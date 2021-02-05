@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-04" />
+<meta name="date" content="2021-02-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -443,6 +443,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="20.7" data-path="PVALUES.html"><a href="PVALUES.html#summary"><i class="fa fa-check"></i><b>20.7</b> Summary</a></li>
 <li class="chapter" data-level="20.8" data-path="PVALUES.html"><a href="PVALUES.html#homework-problems-19"><i class="fa fa-check"></i><b>20.8</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="21" data-path="CLT.html"><a href="CLT.html"><i class="fa fa-check"></i><b>21</b> Central Limit Theorem</a><ul>
+<li class="chapter" data-level="21.1" data-path="CLT.html"><a href="CLT.html#objectives-19"><i class="fa fa-check"></i><b>21.1</b> Objectives</a></li>
+<li class="chapter" data-level="21.2" data-path="CLT.html"><a href="CLT.html#central-limit-theorem"><i class="fa fa-check"></i><b>21.2</b> Central limit theorem</a><ul>
+<li class="chapter" data-level="21.2.1" data-path="CLT.html"><a href="CLT.html#null-distribution"><i class="fa fa-check"></i><b>21.2.1</b> Null distribution</a></li>
+<li class="chapter" data-level="21.2.2" data-path="CLT.html"><a href="CLT.html#theorem---central-limit-theorem"><i class="fa fa-check"></i><b>21.2.2</b> Theorem - central limit theorem</a></li>
+<li class="chapter" data-level="21.2.3" data-path="CLT.html"><a href="CLT.html#simulating-data-for-clt"><i class="fa fa-check"></i><b>21.2.3</b> Simulating data for CLT</a></li>
+<li class="chapter" data-level="21.2.4" data-path="CLT.html"><a href="CLT.html#summary-of-example"><i class="fa fa-check"></i><b>21.2.4</b> Summary of example</a></li>
+</ul></li>
+<li class="chapter" data-level="21.3" data-path="CLT.html"><a href="CLT.html#other-distribution-for-estimators"><i class="fa fa-check"></i><b>21.3</b> Other distribution for estimators</a><ul>
+<li class="chapter" data-level="21.3.1" data-path="CLT.html"><a href="CLT.html#chi-sqaured"><i class="fa fa-check"></i><b>21.3.1</b> Chi-sqaured</a></li>
+<li class="chapter" data-level="21.3.2" data-path="CLT.html"><a href="CLT.html#students-t"><i class="fa fa-check"></i><b>21.3.2</b> Student’s t</a></li>
+<li class="chapter" data-level="21.3.3" data-path="CLT.html"><a href="CLT.html#important-note"><i class="fa fa-check"></i><b>21.3.3</b> Important Note</a></li>
+</ul></li>
+<li class="chapter" data-level="21.4" data-path="CLT.html"><a href="CLT.html#hypotheses-tests-using-clt"><i class="fa fa-check"></i><b>21.4</b> Hypotheses tests using CLT</a><ul>
+<li class="chapter" data-level="21.4.1" data-path="CLT.html"><a href="CLT.html#tappers-and-listeners-1"><i class="fa fa-check"></i><b>21.4.1</b> Tappers and listeners</a></li>
+<li class="chapter" data-level="21.4.2" data-path="CLT.html"><a href="CLT.html#body-temperature"><i class="fa fa-check"></i><b>21.4.2</b> Body temperature</a></li>
+</ul></li>
+<li class="chapter" data-level="21.5" data-path="CLT.html"><a href="CLT.html#summary-and-rules-of-thumb"><i class="fa fa-check"></i><b>21.5</b> Summary and rules of thumb</a><ul>
+<li class="chapter" data-level="21.5.1" data-path="CLT.html"><a href="CLT.html#numerical-data-1"><i class="fa fa-check"></i><b>21.5.1</b> Numerical data</a></li>
+<li class="chapter" data-level="21.5.2" data-path="CLT.html"><a href="CLT.html#binary-data"><i class="fa fa-check"></i><b>21.5.2</b> Binary data</a></li>
+</ul></li>
+<li class="chapter" data-level="21.6" data-path="CLT.html"><a href="CLT.html#homework-problems-20"><i class="fa fa-check"></i><b>21.6</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -608,10 +631,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1    median      Q3      max      mean
-## ...1 sqrt numeric 0.008901107 0.5058919 0.7077333 0.86591 0.999998 0.6687945
-##           sd     n missing
-## ...1 0.23353 10000       0</code></pre>
+##      name   class       min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.0106012 0.4900204 0.7024815 0.8626748 0.9999755 0.6617517
+##             sd     n missing
+## ...1 0.2369428 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -640,10 +663,10 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="TRANS.html#cb406-1"></a><span class="kw">inspect</span>(y_results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class      min         Q1     median         Q3           max
-## ...1    y numeric -4.72158 -0.6814323 -0.3456879 -0.1439743 -2.040998e-06
+##      name   class       min         Q1     median         Q3           max
+## ...1    y numeric -4.546788 -0.7133082 -0.3531362 -0.1477175 -2.448751e-05
 ##            mean        sd     n missing
-## ...1 -0.4948581 0.4952369 10000       0</code></pre>
+## ...1 -0.5099455 0.5069995 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>

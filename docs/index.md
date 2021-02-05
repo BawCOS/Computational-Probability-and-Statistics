@@ -4,7 +4,7 @@ author:
 - Ken Horton
 - Kris Pruitt
 - Bradley Warner
-date: "2021-02-04"
+date: "2021-02-05"
 header-includes:
    - \usepackage{multirow}
    - \usepackage{multicol}
