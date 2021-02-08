@@ -210,7 +210,7 @@ fisher.test(tally(~group+outcome,data=thinner))
 
 The p-value is slightly different since the **hypergeometric** is not symmetric. Doubling the p-value from the single side result is not quite right. The algorithm in `fisher.test()` finds and adds all probabilities less than or equal to value of $\Prob(X = 11)$, see Figure \@ref(fig:dens203-fig). This is the correct p-value.
 
-```{r dens203-fig,fig.cap="",warning=FALSE}
+```{r dens203-fig,fig.cap="Hypergeometric pmf showing the cutoff for p-value calculation.",warning=FALSE}
 gf_dist("hyper",m=50,n=40,k=25) %>%
   gf_hline(yintercept = dhyper(11,50,40,25),color="red") %>%
   gf_labs(title="Hypergeometric pmf",subtitle="Red line is P(X=11)",y="Probability") %>%

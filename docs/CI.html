@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 13 Named Continuous Distributions | Computational Probability and Statistics</title>
+  <title>Chapter 22 Confidence Intervals | Computational Probability and Statistics</title>
   <meta name="description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 13 Named Continuous Distributions | Computational Probability and Statistics" />
+  <meta property="og:title" content="Chapter 22 Confidence Intervals | Computational Probability and Statistics" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="figures/Cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 13 Named Continuous Distributions | Computational Probability and Statistics" />
+  <meta name="twitter:title" content="Chapter 22 Confidence Intervals | Computational Probability and Statistics" />
   
   <meta name="twitter:description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="twitter:image" content="figures/Cover.png" />
@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="DISCRETENAMED.html"/>
-<link rel="next" href="MULTIDISTS.html"/>
+<link rel="prev" href="CLT.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -503,303 +503,581 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="CONTNNAMED" class="section level1">
-<h1><span class="header-section-number">Chapter 13</span> Named Continuous Distributions</h1>
+<div id="CI" class="section level1">
+<h1><span class="header-section-number">Chapter 22</span> Confidence Intervals</h1>
 
-<div id="objectives-12" class="section level2">
-<h2><span class="header-section-number">13.1</span> Objectives</h2>
+<div id="objectives-20" class="section level2">
+<h2><span class="header-section-number">22.1</span> Objectives</h2>
 <ol style="list-style-type: decimal">
-<li>Recognize when to use common continuous distributions (Uniform, Exponential, Gamma, Normal, Beta), identify parameters, and find moments.<br />
+<li>Using asymptotic methods based on the normal distribution, construct and interpret a confidence interval for an unknown parameter.<br />
 </li>
-<li>Use <code>R</code> to calculate probabilities and quantiles involving random variables with common continuous distributions.<br />
+<li>Describe the relationships between confidence intervals, confidence level, and sample size.<br />
 </li>
-<li>Understand the relationship between the Poisson process and the Poisson &amp; Exponential distributions.<br />
-</li>
-<li>Know when to apply and then use the memoryless property.</li>
+<li>For proportions, be able to calculate the three different approaches for confidence intervals using <code>R</code>.</li>
 </ol>
 </div>
-<div id="continuous-distributions" class="section level2">
-<h2><span class="header-section-number">13.2</span> Continuous distributions</h2>
-<p>In this lesson we will explore continuous distributions. This means we work with probability density functions and use them to find probabilities. Thus we must integrate, either numerically, graphically, or mathematically. The cumulative distribution function will also play an important role in this lesson.</p>
-<p>There are many more distributions than the ones in this lesson but these are the most common and will set you up to learn and use any others in the future.</p>
-<div id="uniform-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.1</span> Uniform distribution</h3>
-<p>The first continuous distribution we will discuss is the uniform distribution. By default, when we refer to the uniform distribution, we are referring to the continuous version. When referring to the discrete version, we use the full term “discrete uniform distribution.”</p>
-<p>A continuous random variable has the uniform distribution if probability density is constant, <strong>uniform</strong>. The parameters of this distribution are <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, representing the minimum and maximum of the sample space. This distribution is commonly denoted as <span class="math inline">\(U(a,b)\)</span>.</p>
-<p>Let <span class="math inline">\(X\)</span> be a continuous random variable with the uniform distribution. This is denoted as <span class="math inline">\(X\sim \textsf{Unif}(a,b)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
-<span class="math display">\[
-f_X(x)=\left\{\begin{array}{ll} \frac{1}{b-a}, &amp; a\leq x \leq b \\ 0, &amp; \mbox{otherwise} \end{array}\right.
-\]</span></p>
-<p>The mean of <span class="math inline">\(X\)</span> is <span class="math inline">\(\mbox{E}(X)=\frac{a+b}{2}\)</span> and the variance is <span class="math inline">\(\mbox{Var}(X)=\frac{(b-a)^2}{12}\)</span>. The derivation of the mean is left to the Application.</p>
-<p>The most common uniform distribution is <span class="math inline">\(U(0,1)\)</span> which we have already used several times in this course. Again, notice in Figure <a href="CONTNNAMED.html#fig:uni-fig">13.1</a> that the plot of the <strong>pdf</strong> is a constant or uniform value.</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="CONTNNAMED.html#cb342-1"></a><span class="kw">gf_dist</span>(<span class="st">&quot;unif&quot;</span>,<span class="dt">title=</span><span class="st">&quot;Pdf of Uniform random variable&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;f(x)&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb342-2"><a href="CONTNNAMED.html#cb342-2"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_bw</span>())</span></code></pre></div>
-<div class="figure"><span id="fig:uni-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/uni-fig-1.png" alt="The pdf of Uniform random variable." width="672" />
-<p class="caption">
-Figure 13.1: The pdf of Uniform random variable.
-</p>
-</div>
-<p>To check it is a proper pdf, all values must be non-negative and the total probability must be 1. In <code>R</code> the function for probability density will start with the letter <strong>d</strong> and have some short descriptor for the distribution. For the uniform we use <code>dunif()</code>.</p>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="CONTNNAMED.html#cb343-1"></a><span class="kw">integrate</span>(<span class="cf">function</span>(x)<span class="kw">dunif</span>(x),<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## 1 with absolute error &lt; 1.1e-14</code></pre>
-</div>
-<div id="exponential-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.2</span> Exponential distribution</h3>
-<p>Recall from the lesson on named discrete distributions, we discussed the Poisson process. If arrivals follow a Poisson process, we know that the number of arrivals in a specified amount of time follows a Poisson distribution, and the time until the next arrival follows the <em>exponential</em> distribution. In the Poisson distribution, the number of arrivals is random and the interval is fixed. In the exponential distribution we change this, the interval is random and the arrivals are fixed at 1. This is a subtle point but worth the time to make sure you understand.</p>
-<p>Let <span class="math inline">\(X\)</span> be the number of arrivals in a time interval <span class="math inline">\(T\)</span>, where arrivals occur according to a Poisson process with an average of <span class="math inline">\(\lambda\)</span> arrivals per unit time interval. From the previous lesson, we know that <span class="math inline">\(X\sim \textsf{Poisson}(\lambda T)\)</span>. Now let <span class="math inline">\(Y\)</span> be the time until the next arrival. Then <span class="math inline">\(Y\)</span> follows the exponential distribution with parameter <span class="math inline">\(\lambda\)</span> which has units of inverse base time:</p>
-<p><span class="math display">\[
-Y \sim \textsf{Expon}(\lambda)
-\]</span></p>
-<p>Note on <span class="math inline">\(\lambda\)</span>: One point of confusion involving the parameters of the Poisson and exponential distributions. The parameter of the Poisson distribution (usually denoted as <span class="math inline">\(\lambda\)</span>) represents the average number of arrivals in whatever amount of time specified by the random variable. In the case of the exponential distribution, the parameter (also denoted as <span class="math inline">\(\lambda\)</span>) represents the average number of arrivals per unit time. For example, suppose arrivals follow a Poisson process with an average of 10 arrivals per day. <span class="math inline">\(X\)</span>, the number of arrivals in 5 days, follows a Poisson distribution with parameter <span class="math inline">\(\lambda=50\)</span>, since that is the average number of arrivals in the amount of time specified by <span class="math inline">\(X\)</span>. Meanwhile, <span class="math inline">\(Y\)</span>, the time in days until the next arrival, follows an exponential distribution with parameter <span class="math inline">\(\lambda=10\)</span> (the average number of arrivals per day).</p>
-<p>The pdf of <span class="math inline">\(Y\)</span> is given by:
-<span class="math display">\[
-f_Y(y)=\lambda e^{-\lambda y}, \hspace{0.3cm} y&gt;0
-\]</span></p>
-<p>The mean and variance of <span class="math inline">\(Y\)</span> are: <span class="math inline">\(\mbox{E}(Y)=\frac{1}{\lambda}\)</span> and <span class="math inline">\(\mbox{Var}(Y)=\frac{1}{\lambda^2}\)</span>. You should be able to derive these results but they require integration by parts and can be lengthy algebraic exercises.</p>
+<div id="confidence-interval" class="section level2">
+<h2><span class="header-section-number">22.2</span> Confidence interval</h2>
+<p>A point estimate provides a single plausible value for a parameter. However, a point estimate is rarely perfect; usually there is some error in the estimate. In addition to supplying a point estimate of a parameter, a next logical step would be to provide a plausible <strong>range of values</strong> for the parameter.</p>
+<div id="capturing-the-population-parameter" class="section level3">
+<h3><span class="header-section-number">22.2.1</span> Capturing the population parameter</h3>
+<p>A plausible range of values for the population parameter is called a <strong>confidence interval</strong>. Using only a point estimate is like fishing in a murky lake with a spear, and using a confidence interval is like fishing with a net. We can throw a spear where we saw a fish, but we will probably miss. On the other hand, if we toss a net in that area, we have a good chance of catching the fish.</p>
+<p>If we report a point estimate, we probably will not hit the exact population parameter. On the other hand, if we report a range of plausible values – a confidence interval – we have a good shot at capturing the parameter.</p>
 <blockquote>
-<p><em>Example</em>:<br />
-Suppose at a local retail store, customers arrive to a checkout counter according to a Poisson process with an average of one arrival every three minutes. Let <span class="math inline">\(Y\)</span> be the time (in minutes) until the next customer arrives to the counter. What is the distribution (and parameter) of <span class="math inline">\(Y\)</span>? What are <span class="math inline">\(\mbox{E}(Y)\)</span> and <span class="math inline">\(\mbox{Var}(Y)\)</span>? Find <span class="math inline">\(\mbox{P}(Y&gt;5)\)</span>, <span class="math inline">\(\mbox{P}(Y\leq 3)\)</span>, and <span class="math inline">\(\mbox{P}(1 \leq Y &lt; 5)\)</span>? Also, find the median and 95th percentile of <span class="math inline">\(Y\)</span>. Finally, plot the pdf of <span class="math inline">\(Y\)</span>.</p>
+<p><strong>Exercise</strong>:
+If we want to be very certain we capture the population parameter, should we use a wider interval or a smaller interval?<a href="#fn86" class="footnote-ref" id="fnref86"><sup>86</sup></a></p>
 </blockquote>
-<p>Since one arrival shows every three minutes, the average number of arrivals per unit time is 1/3 arrival per minute. Thus, <span class="math inline">\(Y\sim \textsf{Expon}(\lambda=1/3)\)</span>. This means that <span class="math inline">\(\mbox{E}(Y)=3\)</span> and <span class="math inline">\(\mbox{Var}(Y)=9\)</span>.</p>
-<p>To find <span class="math inline">\(\mbox{P}(Y&gt;5)\)</span>, we could integrate the pdf of <span class="math inline">\(Y\)</span>:
-<span class="math display">\[
-\mbox{P}(Y&gt;5)=\int_5^\infty \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = \lim_{a \to +\infty}\int_5^a \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = \]</span></p>
-<p><span class="math display">\[\lim_{a \to +\infty} -e^{-\frac{1}{3}y}\bigg|_5^a=\lim_{a \to +\infty} -e^{-\frac{a}{3}}-(-e^{-\frac{5}{3}})= 0 + 0.189 = 0.189
-\]</span></p>
-<p>Alternatively, we could use <code>R</code>:</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="CONTNNAMED.html#cb345-1"></a><span class="co">##Prob(Y&gt;5)=1-Prob(Y&lt;=5)</span></span>
-<span id="cb345-2"><a href="CONTNNAMED.html#cb345-2"></a><span class="dv">1</span><span class="op">-</span><span class="kw">pexp</span>(<span class="dv">5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.1888756</code></pre>
-<p>Or using <code>integrate()</code></p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="CONTNNAMED.html#cb347-1"></a><span class="kw">integrate</span>(<span class="cf">function</span>(x)<span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">*</span>x),<span class="dv">5</span>,<span class="ot">Inf</span>)</span></code></pre></div>
-<pre><code>## 0.1888756 with absolute error &lt; 8.5e-05</code></pre>
-<p>For the remaining probabilities, we will use <code>R</code>:</p>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="CONTNNAMED.html#cb349-1"></a><span class="co">##Prob(Y&lt;=3)</span></span>
-<span id="cb349-2"><a href="CONTNNAMED.html#cb349-2"></a><span class="kw">pexp</span>(<span class="dv">3</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.6321206</code></pre>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="CONTNNAMED.html#cb351-1"></a><span class="co">##Prob(1&lt;=Y&lt;5)</span></span>
-<span id="cb351-2"><a href="CONTNNAMED.html#cb351-2"></a><span class="kw">pexp</span>(<span class="dv">5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="op">-</span><span class="kw">pexp</span>(<span class="dv">1</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.5276557</code></pre>
-<p>The median is <span class="math inline">\(y\)</span> such that <span class="math inline">\(\mbox{P}(Y\leq y)=0.5\)</span>. We can find this by solving the following for <span class="math inline">\(y\)</span>:
-<span class="math display">\[
-\int_0^y \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = 0.5
-\]</span></p>
-<p>Alternatively, we can use <code>qexp</code> in <code>R</code>:</p>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="CONTNNAMED.html#cb353-1"></a><span class="co">##median</span></span>
-<span id="cb353-2"><a href="CONTNNAMED.html#cb353-2"></a><span class="kw">qexp</span>(<span class="fl">0.5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 2.079442</code></pre>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="CONTNNAMED.html#cb355-1"></a><span class="co">##95th percentile</span></span>
-<span id="cb355-2"><a href="CONTNNAMED.html#cb355-2"></a><span class="kw">qexp</span>(<span class="fl">0.95</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 8.987197</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:exp-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/exp-fig-1.png" alt="pdf of exponential random varible $Y$" width="672" />
-<p class="caption">
-Figure 13.2: pdf of exponential random varible <span class="math inline">\(Y\)</span>
-</p>
 </div>
-<p>Both from Figure <a href="CONTNNAMED.html#fig:exp-fig">13.2</a> and the mean and median, we know that the exponential distribution is skewed to the right.</p>
-</div>
-<div id="memoryless-property" class="section level3">
-<h3><span class="header-section-number">13.2.3</span> Memoryless property</h3>
-<p>The Poisson process is known for its <em>memoryless</em> property. Essentially, this means that the time until the next arrival is independent of the time since last arrival. Thus, the probability of an arrival within the next 5 minutes is the same regardless of whether an arrival just occurred or an arrival has not occurred for a long time.</p>
-<p>To show this let’s consider random variable <span class="math inline">\(Y\)</span> ( time until the next arrival in minutes) where <span class="math inline">\(Y\sim\textsf{Expon}(\lambda)\)</span>. We will show that, given it has been at least <span class="math inline">\(t\)</span> minutes since the last arrival, the probability we wait at least <span class="math inline">\(y\)</span> additional minutes is equal to the marginal probability that we wait <span class="math inline">\(y\)</span> additional minutes.</p>
-<p>First, note that the cdf of <span class="math inline">\(Y\)</span>, <span class="math inline">\(F_Y(y)=\mbox{P}(Y\leq y)=1-e^{-\lambda y}\)</span>, you should be able to derive this. So,
-<span class="math display">\[
-\mbox{P}(Y\geq y+t|Y\geq t) = \frac{\mbox{P}(Y\geq y+t \cap Y\geq t)}{\mbox{P}(Y\geq t)}=\frac{\mbox{P}(Y\geq y +t)}{\mbox{P}(Y\geq t)} = \frac{1-(1-e^{-(y+t)\lambda})}{1-(1-e^{-t\lambda})}
-\]</span>
-<span class="math display">\[
-=\frac{e^{-\lambda y }e^{-\lambda t}}{e^{-\lambda t }}=e^{-\lambda y} = 1-(1-e^{-\lambda y})=\mbox{P}(Y\geq y). 
-\blacksquare
-\]</span></p>
-<p>Let’s simulate values for a Poisson. The Poisson is often used in modeling customer service situations such as service at Chipotle. However, some people have the mistaken idea that arrivals will be equally spaced. In fact, arrivals will come in clusters and bunches. Maybe this is the root of the common expression, “Bad news comes in threes”?</p>
-<div class="figure"><span id="fig:sim-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/sim-fig-1.png" alt="Simulations of Poisson random variable." width="672" />
-<p class="caption">
-Figure 13.3: Simulations of Poisson random variable.
-</p>
-</div>
-<p>In Figure <a href="CONTNNAMED.html#fig:sim-fig">13.3</a>, the number of events in a box is <span class="math inline">\(X\sim \textsf{Poisson}(\lambda = 5)\)</span>. As you can see, some boxes have more than 5 and some less because 5 is the average number of arrivals. Also note that the spacing is not equal. The 8 different runs are just repeated simulations of the same process. We can see spacing and clusters in each run.</p>
-</div>
-<div id="gamma-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.4</span> Gamma distribution</h3>
-<p>The gamma distribution is a generalization of the exponential distribution. In the exponential distribution, the parameter <span class="math inline">\(\lambda\)</span> is sometimes referred to as the <em>rate</em> parameter. The gamma distribution is sometimes used to model wait times (as with the exponential distribution), but in cases without the memoryless property. The gamma distribution has two parameters, <em>rate</em> and <em>shape</em>. In some texts, <em>scale</em> (the inverse of rate) is used as an alternative parameter to rate.</p>
-<p>Suppose <span class="math inline">\(X\)</span> is a random variable with the gamma distribution with shape parameter <span class="math inline">\(\alpha\)</span> and rate parameter <span class="math inline">\(\lambda\)</span>:
-<span class="math display">\[
-X \sim \textsf{Gamma}(\alpha,\lambda)
-\]</span></p>
-<p><span class="math inline">\(X\)</span> has the following pdf:
-<span class="math display">\[
-f_X(x)=\frac{\lambda^\alpha}{\Gamma (\alpha)}x^{\alpha-1}e^{-\lambda x}, \hspace{0.3cm} x&gt;0
-\]</span></p>
-<p>and 0 otherwise. The mean and variance of <span class="math inline">\(X\)</span> are <span class="math inline">\(\mbox{E}(X)=\frac{\alpha}{\lambda}\)</span> and <span class="math inline">\(\mbox{Var}(X)=\frac{\alpha}{\lambda^2}\)</span>. Looking at the pdf, the mean and the variance, one can easily see that if <span class="math inline">\(\alpha=1\)</span>, the resulting distribution is equivalent to <span class="math inline">\(\textsf{Expon}(\lambda)\)</span>.</p>
-<div id="gamma-function" class="section level4">
-<h4><span class="header-section-number">13.2.4.1</span> Gamma function</h4>
-<p>You may have little to no background with the Gamma function (<span class="math inline">\(\Gamma (\alpha)\)</span>). This is different from the gamma distribution. The gamma function is simply a function and is defined by:
-<span class="math display">\[
-\Gamma (\alpha)=\int_0^\infty t^{\alpha-1}e^{-t}\,\mathrm{d}t
-\]</span></p>
-<p>There are some important properties of the gamma function. Notably, <span class="math inline">\(\Gamma (\alpha)=(\alpha-1)\Gamma (\alpha -1)\)</span>, and if <span class="math inline">\(\alpha\)</span> is a non-negative integer, <span class="math inline">\(\Gamma(\alpha)=(\alpha-1)!\)</span>.</p>
-<p>Suppose <span class="math inline">\(X \sim \textsf{Gamma}(\alpha,\lambda)\)</span>. The pdf of <span class="math inline">\(X\)</span> for various values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> is shown in Figure <a href="CONTNNAMED.html#fig:gamma-fig">13.4</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:gamma-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/gamma-fig-1.png" alt="pdf of Gamma for various values of alpha and lambda" width="672" />
-<p class="caption">
-Figure 13.4: pdf of Gamma for various values of alpha and lambda
-</p>
-</div>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X \sim \textsf{Gamma}(\alpha=5,\lambda=1)\)</span>. Find the mean and variance of <span class="math inline">\(X\)</span>. Also, compute <span class="math inline">\(\mbox{P}(X\leq 2)\)</span> and <span class="math inline">\(\mbox{P}(1\leq X &lt; 8)\)</span>. Find the median and 95th percentile of <span class="math inline">\(X\)</span>.</p>
-</blockquote>
-<p>The mean and variance of <span class="math inline">\(X\)</span> are <span class="math inline">\(\mbox{E}(X)=5\)</span> and <span class="math inline">\(\mbox{Var}(X)=5\)</span>. To find probabilities and quantiles, integration will be difficult, so it’s best to use the built-in <code>R</code> functions:</p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="CONTNNAMED.html#cb357-1"></a><span class="co">## Prob(X&lt;=2)</span></span>
-<span id="cb357-2"><a href="CONTNNAMED.html#cb357-2"></a><span class="kw">pgamma</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.05265302</code></pre>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="CONTNNAMED.html#cb359-1"></a><span class="co">##Prob(1 &lt;= X &lt; 8)</span></span>
-<span id="cb359-2"><a href="CONTNNAMED.html#cb359-2"></a><span class="kw">pgamma</span>(<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">1</span>)<span class="op">-</span><span class="kw">pgamma</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.8967078</code></pre>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="CONTNNAMED.html#cb361-1"></a><span class="co">## median</span></span>
-<span id="cb361-2"><a href="CONTNNAMED.html#cb361-2"></a><span class="kw">qgamma</span>(<span class="fl">0.5</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 4.670909</code></pre>
-<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="CONTNNAMED.html#cb363-1"></a><span class="co">## 95th percentile</span></span>
-<span id="cb363-2"><a href="CONTNNAMED.html#cb363-2"></a><span class="kw">qgamma</span>(<span class="fl">0.95</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 9.153519</code></pre>
-</div>
-</div>
-<div id="weibull-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.5</span> Weibull distribution</h3>
-<p>The last common distribution we will explore is the Weibull distribution. Like the gamma, the Weibull distribution is a generalization of the exponential distribution and is meant to model wait times. A random variable with the Weibull distribution has parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. In <code>R</code>, these are referred to as <code>shape</code> and <code>scale</code> respectively. Note that in some resources, these are represented by <span class="math inline">\(k\)</span> and <span class="math inline">\(\lambda\)</span> or even <span class="math inline">\(k\)</span> and <span class="math inline">\(\theta\)</span>.
-Let <span class="math inline">\(X \sim \textsf{Weibull}(\alpha,\beta)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
-<span class="math display">\[
-f_X(x)=\frac{\alpha}{\beta} \left(\frac{x}{\beta}\right)^{\alpha-1} e^{-\left(\frac{x}{\beta}\right)^\alpha}, \hspace{0.3cm} x\geq 0
-\]</span></p>
-<p>The mean and variance of a random variable with a Weibull distribution can be found by consulting <code>R</code> documentation. Look them up and make sure you can use them.</p>
-</div>
-<div id="normal-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.6</span> Normal distribution</h3>
-<p>The normal distribution (also referred to as Gaussian) is a common distribution found in natural processes. You have likely seen a <em>bell curve</em> in various contexts. The bell curve is often indicative of an underlying normal distribution. There are two parameters of the normal distribution: <span class="math inline">\(\mu\)</span> (the mean of <span class="math inline">\(X\)</span>) and <span class="math inline">\(\sigma\)</span> (the standard deviation of <span class="math inline">\(X\)</span>).</p>
-<p>Suppose a random variable <span class="math inline">\(X\)</span> has a normal distribution with parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:</p>
-<p><span class="math display">\[
-f_X(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \hspace{0.3cm} -\infty &lt; x &lt;\infty
-\]</span></p>
-<p>Some plots of normal distributions for different parameters are plotted in Figure <a href="CONTNNAMED.html#fig:norm-fig">13.5</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:norm-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/norm-fig-1.png" alt="pdf of Normal for various values of mu and sigma" width="672" />
-<p class="caption">
-Figure 13.5: pdf of Normal for various values of mu and sigma
-</p>
-</div>
-<div id="standard-normal" class="section level4">
-<h4><span class="header-section-number">13.2.6.1</span> Standard normal</h4>
-<p>When random variable <span class="math inline">\(X\)</span> is normally distributed with <span class="math inline">\(\mu=0\)</span> and <span class="math inline">\(\sigma=1\)</span>, <span class="math inline">\(X\)</span> is said to follow the <em>standard normal</em> distribution. Sometimes, the standard normal pdf is denoted by <span class="math inline">\(\phi(x)\)</span>.</p>
-<p>Note that any normally distributed random variable can be transformed to have the standard normal distribution. Let <span class="math inline">\(X \sim \textsf{Norm}(\mu,\sigma)\)</span>. Then,
-<span class="math display">\[
-Z=\frac{X-\mu}{\sigma} \sim \textsf{Norm}(0,1)
-\]</span></p>
-<p>Partially, one can show this is true by noting that the mean of <span class="math inline">\(Z\)</span> is 0 and the variance (and standard deviation) of <span class="math inline">\(Z\)</span> is 1:
-<span class="math display">\[
-\mbox{E}(Z)=\mbox{E}\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma}\left(\mbox{E}(X)-\mu\right)=\frac{1}\sigma(\mu-\mu)=0
-\]</span>
-<span class="math display">\[
-\mbox{Var}(Z)=\mbox{Var}\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma^2}\left(\mbox{Var}(X)-0\right)=\frac{1}{\sigma^2} \sigma^2=1
-\]</span></p>
-<p>Note that this does not prove that <span class="math inline">\(Z\)</span> follows the standard normal distribution; we have merely shown that <span class="math inline">\(Z\)</span> has a mean of 0 and a variance of 1. We will discuss transformation of random variables in a later lesson.</p>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X \sim \textsf{Norm}(\mu=200,\sigma=15)\)</span>. Compute <span class="math inline">\(\mbox{P}(X\leq 160)\)</span>, <span class="math inline">\(\mbox{P}(180\leq X &lt; 230)\)</span>, and <span class="math inline">\(\mbox{P}(X&gt;\mu+\sigma)\)</span>. Find the median and 95th percentile of <span class="math inline">\(X\)</span>.</p>
-</blockquote>
-<p>As with the gamma distribution, to find probabilities and quantiles, integration will be difficult, so it’s best to use the built-in <code>R</code> functions:</p>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="CONTNNAMED.html#cb365-1"></a><span class="co">## Prob(X&lt;=160)</span></span>
-<span id="cb365-2"><a href="CONTNNAMED.html#cb365-2"></a><span class="kw">pnorm</span>(<span class="dv">160</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.003830381</code></pre>
-<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="CONTNNAMED.html#cb367-1"></a><span class="co">##Prob(180 &lt;= X &lt; 230)</span></span>
-<span id="cb367-2"><a href="CONTNNAMED.html#cb367-2"></a><span class="kw">pnorm</span>(<span class="dv">230</span>,<span class="dv">200</span>,<span class="dv">15</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">180</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.8860386</code></pre>
-<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="CONTNNAMED.html#cb369-1"></a><span class="co">##Prob(X&gt;mu+sig)</span></span>
-<span id="cb369-2"><a href="CONTNNAMED.html#cb369-2"></a><span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">215</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.1586553</code></pre>
-<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="CONTNNAMED.html#cb371-1"></a><span class="co">## median</span></span>
-<span id="cb371-2"><a href="CONTNNAMED.html#cb371-2"></a><span class="kw">qnorm</span>(<span class="fl">0.5</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 200</code></pre>
-<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="CONTNNAMED.html#cb373-1"></a><span class="co">## 95th percentile</span></span>
-<span id="cb373-2"><a href="CONTNNAMED.html#cb373-2"></a><span class="kw">qnorm</span>(<span class="fl">0.95</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 224.6728</code></pre>
-</div>
-</div>
-<div id="beta-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.7</span> Beta distribution</h3>
-<p>Another common continuous distribution is the beta distribution. This has a unique application in that the domain of a random variable with the beta distribution is <span class="math inline">\([0,1]\)</span>. Thus it is typically used to model proportions. The beta distribution has two parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. (In <code>R</code>, these are denoted not so cleverly as <code>shape1</code> and <code>shape2</code>.)</p>
-<p>Let <span class="math inline">\(X \sim \textsf{Beta}(\alpha,\beta)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
-<span class="math display">\[
-f_X(x)=\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha-1}(1-x)^{\beta-1}, \hspace{0.3cm} 0\leq x \leq 1
-\]</span></p>
-<p>Yes, our old friend the Gamma function. In some resources, <span class="math inline">\(\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}\)</span> is written as <span class="math inline">\(\frac{1}{B(\alpha,\beta)}\)</span>, where <span class="math inline">\(B\)</span> is known as the beta function.</p>
-<p>Note that <span class="math inline">\(\mbox{E}(X)=\frac{\alpha}{\alpha+\beta}\)</span> and <span class="math inline">\(\mbox{Var}(X)=\frac{\alpha \beta}{(\alpha+\beta)^2(\alpha+\beta+1)}\)</span>.</p>
-<p>For various values <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, the pdf of a beta distributed random variable is shown in Figure <a href="CONTNNAMED.html#fig:beta-fig">13.6</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:beta-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/beta-fig-1.png" alt="pdf of Beta for various values of alpha and beta" width="672" />
-<p class="caption">
-Figure 13.6: pdf of Beta for various values of alpha and beta
-</p>
-</div>
-<blockquote>
-<p><strong>Exercise</strong><br />
-What is the distribution if <span class="math inline">\(\alpha=\beta=1\)</span>?</p>
-</blockquote>
-<p>It is the uniform. It is easy to verify that <span class="math inline">\(\Gamma(1)=1\)</span> so that <span class="math inline">\(B(1,1)=1\)</span>.</p>
-</div>
-</div>
-<div id="homework-problems-12" class="section level2">
-<h2><span class="header-section-number">13.3</span> Homework Problems</h2>
-<p>For problems 1-3 below, <strong><em>1)</em></strong> define a random variable that will help you answer the question, <strong><em>2)</em></strong> state the distribution and parameters of that random variable; <strong><em>3)</em></strong> determine the expected value and variance of that random variable, and <strong><em>4)</em></strong> use that random variable to answer the question.</p>
-<p>1. On a given Saturday, suppose vehicles arrive at the USAFA North Gate according to a Poisson process at a rate of 40 arrivals per hour.</p>
-<ol style="list-style-type: lower-alpha">
-<li>Find the probability no vehicles arrive in 10 minutes.<br />
-</li>
-<li>Find the probability that at least 5 minutes will pass before the next arrival.<br />
-</li>
-<li>Find the probability that the next vehicle will arrive between 2 and 10 minutes from now.<br />
-</li>
-<li>Find the probability that at least 7 minutes will pass before the next arrival, given that 2 minutes have already passed. Compare this answer to part (b). This is an example of the memoryless property of the exponential distribution.<br />
-</li>
-<li>Fill in the blank. There is a probability of 90% that the next vehicle will arrive within __ minutes. This value is known as the 90% percentile of the random variable.<br />
-</li>
-<li>Use the function <code>stripplot()</code> to visualize the arrival of 30 vehicles using a random sample from the appropriate exponential distribution.</li>
+<div id="constructing-a-confidence-interval" class="section level3">
+<h3><span class="header-section-number">22.2.2</span> Constructing a confidence interval</h3>
+<p>A point estimate is our best guess for the value of the parameter, so it makes sense to build the confidence interval around that value. The standard error, which is a measure of the uncertainty associated with the point estimate, provides a guide for how large we should make the confidence interval.</p>
+<p>Generally, what you should know about building confidence intervals is laid out in the following steps:</p>
+<ol style="list-style-type: decimal">
+<li><p>Identify the parameter you would like to estimate (for example, <span class="math inline">\(\mu\)</span>).</p></li>
+<li><p>Identify a good estimate for that parameter (sample mean, <span class="math inline">\(\bar{X}\)</span>).</p></li>
+<li><p>Determine the distribution of your estimate or a function of your estimate.</p></li>
+<li><p>Use this distribution to obtain a range of feasible values (confidence interval) for the parameter. (For example if <span class="math inline">\(\mu\)</span> is the parameter of interest and we are using the CLT, then <span class="math inline">\(\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\sim \textsf{Norm}(0,1)\)</span>. We can solve the equation for <span class="math inline">\(\mu\)</span> to find a reasonable range of feasible values.)</p></li>
 </ol>
-<p>2. Suppose time until computer errors on the F-35 follows a Gamma distribution with mean 20 hours and variance 10.</p>
+<p>Let’s do an example to solidify these ideas.</p>
+<blockquote>
+<p>Constructing a 95% confidence interval for the mean<br />
+When the sampling distribution of a point estimate can reasonably be modeled as normal, the point estimate we observe will be within 1.96 standard errors of the true value of interest about 95% of the time. Thus, a <strong>95% confidence interval</strong> for such a point estimate can be constructed:</p>
+</blockquote>
+<p><span class="math display">\[ \hat{\theta} \pm\ 1.96 \times SE_{\hat{\theta}}\]</span>
+Where <span class="math inline">\(\hat{\theta}\)</span> is our estimate of the parameter and <span class="math inline">\(SE_{\hat{\theta}}\)</span> is the standard error of that estimate.</p>
+<p>We can be <strong>95% confident</strong> this interval captures the true value. The 1.96 can be found using the <code>qnorm()</code> function. If we want .95 in the middle, that leaves 0.025 in each tail. Thus we use .975 in the <code>qnorm()</code> function.</p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="CI.html#cb584-1"></a><span class="kw">qnorm</span>(.<span class="dv">975</span>)</span></code></pre></div>
+<pre><code>## [1] 1.959964</code></pre>
+<blockquote>
+<p><strong>Exercise</strong>:<br />
+Compute the area between -1.96 and 1.96 for a normal distribution with mean 0 and standard deviation 1.</p>
+</blockquote>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb586-1"><a href="CI.html#cb586-1"></a><span class="kw">pnorm</span>(<span class="fl">1.96</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="fl">1.96</span>)</span></code></pre></div>
+<pre><code>## [1] 0.9500042</code></pre>
+<p>In mathematical terms, the derivation of this confidence is as follows:</p>
+<p>Let <span class="math inline">\(X_1,X_2,...,X_n\)</span> be an iid sequence of random variables, each with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. The central limit theorem tells us that
+<span class="math display">\[
+\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\overset{approx}{\sim}\textsf{Norm}(0,1)
+\]</span></p>
+<p>If the significance level is <span class="math inline">\(0\leq \alpha \leq 1\)</span>, then the confidence level is <span class="math inline">\(1-\alpha\)</span>. Yes <span class="math inline">\(\alpha\)</span> is the same as the significance level in hypothesis testing. Thus
+<span class="math display">\[
+\mbox{P}\left(-z_{\alpha/2}\leq {\bar{X}-\mu\over \sigma/\sqrt{n}} \leq z_{\alpha/2}\right)=1-\alpha
+\]</span></p>
+<p>where <span class="math inline">\(z_{\alpha/2}\)</span> is such that <span class="math inline">\(\mbox{P}(Z\geq z_{\alpha/2})=\alpha/2\)</span>, where <span class="math inline">\(Z\sim \textsf{Norm}(0,1)\)</span>, see Figure <a href="CI.html#fig:dens221-fig">22.1</a>.</p>
+<div class="figure"><span id="fig:dens221-fig"></span>
+<img src="22-Confidence-Intervals_files/figure-html/dens221-fig-1.png" alt="The pdf of a standard normal distribution showing idea of how to develop a confidence interval." width="672" />
+<p class="caption">
+Figure 22.1: The pdf of a standard normal distribution showing idea of how to develop a confidence interval.
+</p>
+</div>
+<p>So, we know that <span class="math inline">\((1-\alpha)*100\%\)</span> of the time, <span class="math inline">\({\bar{X}-\mu\over \sigma/\sqrt{n}}\)</span> will be between <span class="math inline">\(-z_{\alpha/2}\)</span> and <span class="math inline">\(z_{\alpha/2}\)</span>.</p>
+<p>By rearranging the expression above and solving for <span class="math inline">\(\mu\)</span>, we get:
+<span class="math display">\[
+\mbox{P}\left(\bar{X}-z_{\alpha/2}{\sigma\over\sqrt{n}}\leq \mu \leq \bar{X}+z_{\alpha/2}{\sigma\over\sqrt{n}}\right)=1-\alpha
+\]</span></p>
+<p>Be careful with the interpretation of this expression. As a reminder <span class="math inline">\(\bar{X}\)</span> is the random variable here. The population mean, <span class="math inline">\(\mu\)</span>, is NOT a variable. It is an unknown parameter. Thus, the above expression is NOT a probabilistic statement about <span class="math inline">\(\mu\)</span>, but rather about <span class="math inline">\(\bar{X}\)</span>.</p>
+<p>Nonetheless, the above expression gives us a nice interval for “reasonable” values of <span class="math inline">\(\mu\)</span> given a particular sample.</p>
+<p>A <span class="math inline">\((1-\alpha)*100\%\)</span> <em>confidence interval for the mean</em> is given by:
+<span class="math display">\[
+\mu\in\left(\bar{x}\pm z_{\alpha/2}{\sigma\over\sqrt{n}}\right)
+\]</span></p>
+<p>In most applications, the most common value of <span class="math inline">\(\alpha\)</span> is 0.05. In that case, to construct a 95% confidence interval, we would need to find <span class="math inline">\(z_{0.025}\)</span> which can be found quickly with <code>qnorm()</code>:</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb588-1"><a href="CI.html#cb588-1"></a><span class="kw">qnorm</span>(<span class="dv">1</span><span class="fl">-0.05</span><span class="op">/</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 1.959964</code></pre>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb590-1"><a href="CI.html#cb590-1"></a><span class="kw">qnorm</span>(.<span class="dv">975</span>)</span></code></pre></div>
+<pre><code>## [1] 1.959964</code></pre>
+<div id="unknown-variance" class="section level4">
+<h4><span class="header-section-number">22.2.2.1</span> Unknown Variance</h4>
+<p>When inferring about the population mean, we usually will have to estimate the underlying standard deviation as well. This introduces an extra level of uncertainty. We found that while <span class="math inline">\({\bar{X}-\mu\over\sigma/\sqrt{n}}\)</span> has an approximate normal distribution, <span class="math inline">\({\bar{X}-\mu\over S/\sqrt{n}}\)</span> follows the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. This adds the additional assumption that the parent population, the distribution of <span class="math inline">\(X\)</span>, must be normal.</p>
+<p>Thus, when <span class="math inline">\(\sigma\)</span> is unknown, a <span class="math inline">\((1-\alpha)*100\%\)</span> confidence interval for the mean is given by:
+<span class="math display">\[
+\mu\in\left(\bar{x}\pm t_{\alpha/2,n-1}{s\over\sqrt{n}}\right)
+\]</span></p>
+<p>Similar to the case above, <span class="math inline">\(t_{\alpha/2,n-1}\)</span> can be found using the <code>qt()</code> function in <code>R</code>.</p>
+<p>In practice, if <span class="math inline">\(X\)</span> is close to symmetrical and unimodal, we can relax the assumption of normality. Always look at your sample data. Outliers or skewness can be causes of concern. You can always run other methods that don’t require the assumption of normality and compare results.</p>
+<p>For large sample sizes, the choice of using the normal distribution or the <span class="math inline">\(t\)</span> distribution is irrelevant since they are close to each other. The <span class="math inline">\(t\)</span> distribution requires you to use the degrees of freedom so be careful.</p>
+</div>
+</div>
+<div id="body-temperature-example" class="section level3">
+<h3><span class="header-section-number">22.2.3</span> Body Temperature Example</h3>
+<blockquote>
+<p><em>Example</em>:<br />
+Find a 95% confidence interval for the body temperature data from last lesson.</p>
+</blockquote>
+<p>We need the mean, standard deviation, and sample size from this data. The following <code>R</code> code calculates the confidence interval, make sure you can follow the code.</p>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb592-1"><a href="CI.html#cb592-1"></a>temperature <span class="op">%&gt;%</span></span>
+<span id="cb592-2"><a href="CI.html#cb592-2"></a><span class="st">  </span><span class="kw">favstats</span>(<span class="op">~</span>temperature,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></span>
+<span id="cb592-3"><a href="CI.html#cb592-3"></a><span class="st">  </span><span class="kw">select</span>(mean,sd,n) <span class="op">%&gt;%</span></span>
+<span id="cb592-4"><a href="CI.html#cb592-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">lower_bound=</span>mean<span class="op">-</span><span class="kw">qt</span>(<span class="fl">0.975</span>,<span class="dv">129</span>)<span class="op">*</span>sd<span class="op">/</span><span class="kw">sqrt</span>(n),</span>
+<span id="cb592-5"><a href="CI.html#cb592-5"></a>            <span class="dt">upper_bound=</span>mean<span class="op">+</span><span class="kw">qt</span>(<span class="fl">0.975</span>,<span class="dv">129</span>)<span class="op">*</span>sd<span class="op">/</span><span class="kw">sqrt</span>(n))</span></code></pre></div>
+<pre><code>##   lower_bound upper_bound
+## 1      98.122    98.37646</code></pre>
+<p>The 95% confidence interval for <span class="math inline">\(\mu\)</span> is <span class="math inline">\((98.12,98.38)\)</span>. We am 95% <em>confident</em> that <span class="math inline">\(\mu\)</span>, the average human body temperature, is in this interval. Also, we could say that 95% of similarly constructed intervals will contain the true mean, <span class="math inline">\(\mu\)</span>.</p>
+<p>There is a link between hypothesis testing and confidence intervals. Remember when we used this data in a hypothesis test, the null hypothesis was <span class="math inline">\(H_0\)</span>: The average body temperature is 98.6 <span class="math inline">\(\mu = 98.6\)</span>. This null hypothesized value is not in the interval, so we could reject the null hypothesis with this confidence interval.</p>
+<p>We could also use <code>R</code> to find the confidence interval and conduct the hypothesis test. Read about the function <code>t_test()</code> in the help menu to determine why we used the <code>mu</code> option.</p>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="CI.html#cb594-1"></a><span class="kw">t_test</span>(<span class="op">~</span>temperature,<span class="dt">data=</span>temperature,<span class="dt">mu=</span><span class="fl">98.6</span>)</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  temperature
+## t = -5.4548, df = 129, p-value = 2.411e-07
+## alternative hypothesis: true mean is not equal to 98.6
+## 95 percent confidence interval:
+##  98.12200 98.37646
+## sample estimates:
+## mean of x 
+##  98.24923</code></pre>
+<p>Or if you just want the interval:</p>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb596-1"><a href="CI.html#cb596-1"></a><span class="kw">confint</span>(<span class="kw">t_test</span>(<span class="op">~</span>temperature,<span class="dt">data=</span>temperature,<span class="dt">mu=</span><span class="fl">98.6</span>))</span></code></pre></div>
+<pre><code>##   mean of x  lower    upper level
+## 1  98.24923 98.122 98.37646  0.95</code></pre>
+<p>In reviewing the hypothesis test for a single mean, you can see how this confidence interval was formed by <em>inverting</em> the test statistic. As a reminder, the following equation inverts the test statistic.</p>
+<p><span class="math display">\[
+\mbox{P}\left(\bar{X}-z_{\alpha/2}{\sigma\over\sqrt{n}}\leq \mu \leq \bar{X}+z_{\alpha/2}{\sigma\over\sqrt{n}}\right)=1-\alpha
+\]</span></p>
+</div>
+<div id="one-sided-intervals" class="section level3">
+<h3><span class="header-section-number">22.2.4</span> One-sided Intervals</h3>
+<p>If you remember the hypothesis test for temperature in the central limit theorem lesson, you may be crying foul. That was a one-sided hypothesis test and we just conducted a two-sided test. So far, we have discussed only “two-sided” intervals. These intervals have an upper and lower bound. Typically, <span class="math inline">\(\alpha\)</span> is apportioned equally between the two tails. (Thus, we look for <span class="math inline">\(z_{\alpha/2}\)</span>.)</p>
+<p>In “one-sided” intervals, we only bound the interval on one side. We construct one-sided intervals when we are concerned with whether a parameter exceeds or stays below some threshold. Building a one-sided interval is similar to building two-sided intervals, except rather than dividing <span class="math inline">\(\alpha\)</span> into two, you simply apportion all of <span class="math inline">\(\alpha\)</span> to the relevant side. The difficult part is to determine if we need an upper bound or lower bound.</p>
+<p>For the body temperature study, the alternative hypothesis was that the mean was less than 98.6. In our confidence interval, we want to find the largest value the mean could be and thus we want the upper bound. We are trying to reject the hypothesis by showing an alternative that is smaller than the null hypothesized value. Finding the lower limit does not help us since the confidence interval indicates an interval that starts at the lower value and is unbounded above. Let’s just make up some numbers; suppose the lower confidence bound is 97.5. All we know is the true average temperature is this value or greater. This is not helpful. However, if we find an upper confidence bound and the value is 98.1, we know the true average temperature is most likely no larger than this value. This is much more helpful.</p>
+<p>Repeating the analysis with this in mind.</p>
+<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb598-1"><a href="CI.html#cb598-1"></a>temperature <span class="op">%&gt;%</span></span>
+<span id="cb598-2"><a href="CI.html#cb598-2"></a><span class="st">  </span><span class="kw">favstats</span>(<span class="op">~</span>temperature,<span class="dt">data=</span>.) <span class="op">%&gt;%</span></span>
+<span id="cb598-3"><a href="CI.html#cb598-3"></a><span class="st">  </span><span class="kw">select</span>(mean,sd,n) <span class="op">%&gt;%</span></span>
+<span id="cb598-4"><a href="CI.html#cb598-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">upper_bound=</span>mean<span class="op">+</span><span class="kw">qt</span>(<span class="fl">0.95</span>,<span class="dv">129</span>)<span class="op">*</span>sd<span class="op">/</span><span class="kw">sqrt</span>(n))</span></code></pre></div>
+<pre><code>##   upper_bound
+## 1    98.35577</code></pre>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="CI.html#cb600-1"></a><span class="kw">confint</span>(<span class="kw">t_test</span>(<span class="op">~</span>temperature,<span class="dt">data=</span>temperature,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</span></code></pre></div>
+<pre><code>##   mean of x lower    upper level
+## 1  98.24923  -Inf 98.35577  0.95</code></pre>
+<p>Notice the upper bound in the one-sided interval is smaller than the upper bound in the two-sided interval since all 0.05 is going into the upper tail.</p>
+</div>
+</div>
+<div id="confidence-intervals-for-two-proportions" class="section level2">
+<h2><span class="header-section-number">22.3</span> Confidence intervals for two proportions</h2>
+<p>In hypothesis testing we had several examples of two proportions. We tested these problems with a permutation test or using a hypergeometric. In our notes or applications, we have not presented the hypothesis test for two proportions using the asymptotic normal distribution, the central limit theorem. So in this section we will present three methods of answering our research question, a permutation test, a hypothesis test using the normal distribution, and a confidence interval.</p>
+<p>Earlier this semester, in fact in the first lesson notes, we encountered an experiment that examined whether implanting a stent in the brain of a patient at risk for a stroke helps reduce the risk of a stroke. The results from the first 30 days of this study, which included 451 patients, are summarized in the <code>R</code> code below. These results are surprising! The point estimate suggests that patients who received stents may have a <strong>higher</strong> risk of stroke: <span class="math inline">\(p_{trmt} - p_{control} = 0.090\)</span>.</p>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="CI.html#cb602-1"></a>stent &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/stent_study.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="CI.html#cb603-1"></a><span class="kw">tally</span>(<span class="op">~</span>group<span class="op">+</span>outcome30,<span class="dt">data=</span>stent,<span class="dt">margins =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##          outcome30
+## group     no_event stroke Total
+##   control      214     13   227
+##   trmt         191     33   224
+##   Total        405     46   451</code></pre>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb605-1"><a href="CI.html#cb605-1"></a><span class="kw">tally</span>(outcome30<span class="op">~</span>group,<span class="dt">data=</span>stent,<span class="dt">margins =</span> <span class="ot">TRUE</span>,<span class="dt">format=</span><span class="st">&quot;proportion&quot;</span>)</span></code></pre></div>
+<pre><code>##           group
+## outcome30     control       trmt
+##   no_event 0.94273128 0.85267857
+##   stroke   0.05726872 0.14732143
+##   Total    1.00000000 1.00000000</code></pre>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="CI.html#cb607-1"></a>obs&lt;-<span class="kw">diffprop</span>(outcome30<span class="op">~</span>group,<span class="dt">data=</span>stent)</span>
+<span id="cb607-2"><a href="CI.html#cb607-2"></a>obs</span></code></pre></div>
+<pre><code>##    diffprop 
+## -0.09005271</code></pre>
+<p>Notice that because <code>R</code> uses the variables by names in alphabetic order we have <span class="math inline">\(p_{control} - p_{trmt} = - 0.090\)</span>. This is not a problem. We could fix this by changing the variables to factors.</p>
+<div id="permutation-test-for-two-proportions" class="section level3">
+<h3><span class="header-section-number">22.3.1</span> Permutation test for two proportions</h3>
+<p>We start with the null hypothesis which is two-sided since we don’t know if the treatment is harmful or beneficial.</p>
+<p><span class="math inline">\(H_0\)</span>: The treatment and outcome are independent. <span class="math inline">\(p_{control} - p_{trmt} = 0\)</span> or <span class="math inline">\(p_{control} = p_{trmt}\)</span>.
+<span class="math inline">\(H_A\)</span>: The treatment and outcome are dependent <span class="math inline">\(p_{control} \neq p_{trmt}\)</span>.</p>
+<p>We will use <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<p>The test statistic is the difference in proportions of patients with stroke in the control and treatment groups.</p>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb609-1"><a href="CI.html#cb609-1"></a>obs&lt;-<span class="kw">diffprop</span>(outcome30<span class="op">~</span>group,<span class="dt">data=</span>stent)</span>
+<span id="cb609-2"><a href="CI.html#cb609-2"></a>obs</span></code></pre></div>
+<pre><code>##    diffprop 
+## -0.09005271</code></pre>
+<p>To calculate the p-value, we will shuffle the treatment and control labels because under the null hypothesis, there is no difference.</p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb611-1"><a href="CI.html#cb611-1"></a><span class="kw">set.seed</span>(<span class="dv">2027</span>)</span>
+<span id="cb611-2"><a href="CI.html#cb611-2"></a>results &lt;-<span class="st"> </span><span class="kw">do</span>(<span class="dv">10000</span>)<span class="op">*</span><span class="kw">diffprop</span>(outcome30<span class="op">~</span><span class="kw">shuffle</span>(group),<span class="dt">data=</span>stent)</span></code></pre></div>
+<p>Figure <a href="CI.html#fig:dens222-fig">22.2</a> a visual summary of the distribution of the test statistics generated under the null hypothesis, the sampling distribution.</p>
+<div class="sourceCode" id="cb612"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb612-1"><a href="CI.html#cb612-1"></a>results <span class="op">%&gt;%</span></span>
+<span id="cb612-2"><a href="CI.html#cb612-2"></a><span class="st">  </span><span class="kw">gf_dhistogram</span>(<span class="op">~</span>diffprop,<span class="dt">fill=</span><span class="st">&quot;cyan&quot;</span>,<span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb612-3"><a href="CI.html#cb612-3"></a><span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">xintercept =</span>obs ) <span class="op">%&gt;%</span></span>
+<span id="cb612-4"><a href="CI.html#cb612-4"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb612-5"><a href="CI.html#cb612-5"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title=</span><span class="st">&quot;Sampling distribution of randomization test&quot;</span>,</span>
+<span id="cb612-6"><a href="CI.html#cb612-6"></a>          <span class="dt">x=</span><span class="st">&quot;Difference in proportions&quot;</span>,<span class="dt">y=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:dens222-fig"></span>
+<img src="22-Confidence-Intervals_files/figure-html/dens222-fig-1.png" alt="Sampling distribution of the difference in proportions." width="672" />
+<p class="caption">
+Figure 22.2: Sampling distribution of the difference in proportions.
+</p>
+</div>
+<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb613-1"><a href="CI.html#cb613-1"></a><span class="dv">2</span><span class="op">*</span><span class="kw">prop1</span>(<span class="op">~</span>(diffprop<span class="op">&lt;=</span>obs),<span class="dt">data=</span>results)</span></code></pre></div>
+<pre><code>##  prop_TRUE 
+## 0.00259974</code></pre>
+<p>Based on the data, if there were no difference between the treatment and control groups, the probability of the observed differences in proportion of strokes being - 0.09 or more extreme is 0.0026. This is too unlikely, so we reject that there is no difference between control and stroke groups.</p>
+</div>
+<div id="hypothesis-test-for-two-proportions-using-normal-model" class="section level3">
+<h3><span class="header-section-number">22.3.2</span> Hypothesis test for two proportions using normal model</h3>
+<p>We must check two conditions before applying the normal model to a generic test of <span class="math inline">\(\hat{p}_1 - \hat{p}_2\)</span>. First, the sampling distribution for each sample proportion must be nearly normal, and secondly, the samples must be independent. Under these two conditions, the sampling distribution of <span class="math inline">\(\hat{p}_1 - \hat{p}_2\)</span> may be well approximated using the normal model.</p>
+<p>The hypotheses are the same as above.</p>
+<div id="conditions-for-the-sampling-distribution-of-hatp_1---hatp_2-to-be-normal" class="section level4">
+<h4><span class="header-section-number">22.3.2.1</span> Conditions for the sampling distribution of <span class="math inline">\(\hat{p}_1 - \hat{p}_2\)</span> to be normal</h4>
+<p>The difference <span class="math inline">\(\hat{p}_1 - \hat{p}_2\)</span> tends to follow a normal model when</p>
 <ol style="list-style-type: lower-alpha">
-<li>Find the probability that 20 hours pass without a computer error.<br />
+<li>each proportion separately follows a normal model, and<br />
 </li>
-<li>Find the probability that 45 hours pass without a computer error, given that 25 hours have already passed. Does the memoryless property apply to the Gamma distribution?<br />
+<li>the two samples are independent of each other</li>
+</ol>
+</div>
+<div id="standard-error" class="section level4">
+<h4><span class="header-section-number">22.3.2.2</span> Standard error</h4>
+<p>For our research question the conditions must be verified. Because each group is a simple random sample from less than 10% of the population, the observations are independent, both within the samples and between the samples. The success-failure condition also holds for each sample, at least 10 in each cell is the easiest way to think about it. Because all conditions are met, the normal model can be used for the point estimate of the difference in proportion of strokes</p>
+<p><span class="math display">\[p_{control} - p_{trmt} = 0.05726872 - 0.14732143 = - 0.090\]</span>
+The standard error of the difference in sample proportions is
+<span class="math display">\[ SE_{\hat{p}_1 - \hat{p}_2}
+    = \sqrt{SE_{\hat{p}_1}^2 + SE_{\hat{p}_2}^2}\]</span>
+<span class="math display">\[  = \sqrt{\frac{p_1(1-p_1)}{n_1} + \frac{p_2(1-p_2)}{n_2}}\]</span>
+where <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_2\)</span> represent the population proportions, and <span class="math inline">\(n_1\)</span> and <span class="math inline">\(n_2\)</span> represent the sample sizes.</p>
+<p>The calculation of the standard error for our problem must be done carefully. Remember in hypothesis testing, we assume the null hypothesis is true; this means the proportions of strokes must be the same.</p>
+<p><span class="math display">\[SE = \sqrt{\frac{p(1-p)}{n_{control}} + \frac{p(1-p)}{n_{trmt}}}\]</span>
+We don’t know the exposure rate, <span class="math inline">\(p\)</span>, but we can obtain a good estimate of it by <strong>pooling</strong> the results of both samples:
+<span class="math display">\[\hat{p} = \frac{\text{\# of ``successes&#39;&#39;}}{\text{\# of cases}} = \frac{13 + 33}{451} = 0.102\]</span>
+This is called the <em>pooled estimate</em> of the sample proportion, and we use it to compute the standard error when the null hypothesis is that <span class="math inline">\(p_{control} = p_{trmt}\)</span>.</p>
+<p><span class="math display">\[SE \approx \sqrt{\frac{\hat{p}(1-\hat{p})}{n_{control}} + \frac{\hat{p}(1-\hat{p})}{n_{trmt}}}\]</span></p>
+<p><span class="math display">\[SE \approx \sqrt{\frac{0.102(1-0.102)}{227} + \frac{0.102(1-0.102)}{224}} = 0.0285\]</span></p>
+<p>The test statistic is
+<span class="math display">\[Z = \frac{\text{point estimate} - \text{null value}}{SE} = \frac{-.09 - 0}{0.0285} = - 3.16  \]</span></p>
+<p>The p-value is</p>
+<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb615-1"><a href="CI.html#cb615-1"></a><span class="dv">2</span><span class="op">*</span><span class="kw">pnorm</span>(<span class="op">-</span><span class="fl">3.16</span>)</span></code></pre></div>
+<pre><code>## [1] 0.001577691</code></pre>
+<p>Which is close to what we got with permutation test. This should not surprise us as the sampling distribution under the permutation test looked normal.</p>
+<p>Figure <a href="CI.html#fig:dens223-fig">22.3</a> plots the empirical sampling distribution from the permutation test again with a normal density curve overlayed.</p>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="CI.html#cb617-1"></a>results <span class="op">%&gt;%</span></span>
+<span id="cb617-2"><a href="CI.html#cb617-2"></a><span class="st">  </span><span class="kw">gf_dhistogram</span>(<span class="op">~</span>diffprop,<span class="dt">fill=</span><span class="st">&quot;cyan&quot;</span>,<span class="dt">color=</span><span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb617-3"><a href="CI.html#cb617-3"></a><span class="st">  </span><span class="kw">gf_vline</span>(<span class="dt">xintercept =</span>obs ) <span class="op">%&gt;%</span></span>
+<span id="cb617-4"><a href="CI.html#cb617-4"></a><span class="st">  </span><span class="kw">gf_dist</span>(<span class="st">&quot;norm&quot;</span>,<span class="dt">sd=</span><span class="fl">0.0285</span>,<span class="dt">color=</span><span class="st">&quot;red&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb617-5"><a href="CI.html#cb617-5"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb617-6"><a href="CI.html#cb617-6"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title=</span><span class="st">&quot;Sampling distribution of randomization test&quot;</span>,</span>
+<span id="cb617-7"><a href="CI.html#cb617-7"></a>          <span class="dt">subtitle=</span><span class="st">&quot;Reference normal distribution in red&quot;</span>,</span>
+<span id="cb617-8"><a href="CI.html#cb617-8"></a>          <span class="dt">x=</span><span class="st">&quot;Difference in proportions&quot;</span>)</span></code></pre></div>
+<div class="figure"><span id="fig:dens223-fig"></span>
+<img src="22-Confidence-Intervals_files/figure-html/dens223-fig-1.png" alt="The sampling distribution of the randomization test with a normal distribution plotted in red." width="672" />
+<p class="caption">
+Figure 22.3: The sampling distribution of the randomization test with a normal distribution plotted in red.
+</p>
+</div>
+</div>
+</div>
+<div id="confidence-interval-for-two-proportions-using-normal-model" class="section level3">
+<h3><span class="header-section-number">22.3.3</span> Confidence interval for two proportions using normal model</h3>
+<p>The conditions for applying the normal model have already been verified, so we can proceed to the construction of the confidence interval. Remember the form of the confidence interval is</p>
+<p><span class="math display">\[\text{point estimate} \ \pm\ z^{\star}SE\]</span></p>
+<p>Our point estimate is -0.09. The standard error is different since we can’t assume the proportion of strokes are equal. We will estimate the standard error from</p>
+<p><span class="math display">\[SE    = \sqrt{\frac{p_{control}(1-p_{control})}{n_{control}} + \frac{p_{trmt}(1-p_{trmt})}{n_{trmt}}}\]</span></p>
+<p><span class="math display">\[SE \approx \sqrt{\frac{0.057(1-0.057)}{227} + \frac{0.15(1-0.15)}{224}} = 0.0284\]</span></p>
+<p>It is close to the pooled value because of the nearly equal sample sizes.</p>
+<p>The critical value is found from the normal quantile.</p>
+<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="CI.html#cb618-1"></a><span class="kw">qnorm</span>(.<span class="dv">975</span>)</span></code></pre></div>
+<pre><code>## [1] 1.959964</code></pre>
+<p>The 95% confidence interval is</p>
+<p><span class="math display">\[ - 0.09 \ \pm\ 1.96 \times  0.0284 \quad \to \quad (-0.146,- 0.034)\]</span>
+We are 95% confident that the difference in proportions of strokes in the control and treatment groups is between -0.146 and -0.034. Since this does not include zero, we are confident they are different. This supports the hypothesis tests.</p>
+<p>Of course, <code>R</code> has a built in function to calculate the hypothesis test and confidence interval for two proportions.</p>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="CI.html#cb620-1"></a><span class="kw">prop_test</span>(outcome30<span class="op">~</span>group,<span class="dt">data=</span>stent)</span></code></pre></div>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity correction
+## 
+## data:  tally(outcome30 ~ group)
+## X-squared = 9.0233, df = 1, p-value = 0.002666
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.03022922 0.14987619
+## sample estimates:
+##    prop 1    prop 2 
+## 0.9427313 0.8526786</code></pre>
+<p>The p-value is a little different from the one we calculated and closer to the randomization test, which is an approximation of the exact permutation test, because a correction factor was applied. Read online about this correction to learn more. We run the code below with the correction factor off and get the same p-value as we calculated above. The confidence interval is a little different because the function used <em>no stroke</em> as its success event, but since zero is not in the interval, we get the same conclusion.</p>
+<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb622-1"><a href="CI.html#cb622-1"></a><span class="kw">prop_test</span>(outcome30<span class="op">~</span>group,<span class="dt">data=</span>stent,<span class="dt">correct=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## 
+##  2-sample test for equality of proportions without continuity
+##  correction
+## 
+## data:  tally(outcome30 ~ group)
+## X-squared = 9.9823, df = 1, p-value = 0.001581
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.03466401 0.14544140
+## sample estimates:
+##    prop 1    prop 2 
+## 0.9427313 0.8526786</code></pre>
+<p>Essentially, confidence intervals and hypothesis tests serve similar purposes, but answer slightly different questions. A confidence interval gives you a range of feasible values of a parameter given a particular sample. A hypothesis test tells you whether a specific value is feasible given a sample. Sometimes you can informally conduct a hypothesis test simply by building an interval and observing whether the hypothesized value is contained in the interval. The disadvantage to this approach is that it does not yield a specific <span class="math inline">\(p\)</span>-value. The disadvantage of the hypothesis test is that it does not give a range of values for the test statistic.</p>
+<p>As with hypothesis tests, confidence intervals are imperfect. About 1-in-20 properly constructed 95% confidence intervals will fail to capture the parameter of interest. This is a similar idea to our Type 1 error.</p>
+</div>
+</div>
+<div id="changing-the-confidence-level" class="section level2">
+<h2><span class="header-section-number">22.4</span> Changing the confidence level</h2>
+<p>Suppose we want to consider confidence intervals where the confidence level is somewhat higher than 95%; perhaps we would like a confidence level of 99%. Think back to the analogy about trying to catch a fish: if we want to be more sure that we will catch the fish, we should use a wider net. To create a 99% confidence level, we must also widen our 95% interval. On the other hand, if we want an interval with lower confidence, such as 90%, we could make our original 95% interval slightly slimmer.</p>
+<p>The 95% confidence interval structure provides guidance in how to make intervals with new confidence levels. Below is a general 95% confidence interval for a point estimate that comes from a nearly normal distribution:</p>
+<p><span class="math display">\[\text{point estimate}\ \pm\ 1.96\times SE \]</span></p>
+<p>There are three components to this interval: the point estimate, ``1.96’’, and the standard error. The choice of <span class="math inline">\(1.96\times SE\)</span>, which is also called <strong>margin of error</strong>, was based on capturing 95% of the data since the estimate is within 1.96 standard errors of the true value about 95% of the time. The choice of 1.96 corresponds to a 95% confidence level.</p>
+<blockquote>
+<p><strong>Exercise</strong>:
+If <span class="math inline">\(X\)</span> is a normally distributed random variable, how often will <span class="math inline">\(X\)</span> be within 2.58 standard deviations of the mean?<a href="#fn87" class="footnote-ref" id="fnref87"><sup>87</sup></a></p>
+</blockquote>
+<p>To create a 99% confidence interval, change 1.96 in the 95% confidence interval formula to be <span class="math inline">\(2.58\)</span>.</p>
+<p>The normal approximation is crucial to the precision of these confidence intervals. We will learn a method called the <strong>bootstrap</strong> that will allow us to find confidence intervals without the assumption of normality.</p>
+</div>
+<div id="interpreting-confidence-intervals" class="section level2">
+<h2><span class="header-section-number">22.5</span> Interpreting confidence intervals</h2>
+<p>A careful eye might have observed the somewhat awkward language used to describe confidence intervals.</p>
+<blockquote>
+<p>Correct interpretation:<br />
+We are XX% confident that the population parameter is between…</p>
+</blockquote>
+<p><strong>Incorrect</strong> language might try to describe the confidence interval as capturing the population parameter with a certain probability. This is one of the most common errors: while it might be useful to think of it as a probability, the confidence level only quantifies how plausible it is that the parameter is in the interval.</p>
+<p>Another especially important consideration of confidence intervals is that they <strong>only try to capture the population parameter</strong>. Our intervals say nothing about the confidence of capturing individual observations, a proportion of the observations, or about capturing point estimates. Confidence intervals only attempt to capture population parameters.</p>
+</div>
+<div id="homework-problems-21" class="section level2">
+<h2><span class="header-section-number">22.6</span> Homework Problems</h2>
+<ol style="list-style-type: decimal">
+<li>Chronic illness</li>
+</ol>
+<p>In 2013, the Pew Research Foundation reported that “45% of U.S. adults report that they live with one or more chronic conditions.”<a href="#fn88" class="footnote-ref" id="fnref88"><sup>88</sup></a> However, this value was based on a sample, so it may not be a perfect estimate for the population parameter of interest on its own. The study reported a standard error of about 1.2%, and a normal model may reasonably be used in this setting.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Create a 95% confidence interval for the proportion of U.S. adults who live with one or more chronic conditions. Also interpret the confidence interval in the context of the study.<br />
 </li>
-<li>Find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>: There is a 95% probability time until next computer error will be between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. (note: technically, there are many answers to this question, but find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> such that each tail has equal probability.)</li>
+<li>Create a 99% confidence interval for the proportion of U.S. adults who live with one or more chronic conditions. Also interpret the confidence interval in the context of the study.<br />
+</li>
+<li>Identify each of the following statements as true or false. Provide an explanation to justify each of your answers.</li>
+</ol>
+<ul>
+<li>We can say with certainty that the confidence interval from part a contains the true percentage of U.S. adults who suffer from a chronic illness.</li>
+<li>If we repeated this study 1,000 times and constructed a 95% confidence interval for each study, then approximately 950 of those confidence intervals would contain the true fraction of U.S. adults who suffer from chronic illnesses.</li>
+<li>The poll provides statistically significant evidence (at the <span class="math inline">\(\alpha = 0.05\)</span> level) that the percentage of U.S. adults who suffer from chronic illnesses is not 50%.</li>
+<li>Since the standard error is 1.2%, only 1.2% of people in the study communicated uncertainty about their answer.</li>
+<li>Suppose the researchers had formed a one-sided hypothesis, they believed that the true proportion is less than 50%. We could find an equivalent one-sided 95% confidence interval by taking the upper bound of our two-sided 95% confidence interval.</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<p>2. Vegetarian college students</p>
+<p>Suppose that 8% of college students are vegetarians. Determine if the following statements are true or false, and explain your reasoning.</p>
+<ol style="list-style-type: lower-alpha">
+<li>The distribution of the sample proportions of vegetarians in random samples of size 60 is approximately normal since <span class="math inline">\(n \ge 30\)</span>.</li>
+<li>The distribution of the sample proportions of vegetarian college students in random samples of size 50 is right skewed.</li>
+<li>A random sample of 125 college students where 12% are vegetarians would be considered unusual.</li>
+<li>A random sample of 250 college students where 12% are vegetarians would be considered unusual.</li>
+<li>The standard error would be reduced by one-half if we increased the sample size from 125 to~250.</li>
+<li>A 99% confidence will be wider than a 95% because to have a higher confidence level requires a wider interval.</li>
+</ol>
+<p>3. Orange tabbies</p>
+<p>Suppose that 90% of orange tabby cats are male. Determine if the following statements are true or false, and explain your reasoning.<br />
+a. The distribution of sample proportions of random samples of size 30 is left skewed.<br />
+b. Using a sample size that is 4 times as large will reduce the standard error of the sample proportion by one-half.<br />
+c. The distribution of sample proportions of random samples of size 140 is approximately normal.</p>
+<p>4. Working backwards</p>
+<p>A 90% confidence interval for a population mean is (65,77). The population distribution is approximately normal and the population standard deviation is unknown. This confidence interval is based on a simple random sample of 25 observations. Calculate the sample mean, the margin of error, and the sample standard deviation.</p>
+<p>5. Find the p-value</p>
+<p>An independent random sample is selected from an approximately normal population with an unknown standard deviation. Find the p-value for the given set of hypotheses and <span class="math inline">\(T\)</span> test statistic. Also determine if the null hypothesis would be rejected at <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(H_{A}: \mu &gt; \mu_{0}\)</span>, <span class="math inline">\(n = 11\)</span>, <span class="math inline">\(T = 1.91\)</span><br />
+</li>
+<li><span class="math inline">\(H_{A}: \mu &lt; \mu_{0}\)</span>, <span class="math inline">\(n = 17\)</span>, <span class="math inline">\(T = - 3.45\)</span><br />
+</li>
+<li><span class="math inline">\(H_{A}: \mu \ne \mu_{0}\)</span>, <span class="math inline">\(n = 7\)</span>, <span class="math inline">\(T = 0.83\)</span><br />
+</li>
+<li><span class="math inline">\(H_{A}: \mu &gt; \mu_{0}\)</span>, <span class="math inline">\(n = 28\)</span>, <span class="math inline">\(T = 2.13\)</span></li>
 </ol>
 <div style="page-break-after: always;"></div>
-<p>3. Suppose PFT scores in the cadet wing follow a normal distribution with mean 330 and standard deviation 50.</p>
-<ol style="list-style-type: lower-alpha">
-<li>Find the probability a randomly selected cadet has a PFT score higher than 450.<br />
-</li>
-<li>Find the probability a randomly selected cadet has a PFT score within 2 standard deviations of the mean.<br />
-</li>
-<li>Find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> such that 90% of PFT scores will be between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.<br />
-</li>
-<li>Find the probability a randomly selected cadet has a PFT score higher than 450 given he/she is among the top 10% of cadets.</li>
-</ol>
-<p>4. Let <span class="math inline">\(X \sim \textsf{Beta}(\alpha=1,\beta=1)\)</span>. Show that <span class="math inline">\(X\sim \textsf{Unif}(0,1)\)</span>. Hint: write out the beta distribution pdf where <span class="math inline">\(\alpha=1\)</span> and <span class="math inline">\(\beta=1\)</span>.</p>
-<p>5. When using <code>R</code> to calculate probabilities related to the gamma distribution, we often use <code>pgamma</code>. Recall that <code>pgamma</code> is equivalent to the cdf of the gamma distribution. If <span class="math inline">\(X\sim\textsf{Gamma}(\alpha,\lambda)\)</span>, then
-<span class="math display">\[
-\mbox{P}(X\leq x)=\textsf{pgamma(x,alpha,lambda)}
+<p>6. Sleep habits of New Yorkers</p>
+<p>New York is known as “the city that never sleeps”. A random sample of 25 New Yorkers were asked how much sleep they get per night. Statistical summaries of these data are shown below. Do these data provide strong evidence that New Yorkers sleep less than 8 hours a night on average?</p>
+<p><span class="math display">\[
+\begin{array}{ccccc} &amp; &amp; &amp;\\ 
+\hline
+n   &amp; \bar{x}   &amp; s     &amp; min   &amp; max \\ 
+ \hline
+25  &amp; 7.73      &amp; 0.77  &amp; 6.17  &amp; 9.78 \\ 
+  \hline
+\end{array} 
 \]</span></p>
 
+<ol style="list-style-type: lower-alpha">
+<li>Write the hypotheses in symbols and in words.<br />
+</li>
+<li>Check conditions, then calculate the test statistic, <span class="math inline">\(T\)</span>, and the associated degrees of freedom.<br />
+</li>
+<li>Find and interpret the p-value in this context.<br />
+</li>
+<li>What is the conclusion of the hypothesis test?<br />
+</li>
+<li>Construct a 95% confidence interval that corresponded to this hypothesis test, would you expect 8 hours to be in the interval?</li>
+</ol>
+<p>7. Vegetarian college students II</p>
+<p>From problem 2 part c, suppose that it has been reported that 8% of college students are vegetarians. We think USAFA is not typical because of their fitness and health awareness, we think there are more vegetarians. We collect a random sample of 125 cadets and find 12% claimed they are vegetarians. Is there enough evidence to claim that USAFA cadets are different?</p>
+<ol style="list-style-type: lower-alpha">
+<li>Use <code>binom.test()</code> to conduct the hypothesis test and find a confidence interval.</li>
+<li>Use <code>prop.test()</code> with <code>correct=FALSE</code> to conduct the hypothesis test and find a confidence interval.</li>
+<li>Use <code>prop.test()</code> with <code>correct=TRUE</code> to conduct the hypothesis test and find a confidence interval.</li>
+<li>Which test should you use?</li>
+</ol>
+
+<div id="refs" class="references">
+<div>
+<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
 </div>
+<div>
+<p>Çetinkaya-Rundel, Mine, David Diez, Andrew Bray, Albert Kim, Ben Baumer, Chester Ismay, and Christopher Barr. 2020. <em>Openintro: Data Sets and Supplemental Functions from ’Openintro’ Textbooks and Labs</em>. <a href="https://CRAN.R-project.org/package=openintro">https://CRAN.R-project.org/package=openintro</a>.</p>
+</div>
+<div>
+<p>Diez, David, Christopher Barr, and Mine Çetinkaya-Rundel. 2014. <em>Introductory Statistics with Randomization and Simulation</em>. 1st ed. Openintro. <a href="https://www.openintro.org/book/isrs/">https://www.openintro.org/book/isrs/</a>.</p>
+</div>
+<div>
+<p>James, Gareth, Daniela Witten, Trevor Hastie, and Rob Tibshirani. 2017. <em>ISLR: Data for an Introduction to Statistical Learning with Applications in R</em>. <a href="https://CRAN.R-project.org/package=ISLR">https://CRAN.R-project.org/package=ISLR</a>.</p>
+</div>
+<div>
+<p>Kaplan, Daniel T., Randall Pruim, and Nicholas J. Horton. 2020. <em>MosaicCalc: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation</em>. <a href="https://CRAN.R-project.org/package=mosaicCalc">https://CRAN.R-project.org/package=mosaicCalc</a>.</p>
+</div>
+<div>
+<p>Kerns, Jay. 2010. <em>Introductory to Probability and Statistics with R</em>. 1st ed. <a href="http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf">http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf</a>.</p>
+</div>
+<div>
+<p>Meyer, David, Achim Zeileis, and Kurt Hornik. 2020. <em>Vcd: Visualizing Categorical Data</em>. <a href="https://CRAN.R-project.org/package=vcd">https://CRAN.R-project.org/package=vcd</a>.</p>
+</div>
+<div>
+<p>Pruim, Randall J. 2011. <em>Foundations and Applications of Statistics: An Introduction Using R</em>. Vol. 13. American Mathematical Soc.</p>
+</div>
+<div>
+<p>Pruim, Randall, Daniel T. Kaplan, and Nicholas J. Horton. 2020. <em>Mosaic: Project Mosaic Statistics and Mathematics Teaching Utilities</em>. <a href="https://CRAN.R-project.org/package=mosaic">https://CRAN.R-project.org/package=mosaic</a>.</p>
+</div>
+<div>
+<p>Ripley, Brian. 2019. <em>MASS: Support Functions and Datasets for Venables and Ripley’s Mass</em>. <a href="https://CRAN.R-project.org/package=MASS">https://CRAN.R-project.org/package=MASS</a>.</p>
+</div>
+<div>
+<p>Robinson, David, Alex Hayes, and Simon Couch. 2020. <em>Broom: Convert Statistical Objects into Tidy Tibbles</em>. <a href="https://CRAN.R-project.org/package=broom">https://CRAN.R-project.org/package=broom</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley. 2019. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey Dunnington. 2020. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>.</p>
+</div>
+<div>
+<p>Xie, Yihui. 2020a. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
+</div>
+<div>
+<p>———. 2020b. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr">https://CRAN.R-project.org/package=knitr</a>.</p>
+</div>
+<div>
+<p>Xie, Yihui, Joe Cheng, and Xianying Tan. 2020. <em>DT: A Wrapper of the Javascript Library ’Datatables’</em>. <a href="https://CRAN.R-project.org/package=DT">https://CRAN.R-project.org/package=DT</a>.</p>
+</div>
+<div>
+<p>Zhu, Hao. 2020. <em>KableExtra: Construct Complex Table with ’Kable’ and Pipe Syntax</em>. <a href="https://CRAN.R-project.org/package=kableExtra">https://CRAN.R-project.org/package=kableExtra</a>.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="footnotes">
+<hr />
+<ol start="86">
+<li id="fn86"><p>If we want to be more certain we will capture the fish, we might use a wider net. Likewise, we use a wider confidence interval if we want to be more certain that we capture the parameter. A higher level of confidence implies a wider interval.<a href="CI.html#fnref86" class="footnote-back">↩︎</a></p></li>
+<li id="fn87"><p>This is equivalent to asking how often a standard normal variable will be larger than -2.58 but less than 2.58. To determine this probability, look up -2.58 and 2.58 in <code>R</code> using <code>pnorm()</code> (0.0049 and 0.9951). Thus, there is a <span class="math inline">\(0.9951-0.0049 \approx 0.99\)</span> probability that the unobserved random variable <span class="math inline">\(X\)</span> will be within 2.58 standard deviations of the mean.<a href="CI.html#fnref87" class="footnote-back">↩︎</a></p></li>
+<li id="fn88"><p><a href="http://pewinternet.org/Reports/2013/The-Diagnosis-Difference.aspx" class="uri">http://pewinternet.org/Reports/2013/The-Diagnosis-Difference.aspx</a> The Diagnosis Difference. November 26, 2013. Pew Research.<a href="CI.html#fnref88" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="DISCRETENAMED.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="MULTIDISTS.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="CLT.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

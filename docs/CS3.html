@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-05" />
+<meta name="date" content="2021-02-08" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,6 +466,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21.6" data-path="CLT.html"><a href="CLT.html#homework-problems-20"><i class="fa fa-check"></i><b>21.6</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="22" data-path="CI.html"><a href="CI.html"><i class="fa fa-check"></i><b>22</b> Confidence Intervals</a><ul>
+<li class="chapter" data-level="22.1" data-path="CI.html"><a href="CI.html#objectives-20"><i class="fa fa-check"></i><b>22.1</b> Objectives</a></li>
+<li class="chapter" data-level="22.2" data-path="CI.html"><a href="CI.html#confidence-interval"><i class="fa fa-check"></i><b>22.2</b> Confidence interval</a><ul>
+<li class="chapter" data-level="22.2.1" data-path="CI.html"><a href="CI.html#capturing-the-population-parameter"><i class="fa fa-check"></i><b>22.2.1</b> Capturing the population parameter</a></li>
+<li class="chapter" data-level="22.2.2" data-path="CI.html"><a href="CI.html#constructing-a-confidence-interval"><i class="fa fa-check"></i><b>22.2.2</b> Constructing a confidence interval</a></li>
+<li class="chapter" data-level="22.2.3" data-path="CI.html"><a href="CI.html#body-temperature-example"><i class="fa fa-check"></i><b>22.2.3</b> Body Temperature Example</a></li>
+<li class="chapter" data-level="22.2.4" data-path="CI.html"><a href="CI.html#one-sided-intervals"><i class="fa fa-check"></i><b>22.2.4</b> One-sided Intervals</a></li>
+</ul></li>
+<li class="chapter" data-level="22.3" data-path="CI.html"><a href="CI.html#confidence-intervals-for-two-proportions"><i class="fa fa-check"></i><b>22.3</b> Confidence intervals for two proportions</a><ul>
+<li class="chapter" data-level="22.3.1" data-path="CI.html"><a href="CI.html#permutation-test-for-two-proportions"><i class="fa fa-check"></i><b>22.3.1</b> Permutation test for two proportions</a></li>
+<li class="chapter" data-level="22.3.2" data-path="CI.html"><a href="CI.html#hypothesis-test-for-two-proportions-using-normal-model"><i class="fa fa-check"></i><b>22.3.2</b> Hypothesis test for two proportions using normal model</a></li>
+<li class="chapter" data-level="22.3.3" data-path="CI.html"><a href="CI.html#confidence-interval-for-two-proportions-using-normal-model"><i class="fa fa-check"></i><b>22.3.3</b> Confidence interval for two proportions using normal model</a></li>
+</ul></li>
+<li class="chapter" data-level="22.4" data-path="CI.html"><a href="CI.html#changing-the-confidence-level"><i class="fa fa-check"></i><b>22.4</b> Changing the confidence level</a></li>
+<li class="chapter" data-level="22.5" data-path="CI.html"><a href="CI.html#interpreting-confidence-intervals"><i class="fa fa-check"></i><b>22.5</b> Interpreting confidence intervals</a></li>
+<li class="chapter" data-level="22.6" data-path="CI.html"><a href="CI.html#homework-problems-21"><i class="fa fa-check"></i><b>22.6</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -535,7 +552,8 @@ Statisticians are sometimes called upon to evaluate the strength of evidence. Wh
 </blockquote>
 <p>The large difference in promotion rates (58.3% for females versus 87.5% for males) suggest there might be discrimination against women in promotion decisions. Most people come to this conclusion because they think these sample statistics are the actual population parameters. We cannot yet be sure if the observed difference represents discrimination or is just from random variability. Generally there is fluctuation in sample data; if we conducted the experiment again, we would get different values. We also wouldn’t expect the sample proportions to be <strong>exactly</strong> equal, even if the truth was that the promotion decisions were independent of gender. To make a decision, we must understand the random variability and compare it with the observed difference.</p>
 <p>This question is a reminder that the observed outcomes in the sample may not perfectly reflect the true relationships between variables in the underlying population. The table shows there were 7 fewer promotions in the female group than in the male group, a difference in promotion rates of 29.2% <span class="math inline">\(\left( \frac{21}{24} - \frac{14}{24} = 0.292 \right)\)</span>. This observed difference is what we call a <em>point estimate</em> of the true effect. The point estimate of the difference is large, but the sample size for the study is small, making it unclear if this observed difference represents discrimination or whether it is simply due to chance. We label these two competing claims, chance or discrimination, as <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_A\)</span>:</p>
-
+<p><span class="math inline">\(H_0\)</span>: <strong>Null hypothesis.</strong> The variables <em>gender</em> and <em>decision</em> are independent. They have no relationship, and the observed difference between the proportion of males and females who were promoted, 29.2%, was due to chance.<br />
+<span class="math inline">\(H_A\)</span>: <strong>Alternative hypothesis.</strong> The variables <em>gender</em> and <em>decision</em> are <strong>not</strong> independent. The difference in promotion rates of 29.2% was not due to chance, and equally qualified females are less likely to be promoted than males.</p>
 <blockquote>
 <p>Hypothesis testing<br />
 These hypotheses are part of what is called a <strong>hypothesis test</strong>. A hypothesis test is a statistical technique used to evaluate competing claims using data. Often times, the null hypothesis takes a stance of <strong>no difference</strong> or <strong>no effect</strong> and thus is <code>skeptical</code> of the research claim. If the null hypothesis and the data notably disagree, then we will reject the null hypothesis in favor of the alternative hypothesis.</p>
@@ -649,7 +667,8 @@ How often would you observe a difference of at least -29.2% (-0.292) according t
 ## 1  0.0257</code></pre>
 <p>In our simulations, only 2.8% of the simulated test statistics were less than or equal to the observed test statistic, more extreme relative to the null hypothesis. Such a low probability indicates that observing such a large difference in proportions from chance alone is rare. This probability is known as a <strong>p-value</strong>. The p-value is a conditional probability, the probability of the observed value or more extreme given that the null hypothesis is true.</p>
 <p>The observed difference of -29.2% is a rare event if there really is no impact from listing gender in the candidates’ files, which provides us with two possible interpretations of the study results:</p>
-
+<p><span class="math inline">\(H_0\)</span>: <strong>Null hypothesis.</strong> Gender has no effect on promotion decision, and we observed a difference that is so large that it would only happen rarely.<br />
+<span class="math inline">\(H_A\)</span>: <strong>Alternative hypothesis.</strong> Gender has an effect on promotion decision, and what we observed was actually due to equally qualified women being discriminated against in promotion decisions, which explains the large difference of -29.2%.</p>
 <p>When we conduct formal studies, we reject a skeptical position if the data strongly conflict with that position.<a href="#fn72" class="footnote-ref" id="fnref72"><sup>72</sup></a></p>
 <p>In our analysis, we determined that there was only a ~ 2% probability of obtaining a test statistic where the difference between female and male promotion proportions was 29.2% or larger assuming gender had no impact. So we conclude the data provide evidence of gender discrimination against women by the supervisors. In this case, we reject the null hypothesis in favor of the alternative.</p>
 <p>Statistical inference is the practice of making decisions and conclusions from data in the context of uncertainty. Errors do occur, just like rare events, and the data set at hand might lead us to the wrong conclusion. While a given data set may not always lead us to a correct conclusion, statistical inference gives us tools to control and evaluate how often these errors occur.</p>
@@ -744,7 +763,7 @@ There were 48 files and 48 supervisors. A total of 35 files indicated promote. W
 <li id="fn69"><p>The study is an experiment, as subjects were randomly assigned a male file or a female file. Since this is an experiment, the results can be used to evaluate a causal relationship between gender of a candidate and the promotion decision.<a href="CS3.html#fnref69" class="footnote-back">↩︎</a></p></li>
 <li id="fn70"><p>The test procedure we employ in this section is formally called a <strong>permutation test</strong>.<a href="CS3.html#fnref70" class="footnote-back">↩︎</a></p></li>
 <li id="fn71"><p><span class="math inline">\(18/24 - 17/24=0.042\)</span> or about 4.2% in favor of the men. This difference due to chance is much smaller than the difference observed in the actual groups.<a href="CS3.html#fnref71" class="footnote-back">↩︎</a></p></li>
-<li id="fn72"><p>This reasoning does not generally extend to anecdotal observations. Each of us observes incredibly rare events every day, events we could not possibly hope to predict. However, in the non-rigorous setting of anecdotal evidence, almost anything may appear to be a rare event, so the idea of looking for rare events in day-to-day activities is treacherous. For example, we might look at the lottery: there was only a 1 in 176 million chance that the Mega Millions numbers for the largest jackpot in history (March 30, 2012) would be (2, 4, 23, 38, 46) with a Mega ball of (23), but nonetheless those numbers came up! However, no matter what numbers had turned up, they would have had the same incredibly rare odds. That is, . This type of situation is typical of our daily lives: each possible event in itself seems incredibly rare, but if we consider every alternative, those outcomes are also incredibly rare. We should be cautious not to misinterpret such anecdotal evidence.<a href="CS3.html#fnref72" class="footnote-back">↩︎</a></p></li>
+<li id="fn72"><p>This reasoning does not generally extend to anecdotal observations. Each of us observes incredibly rare events every day, events we could not possibly hope to predict. However, in the non-rigorous setting of anecdotal evidence, almost anything may appear to be a rare event, so the idea of looking for rare events in day-to-day activities is treacherous. For example, we might look at the lottery: there was only a 1 in 176 million chance that the Mega Millions numbers for the largest jackpot in history (March 30, 2012) would be (2, 4, 23, 38, 46) with a Mega ball of (23), but nonetheless those numbers came up! However, no matter what numbers had turned up, they would have had the same incredibly rare odds. That is, <strong>any set of numbers we could have observed would ultimately be incredibly rare</strong>. This type of situation is typical of our daily lives: each possible event in itself seems incredibly rare, but if we consider every alternative, those outcomes are also incredibly rare. We should be cautious not to misinterpret such anecdotal evidence.<a href="CS3.html#fnref72" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

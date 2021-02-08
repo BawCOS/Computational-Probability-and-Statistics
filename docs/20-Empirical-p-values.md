@@ -317,7 +317,10 @@ gf_dist("hyper",m=50,n=40,k=25) %>%
   gf_theme(theme_bw())
 ```
 
-<img src="20-Empirical-p-values_files/figure-html/dens203-fig-1.png" width="672" />
+<div class="figure">
+<img src="20-Empirical-p-values_files/figure-html/dens203-fig-1.png" alt="Hypergeometric pmf showing the cutoff for p-value calculation." width="672" />
+<p class="caption">(\#fig:dens203-fig)Hypergeometric pmf showing the cutoff for p-value calculation.</p>
+</div>
 
 This is how `fisher.test()` is calculating the p-value:
 
