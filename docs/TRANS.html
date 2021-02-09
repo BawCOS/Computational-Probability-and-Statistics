@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-08" />
+<meta name="date" content="2021-02-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -483,6 +483,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="22.5" data-path="CI.html"><a href="CI.html#interpreting-confidence-intervals"><i class="fa fa-check"></i><b>22.5</b> Interpreting confidence intervals</a></li>
 <li class="chapter" data-level="22.6" data-path="CI.html"><a href="CI.html#homework-problems-21"><i class="fa fa-check"></i><b>22.6</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="23" data-path="BOOT.html"><a href="BOOT.html"><i class="fa fa-check"></i><b>23</b> Bootstrap</a><ul>
+<li class="chapter" data-level="23.1" data-path="BOOT.html"><a href="BOOT.html#objectives-21"><i class="fa fa-check"></i><b>23.1</b> Objectives</a></li>
+<li class="chapter" data-level="23.2" data-path="BOOT.html"><a href="BOOT.html#confidence-intervals"><i class="fa fa-check"></i><b>23.2</b> Confidence intervals</a></li>
+<li class="chapter" data-level="23.3" data-path="BOOT.html"><a href="BOOT.html#bootstrapping"><i class="fa fa-check"></i><b>23.3</b> Bootstrapping</a></li>
+<li class="chapter" data-level="23.4" data-path="BOOT.html"><a href="BOOT.html#bootstrap-example"><i class="fa fa-check"></i><b>23.4</b> Bootstrap example</a><ul>
+<li class="chapter" data-level="23.4.1" data-path="BOOT.html"><a href="BOOT.html#using-clt"><i class="fa fa-check"></i><b>23.4.1</b> Using CLT</a></li>
+<li class="chapter" data-level="23.4.2" data-path="BOOT.html"><a href="BOOT.html#bootstrap"><i class="fa fa-check"></i><b>23.4.2</b> Bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="23.5" data-path="BOOT.html"><a href="BOOT.html#non-standard-sample-statistics"><i class="fa fa-check"></i><b>23.5</b> Non-standard sample statistics</a><ul>
+<li class="chapter" data-level="23.5.1" data-path="BOOT.html"><a href="BOOT.html#example-median"><i class="fa fa-check"></i><b>23.5.1</b> Example median</a></li>
+<li class="chapter" data-level="23.5.2" data-path="BOOT.html"><a href="BOOT.html#summary-bootstrap"><i class="fa fa-check"></i><b>23.5.2</b> Summary bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="23.6" data-path="BOOT.html"><a href="BOOT.html#confidence-interval-for-difference-in-means"><i class="fa fa-check"></i><b>23.6</b> Confidence interval for difference in means</a><ul>
+<li class="chapter" data-level="23.6.1" data-path="BOOT.html"><a href="BOOT.html#health-evaluation-and-linkage-of-primary-care"><i class="fa fa-check"></i><b>23.6.1</b> Health evaluation and linkage of primary care</a></li>
+<li class="chapter" data-level="23.6.2" data-path="BOOT.html"><a href="BOOT.html#permutation-test"><i class="fa fa-check"></i><b>23.6.2</b> Permutation test</a></li>
+<li class="chapter" data-level="23.6.3" data-path="BOOT.html"><a href="BOOT.html#clt"><i class="fa fa-check"></i><b>23.6.3</b> CLT</a></li>
+<li class="chapter" data-level="23.6.4" data-path="BOOT.html"><a href="BOOT.html#hypothesis-tests"><i class="fa fa-check"></i><b>23.6.4</b> Hypothesis tests</a></li>
+<li class="chapter" data-level="23.6.5" data-path="BOOT.html"><a href="BOOT.html#confidence-intervals-1"><i class="fa fa-check"></i><b>23.6.5</b> Confidence intervals</a></li>
+<li class="chapter" data-level="23.6.6" data-path="BOOT.html"><a href="BOOT.html#bootstrap-1"><i class="fa fa-check"></i><b>23.6.6</b> Bootstrap</a></li>
+</ul></li>
+<li class="chapter" data-level="23.7" data-path="BOOT.html"><a href="BOOT.html#frequently-asked-questions"><i class="fa fa-check"></i><b>23.7</b> Frequently asked questions</a></li>
+<li class="chapter" data-level="23.8" data-path="BOOT.html"><a href="BOOT.html#homework-problems-22"><i class="fa fa-check"></i><b>23.8</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -649,9 +672,9 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class         min        Q1    median        Q3       max      mean
-## ...1 sqrt numeric 0.003822289 0.5034669 0.7075768 0.8659581 0.9998788 0.6682975
+## ...1 sqrt numeric 0.004921521 0.4977629 0.7061643 0.8671513 0.9999228 0.6661759
 ##             sd     n missing
-## ...1 0.2343216 10000       0</code></pre>
+## ...1 0.2364772 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -681,9 +704,9 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -5.566906 -0.6862373 -0.3459092 -0.1439187 -0.0001212101
+## ...1    y numeric -5.314138 -0.6976315 -0.3479073 -0.1425418 -7.721621e-05
 ##            mean        sd     n missing
-## ...1 -0.4957383 0.4968033 10000       0</code></pre>
+## ...1 -0.5026017 0.5090589 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
