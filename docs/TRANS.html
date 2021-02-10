@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-09" />
+<meta name="date" content="2021-02-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -506,6 +506,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="23.7" data-path="BOOT.html"><a href="BOOT.html#frequently-asked-questions"><i class="fa fa-check"></i><b>23.7</b> Frequently asked questions</a></li>
 <li class="chapter" data-level="23.8" data-path="BOOT.html"><a href="BOOT.html#homework-problems-22"><i class="fa fa-check"></i><b>23.8</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="24" data-path="ADDTESTS.html"><a href="ADDTESTS.html"><i class="fa fa-check"></i><b>24</b> Additional Hypothesis Tests</a><ul>
+<li class="chapter" data-level="24.1" data-path="ADDTESTS.html"><a href="ADDTESTS.html#objectives-22"><i class="fa fa-check"></i><b>24.1</b> Objectives</a></li>
+<li class="chapter" data-level="24.2" data-path="ADDTESTS.html"><a href="ADDTESTS.html#introduction-2"><i class="fa fa-check"></i><b>24.2</b> Introduction</a></li>
+<li class="chapter" data-level="24.3" data-path="ADDTESTS.html"><a href="ADDTESTS.html#categorical-data-1"><i class="fa fa-check"></i><b>24.3</b> Categorical data</a><ul>
+<li class="chapter" data-level="24.3.1" data-path="ADDTESTS.html"><a href="ADDTESTS.html#help-example"><i class="fa fa-check"></i><b>24.3.1</b> HELP example</a></li>
+<li class="chapter" data-level="24.3.2" data-path="ADDTESTS.html"><a href="ADDTESTS.html#test-statistic"><i class="fa fa-check"></i><b>24.3.2</b> Test statistic</a></li>
+<li class="chapter" data-level="24.3.3" data-path="ADDTESTS.html"><a href="ADDTESTS.html#extension-to-larger-tables"><i class="fa fa-check"></i><b>24.3.3</b> Extension to larger tables</a></li>
+<li class="chapter" data-level="24.3.4" data-path="ADDTESTS.html"><a href="ADDTESTS.html#permutation-test-1"><i class="fa fa-check"></i><b>24.3.4</b> Permutation test</a></li>
+<li class="chapter" data-level="24.3.5" data-path="ADDTESTS.html"><a href="ADDTESTS.html#chi-squared-test"><i class="fa fa-check"></i><b>24.3.5</b> Chi-squared test</a></li>
+</ul></li>
+<li class="chapter" data-level="24.4" data-path="ADDTESTS.html"><a href="ADDTESTS.html#numerical-data-2"><i class="fa fa-check"></i><b>24.4</b> Numerical data</a><ul>
+<li class="chapter" data-level="24.4.1" data-path="ADDTESTS.html"><a href="ADDTESTS.html#mlb-batting-performance"><i class="fa fa-check"></i><b>24.4.1</b> MLB batting performance</a></li>
+<li class="chapter" data-level="24.4.2" data-path="ADDTESTS.html"><a href="ADDTESTS.html#analysis-of-variance-anova-and-the-f-test"><i class="fa fa-check"></i><b>24.4.2</b> Analysis of variance (ANOVA) and the F test</a></li>
+</ul></li>
+<li class="chapter" data-level="24.5" data-path="ADDTESTS.html"><a href="ADDTESTS.html#homework-problems-23"><i class="fa fa-check"></i><b>24.5</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -671,10 +687,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1    median        Q3       max      mean
-## ...1 sqrt numeric 0.004921521 0.4977629 0.7061643 0.8671513 0.9999228 0.6661759
+##      name   class         min        Q1   median        Q3       max      mean
+## ...1 sqrt numeric 0.006235246 0.4992367 0.706712 0.8657337 0.9999793 0.6662781
 ##             sd     n missing
-## ...1 0.2364772 10000       0</code></pre>
+## ...1 0.2366337 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -703,10 +719,10 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="TRANS.html#cb406-1"></a><span class="kw">inspect</span>(y_results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -5.314138 -0.6976315 -0.3479073 -0.1425418 -7.721621e-05
+##      name   class       min        Q1     median         Q3           max
+## ...1    y numeric -5.077537 -0.694675 -0.3471321 -0.1441779 -2.066461e-05
 ##            mean        sd     n missing
-## ...1 -0.5026017 0.5090589 10000       0</code></pre>
+## ...1 -0.5016172 0.5035977 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
