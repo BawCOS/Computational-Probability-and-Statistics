@@ -1,6 +1,6 @@
 # (PART) Statistical Modeling {-} 
 
-# Hypothesis Testing Case Study {#CS3}
+# Case Study {#CS3}
 
 
 ## Objectives

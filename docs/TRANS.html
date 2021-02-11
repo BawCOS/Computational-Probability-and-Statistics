@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-10" />
+<meta name="date" content="2021-02-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -375,7 +375,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17.6" data-path="EST.html"><a href="EST.html#homework-problems-16"><i class="fa fa-check"></i><b>17.6</b> Homework Problems</a></li>
 </ul></li>
 <li class="part"><span><b>III Statistical Modeling</b></span></li>
-<li class="chapter" data-level="18" data-path="CS3.html"><a href="CS3.html"><i class="fa fa-check"></i><b>18</b> Hypothesis Testing Case Study</a><ul>
+<li class="chapter" data-level="18" data-path="CS3.html"><a href="CS3.html"><i class="fa fa-check"></i><b>18</b> Case Study</a><ul>
 <li class="chapter" data-level="18.1" data-path="CS3.html"><a href="CS3.html#objectives-17"><i class="fa fa-check"></i><b>18.1</b> Objectives</a></li>
 <li class="chapter" data-level="18.2" data-path="CS3.html"><a href="CS3.html#introduction"><i class="fa fa-check"></i><b>18.2</b> Introduction</a></li>
 <li class="chapter" data-level="18.3" data-path="CS3.html"><a href="CS3.html#foundation-for-inference"><i class="fa fa-check"></i><b>18.3</b> Foundation for inference</a></li>
@@ -521,6 +521,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="24.4.2" data-path="ADDTESTS.html"><a href="ADDTESTS.html#analysis-of-variance-anova-and-the-f-test"><i class="fa fa-check"></i><b>24.4.2</b> Analysis of variance (ANOVA) and the F test</a></li>
 </ul></li>
 <li class="chapter" data-level="24.5" data-path="ADDTESTS.html"><a href="ADDTESTS.html#homework-problems-23"><i class="fa fa-check"></i><b>24.5</b> Homework Problems</a></li>
+</ul></li>
+<li class="part"><span><b>IV Predictive Statistical Modeling</b></span></li>
+<li class="chapter" data-level="25" data-path="CS4.html"><a href="CS4.html"><i class="fa fa-check"></i><b>25</b> Case Study</a><ul>
+<li class="chapter" data-level="25.1" data-path="CS4.html"><a href="CS4.html#objectives-23"><i class="fa fa-check"></i><b>25.1</b> Objectives</a></li>
+<li class="chapter" data-level="25.2" data-path="CS4.html"><a href="CS4.html#introduction-3"><i class="fa fa-check"></i><b>25.2</b> Introduction</a><ul>
+<li class="chapter" data-level="25.2.1" data-path="CS4.html"><a href="CS4.html#load-packages"><i class="fa fa-check"></i><b>25.2.1</b> Load packages</a></li>
+<li class="chapter" data-level="25.2.2" data-path="CS4.html"><a href="CS4.html#the-data-and-exploratory-analysis"><i class="fa fa-check"></i><b>25.2.2</b> The data and exploratory analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="25.3" data-path="CS4.html"><a href="CS4.html#sum-of-squared-residuals"><i class="fa fa-check"></i><b>25.3</b> Sum of squared residuals</a></li>
+<li class="chapter" data-level="25.4" data-path="CS4.html"><a href="CS4.html#the-linear-model"><i class="fa fa-check"></i><b>25.4</b> The linear model</a></li>
+<li class="chapter" data-level="25.5" data-path="CS4.html"><a href="CS4.html#prediction-and-prediction-errors"><i class="fa fa-check"></i><b>25.5</b> Prediction and prediction errors</a></li>
+<li class="chapter" data-level="25.6" data-path="CS4.html"><a href="CS4.html#model-diagnostics"><i class="fa fa-check"></i><b>25.6</b> Model diagnostics</a></li>
+<li class="chapter" data-level="25.7" data-path="CS4.html"><a href="CS4.html#brief-summary"><i class="fa fa-check"></i><b>25.7</b> Brief summary</a></li>
+<li class="chapter" data-level="25.8" data-path="CS4.html"><a href="CS4.html#homework-problems-24"><i class="fa fa-check"></i><b>25.8</b> Homework Problems</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -687,10 +701,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1   median        Q3       max      mean
-## ...1 sqrt numeric 0.006235246 0.4992367 0.706712 0.8657337 0.9999793 0.6662781
+##      name   class         min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.009824919 0.4979088 0.7056395 0.8667108 0.9999505 0.6664801
 ##             sd     n missing
-## ...1 0.2366337 10000       0</code></pre>
+## ...1 0.2364931 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -719,10 +733,10 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="TRANS.html#cb406-1"></a><span class="kw">inspect</span>(y_results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class       min        Q1     median         Q3           max
-## ...1    y numeric -5.077537 -0.694675 -0.3471321 -0.1441779 -2.066461e-05
+##      name   class       min         Q1     median         Q3           max
+## ...1    y numeric -4.622833 -0.6973385 -0.3486508 -0.1430499 -4.954591e-05
 ##            mean        sd     n missing
-## ...1 -0.5016172 0.5035977 10000       0</code></pre>
+## ...1 -0.5004348 0.4989513 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
