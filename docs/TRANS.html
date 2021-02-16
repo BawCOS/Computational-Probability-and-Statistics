@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-11" />
+<meta name="date" content="2021-02-16" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -536,6 +536,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="25.7" data-path="CS4.html"><a href="CS4.html#brief-summary"><i class="fa fa-check"></i><b>25.7</b> Brief summary</a></li>
 <li class="chapter" data-level="25.8" data-path="CS4.html"><a href="CS4.html#homework-problems-24"><i class="fa fa-check"></i><b>25.8</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="26" data-path="LRBASICS.html"><a href="LRBASICS.html"><i class="fa fa-check"></i><b>26</b> Linear Regression Basics</a><ul>
+<li class="chapter" data-level="26.1" data-path="LRBASICS.html"><a href="LRBASICS.html#objectives-24"><i class="fa fa-check"></i><b>26.1</b> Objectives</a></li>
+<li class="chapter" data-level="26.2" data-path="LRBASICS.html"><a href="LRBASICS.html#linear-regression-models"><i class="fa fa-check"></i><b>26.2</b> Linear regression models</a><ul>
+<li class="chapter" data-level="26.2.1" data-path="LRBASICS.html"><a href="LRBASICS.html#estimation-1"><i class="fa fa-check"></i><b>26.2.1</b> Estimation</a></li>
+<li class="chapter" data-level="26.2.2" data-path="LRBASICS.html"><a href="LRBASICS.html#possum-example"><i class="fa fa-check"></i><b>26.2.2</b> Possum example</a></li>
+<li class="chapter" data-level="26.2.3" data-path="LRBASICS.html"><a href="LRBASICS.html#interpretation"><i class="fa fa-check"></i><b>26.2.3</b> Interpretation</a></li>
+<li class="chapter" data-level="26.2.4" data-path="LRBASICS.html"><a href="LRBASICS.html#extrapolation-is-dangerous"><i class="fa fa-check"></i><b>26.2.4</b> Extrapolation is dangerous</a></li>
+<li class="chapter" data-level="26.2.5" data-path="LRBASICS.html"><a href="LRBASICS.html#reading-computer-output"><i class="fa fa-check"></i><b>26.2.5</b> Reading computer output</a></li>
+<li class="chapter" data-level="26.2.6" data-path="LRBASICS.html"><a href="LRBASICS.html#assumptions-1"><i class="fa fa-check"></i><b>26.2.6</b> Assumptions</a></li>
+<li class="chapter" data-level="26.2.7" data-path="LRBASICS.html"><a href="LRBASICS.html#residual-plots"><i class="fa fa-check"></i><b>26.2.7</b> Residual plots</a></li>
+<li class="chapter" data-level="26.2.8" data-path="LRBASICS.html"><a href="LRBASICS.html#summary-1"><i class="fa fa-check"></i><b>26.2.8</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="26.3" data-path="LRBASICS.html"><a href="LRBASICS.html#homework-problems-25"><i class="fa fa-check"></i><b>26.3</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -701,10 +715,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1    median        Q3       max      mean
-## ...1 sqrt numeric 0.009824919 0.4979088 0.7056395 0.8667108 0.9999505 0.6664801
+##      name   class        min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.01298625 0.5061215 0.7137399 0.8659472 0.9998773 0.6702861
 ##             sd     n missing
-## ...1 0.2364931 10000       0</code></pre>
+## ...1 0.2351366 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -734,9 +748,9 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -4.622833 -0.6973385 -0.3486508 -0.1430499 -4.954591e-05
-##            mean        sd     n missing
-## ...1 -0.5004348 0.4989513 10000       0</code></pre>
+## ...1    y numeric -4.343864 -0.6809785 -0.3372367 -0.1439313 -0.0001227332
+##            mean       sd     n missing
+## ...1 -0.4947347 0.503282 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
