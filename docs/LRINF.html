@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 13 Named Continuous Distributions | Computational Probability and Statistics</title>
+  <title>Chapter 27 Linear Regression Inference | Computational Probability and Statistics</title>
   <meta name="description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 13 Named Continuous Distributions | Computational Probability and Statistics" />
+  <meta property="og:title" content="Chapter 27 Linear Regression Inference | Computational Probability and Statistics" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="figures/Cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 13 Named Continuous Distributions | Computational Probability and Statistics" />
+  <meta name="twitter:title" content="Chapter 27 Linear Regression Inference | Computational Probability and Statistics" />
   
   <meta name="twitter:description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="twitter:image" content="figures/Cover.png" />
@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="DISCRETENAMED.html"/>
-<link rel="next" href="MULTIDISTS.html"/>
+<link rel="prev" href="LRBASICS.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -586,303 +586,503 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="CONTNNAMED" class="section level1">
-<h1><span class="header-section-number">Chapter 13</span> Named Continuous Distributions</h1>
-
-<div id="objectives-12" class="section level2">
-<h2><span class="header-section-number">13.1</span> Objectives</h2>
+<div id="LRINF" class="section level1">
+<h1><span class="header-section-number">Chapter 27</span> Linear Regression Inference</h1>
+<div id="objectives-25" class="section level2">
+<h2><span class="header-section-number">27.1</span> Objectives</h2>
 <ol style="list-style-type: decimal">
-<li>Recognize when to use common continuous distributions (Uniform, Exponential, Gamma, Normal, Beta), identify parameters, and find moments.<br />
+<li>Given a simple linear regression model, conduct inference on the coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.<br />
 </li>
-<li>Use <code>R</code> to calculate probabilities and quantiles involving random variables with common continuous distributions.<br />
+<li>Given a simple linear regression model, calculate the predicted response for a given value of the predictor.<br />
 </li>
-<li>Understand the relationship between the Poisson process and the Poisson &amp; Exponential distributions.<br />
-</li>
-<li>Know when to apply and then use the memoryless property.</li>
+<li>Build and interpret confidence and prediction intervals for values of the response variable.</li>
 </ol>
 </div>
-<div id="continuous-distributions" class="section level2">
-<h2><span class="header-section-number">13.2</span> Continuous distributions</h2>
-<p>In this lesson we will explore continuous distributions. This means we work with probability density functions and use them to find probabilities. Thus we must integrate, either numerically, graphically, or mathematically. The cumulative distribution function will also play an important role in this lesson.</p>
-<p>There are many more distributions than the ones in this lesson but these are the most common and will set you up to learn and use any others in the future.</p>
-<div id="uniform-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.1</span> Uniform distribution</h3>
-<p>The first continuous distribution we will discuss is the uniform distribution. By default, when we refer to the uniform distribution, we are referring to the continuous version. When referring to the discrete version, we use the full term “discrete uniform distribution.”</p>
-<p>A continuous random variable has the uniform distribution if probability density is constant, <strong>uniform</strong>. The parameters of this distribution are <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, representing the minimum and maximum of the sample space. This distribution is commonly denoted as <span class="math inline">\(U(a,b)\)</span>.</p>
-<p>Let <span class="math inline">\(X\)</span> be a continuous random variable with the uniform distribution. This is denoted as <span class="math inline">\(X\sim \textsf{Unif}(a,b)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
+<div id="introduction-4" class="section level2">
+<h2><span class="header-section-number">27.2</span> Introduction</h2>
+<p>In this lesson we discuss uncertainty in the estimates of the slope and y-intercept for a regression line. This will allow us to perform inference and predictions. Just as we identified standard errors for point estimates in previous lessons, we first discuss standard errors for these new estimates. This lesson is a classical lesson in the sense that we will be using the normal distribution. We will assume that the errors are normally distributed with constant variance. Later in the course, we will relax these assumptions.</p>
+<div id="regression" class="section level3">
+<h3><span class="header-section-number">27.2.1</span> Regression</h3>
+<p>Last lesson, we introduced linear models using the simple linear regression model:
 <span class="math display">\[
-f_X(x)=\left\{\begin{array}{ll} \frac{1}{b-a}, &amp; a\leq x \leq b \\ 0, &amp; \mbox{otherwise} \end{array}\right.
+Y=\beta_0+\beta_1X+e
 \]</span></p>
-<p>The mean of <span class="math inline">\(X\)</span> is <span class="math inline">\(\mbox{E}(X)=\frac{a+b}{2}\)</span> and the variance is <span class="math inline">\(\mbox{Var}(X)=\frac{(b-a)^2}{12}\)</span>. The derivation of the mean is left to the Application.</p>
-<p>The most common uniform distribution is <span class="math inline">\(U(0,1)\)</span> which we have already used several times in this course. Again, notice in Figure <a href="CONTNNAMED.html#fig:uni-fig">13.1</a> that the plot of the <strong>pdf</strong> is a constant or uniform value.</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="CONTNNAMED.html#cb342-1"></a><span class="kw">gf_dist</span>(<span class="st">&quot;unif&quot;</span>,<span class="dt">title=</span><span class="st">&quot;Pdf of Uniform random variable&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;f(x)&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb342-2"><a href="CONTNNAMED.html#cb342-2"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_bw</span>())</span></code></pre></div>
-<div class="figure"><span id="fig:uni-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/uni-fig-1.png" alt="The pdf of Uniform random variable." width="672" />
-<p class="caption">
-Figure 13.1: The pdf of Uniform random variable.
-</p>
-</div>
-<p>To check it is a proper pdf, all values must be non-negative and the total probability must be 1. In <code>R</code> the function for probability density will start with the letter <strong>d</strong> and have some short descriptor for the distribution. For the uniform we use <code>dunif()</code>.</p>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="CONTNNAMED.html#cb343-1"></a><span class="kw">integrate</span>(<span class="cf">function</span>(x)<span class="kw">dunif</span>(x),<span class="dv">0</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## 1 with absolute error &lt; 1.1e-14</code></pre>
-</div>
-<div id="exponential-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.2</span> Exponential distribution</h3>
-<p>Recall from the lesson on named discrete distributions, we discussed the Poisson process. If arrivals follow a Poisson process, we know that the number of arrivals in a specified amount of time follows a Poisson distribution, and the time until the next arrival follows the <em>exponential</em> distribution. In the Poisson distribution, the number of arrivals is random and the interval is fixed. In the exponential distribution we change this, the interval is random and the arrivals are fixed at 1. This is a subtle point but worth the time to make sure you understand.</p>
-<p>Let <span class="math inline">\(X\)</span> be the number of arrivals in a time interval <span class="math inline">\(T\)</span>, where arrivals occur according to a Poisson process with an average of <span class="math inline">\(\lambda\)</span> arrivals per unit time interval. From the previous lesson, we know that <span class="math inline">\(X\sim \textsf{Poisson}(\lambda T)\)</span>. Now let <span class="math inline">\(Y\)</span> be the time until the next arrival. Then <span class="math inline">\(Y\)</span> follows the exponential distribution with parameter <span class="math inline">\(\lambda\)</span> which has units of inverse base time:</p>
-<p><span class="math display">\[
-Y \sim \textsf{Expon}(\lambda)
-\]</span></p>
-<p>Note on <span class="math inline">\(\lambda\)</span>: One point of confusion involving the parameters of the Poisson and exponential distributions. The parameter of the Poisson distribution (usually denoted as <span class="math inline">\(\lambda\)</span>) represents the average number of arrivals in whatever amount of time specified by the random variable. In the case of the exponential distribution, the parameter (also denoted as <span class="math inline">\(\lambda\)</span>) represents the average number of arrivals per unit time. For example, suppose arrivals follow a Poisson process with an average of 10 arrivals per day. <span class="math inline">\(X\)</span>, the number of arrivals in 5 days, follows a Poisson distribution with parameter <span class="math inline">\(\lambda=50\)</span>, since that is the average number of arrivals in the amount of time specified by <span class="math inline">\(X\)</span>. Meanwhile, <span class="math inline">\(Y\)</span>, the time in days until the next arrival, follows an exponential distribution with parameter <span class="math inline">\(\lambda=10\)</span> (the average number of arrivals per day).</p>
-<p>The pdf of <span class="math inline">\(Y\)</span> is given by:
+<p>where here we assume the error term follows a normal distribution with mean 0 and constant standard deviation <span class="math inline">\(\sigma\)</span>. Using the method of least squares, which does not require the assumption of normality, we obtain estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>:
 <span class="math display">\[
-f_Y(y)=\lambda e^{-\lambda y}, \hspace{0.3cm} y&gt;0
-\]</span></p>
-<p>The mean and variance of <span class="math inline">\(Y\)</span> are: <span class="math inline">\(\mbox{E}(Y)=\frac{1}{\lambda}\)</span> and <span class="math inline">\(\mbox{Var}(Y)=\frac{1}{\lambda^2}\)</span>. You should be able to derive these results but they require integration by parts and can be lengthy algebraic exercises.</p>
-<blockquote>
-<p><em>Example</em>:<br />
-Suppose at a local retail store, customers arrive to a checkout counter according to a Poisson process with an average of one arrival every three minutes. Let <span class="math inline">\(Y\)</span> be the time (in minutes) until the next customer arrives to the counter. What is the distribution (and parameter) of <span class="math inline">\(Y\)</span>? What are <span class="math inline">\(\mbox{E}(Y)\)</span> and <span class="math inline">\(\mbox{Var}(Y)\)</span>? Find <span class="math inline">\(\mbox{P}(Y&gt;5)\)</span>, <span class="math inline">\(\mbox{P}(Y\leq 3)\)</span>, and <span class="math inline">\(\mbox{P}(1 \leq Y &lt; 5)\)</span>? Also, find the median and 95th percentile of <span class="math inline">\(Y\)</span>. Finally, plot the pdf of <span class="math inline">\(Y\)</span>.</p>
-</blockquote>
-<p>Since one arrival shows every three minutes, the average number of arrivals per unit time is 1/3 arrival per minute. Thus, <span class="math inline">\(Y\sim \textsf{Expon}(\lambda=1/3)\)</span>. This means that <span class="math inline">\(\mbox{E}(Y)=3\)</span> and <span class="math inline">\(\mbox{Var}(Y)=9\)</span>.</p>
-<p>To find <span class="math inline">\(\mbox{P}(Y&gt;5)\)</span>, we could integrate the pdf of <span class="math inline">\(Y\)</span>:
-<span class="math display">\[
-\mbox{P}(Y&gt;5)=\int_5^\infty \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = \lim_{a \to +\infty}\int_5^a \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = \]</span></p>
-<p><span class="math display">\[\lim_{a \to +\infty} -e^{-\frac{1}{3}y}\bigg|_5^a=\lim_{a \to +\infty} -e^{-\frac{a}{3}}-(-e^{-\frac{5}{3}})= 0 + 0.189 = 0.189
-\]</span></p>
-<p>Alternatively, we could use <code>R</code>:</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="CONTNNAMED.html#cb345-1"></a><span class="co">##Prob(Y&gt;5)=1-Prob(Y&lt;=5)</span></span>
-<span id="cb345-2"><a href="CONTNNAMED.html#cb345-2"></a><span class="dv">1</span><span class="op">-</span><span class="kw">pexp</span>(<span class="dv">5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.1888756</code></pre>
-<p>Or using <code>integrate()</code></p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="CONTNNAMED.html#cb347-1"></a><span class="kw">integrate</span>(<span class="cf">function</span>(x)<span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">3</span><span class="op">*</span>x),<span class="dv">5</span>,<span class="ot">Inf</span>)</span></code></pre></div>
-<pre><code>## 0.1888756 with absolute error &lt; 8.5e-05</code></pre>
-<p>For the remaining probabilities, we will use <code>R</code>:</p>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="CONTNNAMED.html#cb349-1"></a><span class="co">##Prob(Y&lt;=3)</span></span>
-<span id="cb349-2"><a href="CONTNNAMED.html#cb349-2"></a><span class="kw">pexp</span>(<span class="dv">3</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.6321206</code></pre>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="CONTNNAMED.html#cb351-1"></a><span class="co">##Prob(1&lt;=Y&lt;5)</span></span>
-<span id="cb351-2"><a href="CONTNNAMED.html#cb351-2"></a><span class="kw">pexp</span>(<span class="dv">5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)<span class="op">-</span><span class="kw">pexp</span>(<span class="dv">1</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.5276557</code></pre>
-<p>The median is <span class="math inline">\(y\)</span> such that <span class="math inline">\(\mbox{P}(Y\leq y)=0.5\)</span>. We can find this by solving the following for <span class="math inline">\(y\)</span>:
-<span class="math display">\[
-\int_0^y \frac{1}{3}e^{-\frac{1}{3}y}\,\mathrm{d}y = 0.5
-\]</span></p>
-<p>Alternatively, we can use <code>qexp</code> in <code>R</code>:</p>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="CONTNNAMED.html#cb353-1"></a><span class="co">##median</span></span>
-<span id="cb353-2"><a href="CONTNNAMED.html#cb353-2"></a><span class="kw">qexp</span>(<span class="fl">0.5</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 2.079442</code></pre>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="CONTNNAMED.html#cb355-1"></a><span class="co">##95th percentile</span></span>
-<span id="cb355-2"><a href="CONTNNAMED.html#cb355-2"></a><span class="kw">qexp</span>(<span class="fl">0.95</span>,<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 8.987197</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:exp-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/exp-fig-1.png" alt="pdf of exponential random varible $Y$" width="672" />
-<p class="caption">
-Figure 13.2: pdf of exponential random varible <span class="math inline">\(Y\)</span>
-</p>
-</div>
-<p>Both from Figure <a href="CONTNNAMED.html#fig:exp-fig">13.2</a> and the mean and median, we know that the exponential distribution is skewed to the right.</p>
-</div>
-<div id="memoryless-property" class="section level3">
-<h3><span class="header-section-number">13.2.3</span> Memoryless property</h3>
-<p>The Poisson process is known for its <em>memoryless</em> property. Essentially, this means that the time until the next arrival is independent of the time since last arrival. Thus, the probability of an arrival within the next 5 minutes is the same regardless of whether an arrival just occurred or an arrival has not occurred for a long time.</p>
-<p>To show this let’s consider random variable <span class="math inline">\(Y\)</span> ( time until the next arrival in minutes) where <span class="math inline">\(Y\sim\textsf{Expon}(\lambda)\)</span>. We will show that, given it has been at least <span class="math inline">\(t\)</span> minutes since the last arrival, the probability we wait at least <span class="math inline">\(y\)</span> additional minutes is equal to the marginal probability that we wait <span class="math inline">\(y\)</span> additional minutes.</p>
-<p>First, note that the cdf of <span class="math inline">\(Y\)</span>, <span class="math inline">\(F_Y(y)=\mbox{P}(Y\leq y)=1-e^{-\lambda y}\)</span>, you should be able to derive this. So,
-<span class="math display">\[
-\mbox{P}(Y\geq y+t|Y\geq t) = \frac{\mbox{P}(Y\geq y+t \cap Y\geq t)}{\mbox{P}(Y\geq t)}=\frac{\mbox{P}(Y\geq y +t)}{\mbox{P}(Y\geq t)} = \frac{1-(1-e^{-(y+t)\lambda})}{1-(1-e^{-t\lambda})}
+\hat{\beta}_1 = {\sum x_i y_i - n\bar{x}\bar{y} \over \sum x_i^2 -n\bar{x}^2}
 \]</span>
 <span class="math display">\[
-=\frac{e^{-\lambda y }e^{-\lambda t}}{e^{-\lambda t }}=e^{-\lambda y} = 1-(1-e^{-\lambda y})=\mbox{P}(Y\geq y). 
-\blacksquare
+\hat{\beta}_0=\bar{y}-\hat{\beta}_1\bar{x}
 \]</span></p>
-<p>Let’s simulate values for a Poisson. The Poisson is often used in modeling customer service situations such as service at Chipotle. However, some people have the mistaken idea that arrivals will be equally spaced. In fact, arrivals will come in clusters and bunches. Maybe this is the root of the common expression, “Bad news comes in threes”?</p>
-<div class="figure"><span id="fig:sim-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/sim-fig-1.png" alt="Simulations of Poisson random variable." width="672" />
-<p class="caption">
-Figure 13.3: Simulations of Poisson random variable.
-</p>
-</div>
-<p>In Figure <a href="CONTNNAMED.html#fig:sim-fig">13.3</a>, the number of events in a box is <span class="math inline">\(X\sim \textsf{Poisson}(\lambda = 5)\)</span>. As you can see, some boxes have more than 5 and some less because 5 is the average number of arrivals. Also note that the spacing is not equal. The 8 different runs are just repeated simulations of the same process. We can see spacing and clusters in each run.</p>
-</div>
-<div id="gamma-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.4</span> Gamma distribution</h3>
-<p>The gamma distribution is a generalization of the exponential distribution. In the exponential distribution, the parameter <span class="math inline">\(\lambda\)</span> is sometimes referred to as the <em>rate</em> parameter. The gamma distribution is sometimes used to model wait times (as with the exponential distribution), but in cases without the memoryless property. The gamma distribution has two parameters, <em>rate</em> and <em>shape</em>. In some texts, <em>scale</em> (the inverse of rate) is used as an alternative parameter to rate.</p>
-<p>Suppose <span class="math inline">\(X\)</span> is a random variable with the gamma distribution with shape parameter <span class="math inline">\(\alpha\)</span> and rate parameter <span class="math inline">\(\lambda\)</span>:
-<span class="math display">\[
-X \sim \textsf{Gamma}(\alpha,\lambda)
-\]</span></p>
-<p><span class="math inline">\(X\)</span> has the following pdf:
-<span class="math display">\[
-f_X(x)=\frac{\lambda^\alpha}{\Gamma (\alpha)}x^{\alpha-1}e^{-\lambda x}, \hspace{0.3cm} x&gt;0
-\]</span></p>
-<p>and 0 otherwise. The mean and variance of <span class="math inline">\(X\)</span> are <span class="math inline">\(\mbox{E}(X)=\frac{\alpha}{\lambda}\)</span> and <span class="math inline">\(\mbox{Var}(X)=\frac{\alpha}{\lambda^2}\)</span>. Looking at the pdf, the mean and the variance, one can easily see that if <span class="math inline">\(\alpha=1\)</span>, the resulting distribution is equivalent to <span class="math inline">\(\textsf{Expon}(\lambda)\)</span>.</p>
-<div id="gamma-function" class="section level4">
-<h4><span class="header-section-number">13.2.4.1</span> Gamma function</h4>
-<p>You may have little to no background with the Gamma function (<span class="math inline">\(\Gamma (\alpha)\)</span>). This is different from the gamma distribution. The gamma function is simply a function and is defined by:
-<span class="math display">\[
-\Gamma (\alpha)=\int_0^\infty t^{\alpha-1}e^{-t}\,\mathrm{d}t
-\]</span></p>
-<p>There are some important properties of the gamma function. Notably, <span class="math inline">\(\Gamma (\alpha)=(\alpha-1)\Gamma (\alpha -1)\)</span>, and if <span class="math inline">\(\alpha\)</span> is a non-negative integer, <span class="math inline">\(\Gamma(\alpha)=(\alpha-1)!\)</span>.</p>
-<p>Suppose <span class="math inline">\(X \sim \textsf{Gamma}(\alpha,\lambda)\)</span>. The pdf of <span class="math inline">\(X\)</span> for various values of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> is shown in Figure <a href="CONTNNAMED.html#fig:gamma-fig">13.4</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:gamma-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/gamma-fig-1.png" alt="pdf of Gamma for various values of alpha and lambda" width="672" />
-<p class="caption">
-Figure 13.4: pdf of Gamma for various values of alpha and lambda
-</p>
-</div>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X \sim \textsf{Gamma}(\alpha=5,\lambda=1)\)</span>. Find the mean and variance of <span class="math inline">\(X\)</span>. Also, compute <span class="math inline">\(\mbox{P}(X\leq 2)\)</span> and <span class="math inline">\(\mbox{P}(1\leq X &lt; 8)\)</span>. Find the median and 95th percentile of <span class="math inline">\(X\)</span>.</p>
-</blockquote>
-<p>The mean and variance of <span class="math inline">\(X\)</span> are <span class="math inline">\(\mbox{E}(X)=5\)</span> and <span class="math inline">\(\mbox{Var}(X)=5\)</span>. To find probabilities and quantiles, integration will be difficult, so it’s best to use the built-in <code>R</code> functions:</p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="CONTNNAMED.html#cb357-1"></a><span class="co">## Prob(X&lt;=2)</span></span>
-<span id="cb357-2"><a href="CONTNNAMED.html#cb357-2"></a><span class="kw">pgamma</span>(<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.05265302</code></pre>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="CONTNNAMED.html#cb359-1"></a><span class="co">##Prob(1 &lt;= X &lt; 8)</span></span>
-<span id="cb359-2"><a href="CONTNNAMED.html#cb359-2"></a><span class="kw">pgamma</span>(<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">1</span>)<span class="op">-</span><span class="kw">pgamma</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.8967078</code></pre>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="CONTNNAMED.html#cb361-1"></a><span class="co">## median</span></span>
-<span id="cb361-2"><a href="CONTNNAMED.html#cb361-2"></a><span class="kw">qgamma</span>(<span class="fl">0.5</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 4.670909</code></pre>
-<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="CONTNNAMED.html#cb363-1"></a><span class="co">## 95th percentile</span></span>
-<span id="cb363-2"><a href="CONTNNAMED.html#cb363-2"></a><span class="kw">qgamma</span>(<span class="fl">0.95</span>,<span class="dv">5</span>,<span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 9.153519</code></pre>
-</div>
-</div>
-<div id="weibull-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.5</span> Weibull distribution</h3>
-<p>The last common distribution we will explore is the Weibull distribution. Like the gamma, the Weibull distribution is a generalization of the exponential distribution and is meant to model wait times. A random variable with the Weibull distribution has parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. In <code>R</code>, these are referred to as <code>shape</code> and <code>scale</code> respectively. Note that in some resources, these are represented by <span class="math inline">\(k\)</span> and <span class="math inline">\(\lambda\)</span> or even <span class="math inline">\(k\)</span> and <span class="math inline">\(\theta\)</span>.
-Let <span class="math inline">\(X \sim \textsf{Weibull}(\alpha,\beta)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
-<span class="math display">\[
-f_X(x)=\frac{\alpha}{\beta} \left(\frac{x}{\beta}\right)^{\alpha-1} e^{-\left(\frac{x}{\beta}\right)^\alpha}, \hspace{0.3cm} x\geq 0
-\]</span></p>
-<p>The mean and variance of a random variable with a Weibull distribution can be found by consulting <code>R</code> documentation. Look them up and make sure you can use them.</p>
-</div>
-<div id="normal-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.6</span> Normal distribution</h3>
-<p>The normal distribution (also referred to as Gaussian) is a common distribution found in natural processes. You have likely seen a <em>bell curve</em> in various contexts. The bell curve is often indicative of an underlying normal distribution. There are two parameters of the normal distribution: <span class="math inline">\(\mu\)</span> (the mean of <span class="math inline">\(X\)</span>) and <span class="math inline">\(\sigma\)</span> (the standard deviation of <span class="math inline">\(X\)</span>).</p>
-<p>Suppose a random variable <span class="math inline">\(X\)</span> has a normal distribution with parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:</p>
+<p>If we assume a probability distribution for the errors, we could also find point estimates using maximum likelihood methods. This will not be discussed in this course.</p>
+<p>Using these estimates, for a given value of the predictor, <span class="math inline">\(x_*\)</span>, we can obtain a prediction of the response variable. Here we are using the subscript <span class="math inline">\(_*\)</span> to denote a new value for the explanatory variable. The resulting prediction, which we will denote <span class="math inline">\(\hat{Y}_*\)</span>, is the <strong>average</strong> or <strong>expected value</strong> of the response given predictor value <span class="math inline">\(x_*\)</span>:</p>
 <p><span class="math display">\[
-f_X(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x-\mu)^2}{2\sigma^2}}, \hspace{0.3cm} -\infty &lt; x &lt;\infty
+\hat{Y}_*=\hat{\beta}_0+\hat{\beta}_1x_*
 \]</span></p>
-<p>Some plots of normal distributions for different parameters are plotted in Figure <a href="CONTNNAMED.html#fig:norm-fig">13.5</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:norm-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/norm-fig-1.png" alt="pdf of Normal for various values of mu and sigma" width="672" />
-<p class="caption">
-Figure 13.5: pdf of Normal for various values of mu and sigma
-</p>
-</div>
-<div id="standard-normal" class="section level4">
-<h4><span class="header-section-number">13.2.6.1</span> Standard normal</h4>
-<p>When random variable <span class="math inline">\(X\)</span> is normally distributed with <span class="math inline">\(\mu=0\)</span> and <span class="math inline">\(\sigma=1\)</span>, <span class="math inline">\(X\)</span> is said to follow the <em>standard normal</em> distribution. Sometimes, the standard normal pdf is denoted by <span class="math inline">\(\phi(x)\)</span>.</p>
-<p>Note that any normally distributed random variable can be transformed to have the standard normal distribution. Let <span class="math inline">\(X \sim \textsf{Norm}(\mu,\sigma)\)</span>. Then,
-<span class="math display">\[
-Z=\frac{X-\mu}{\sigma} \sim \textsf{Norm}(0,1)
-\]</span></p>
-<p>Partially, one can show this is true by noting that the mean of <span class="math inline">\(Z\)</span> is 0 and the variance (and standard deviation) of <span class="math inline">\(Z\)</span> is 1:
-<span class="math display">\[
-\mbox{E}(Z)=\mbox{E}\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma}\left(\mbox{E}(X)-\mu\right)=\frac{1}\sigma(\mu-\mu)=0
+<p>The reason this model returns the expected value of the response at the given value of the predictor is because the error term has an expected value of zero. As a review of the properties of expectation as well as last lesson, we have:</p>
+<p><span class="math display">\[
+E(Y|X=x)=E(\beta_0+\beta_1x+e)=Y=\beta_0+\beta_1x+E(e)=\beta_0+\beta_1x
 \]</span>
-<span class="math display">\[
-\mbox{Var}(Z)=\mbox{Var}\left(\frac{X-\mu}{\sigma}\right)=\frac{1}{\sigma^2}\left(\mbox{Var}(X)-0\right)=\frac{1}{\sigma^2} \sigma^2=1
-\]</span></p>
-<p>Note that this does not prove that <span class="math inline">\(Z\)</span> follows the standard normal distribution; we have merely shown that <span class="math inline">\(Z\)</span> has a mean of 0 and a variance of 1. We will discuss transformation of random variables in a later lesson.</p>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X \sim \textsf{Norm}(\mu=200,\sigma=15)\)</span>. Compute <span class="math inline">\(\mbox{P}(X\leq 160)\)</span>, <span class="math inline">\(\mbox{P}(180\leq X &lt; 230)\)</span>, and <span class="math inline">\(\mbox{P}(X&gt;\mu+\sigma)\)</span>. Find the median and 95th percentile of <span class="math inline">\(X\)</span>.</p>
-</blockquote>
-<p>As with the gamma distribution, to find probabilities and quantiles, integration will be difficult, so it’s best to use the built-in <code>R</code> functions:</p>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="CONTNNAMED.html#cb365-1"></a><span class="co">## Prob(X&lt;=160)</span></span>
-<span id="cb365-2"><a href="CONTNNAMED.html#cb365-2"></a><span class="kw">pnorm</span>(<span class="dv">160</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.003830381</code></pre>
-<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="CONTNNAMED.html#cb367-1"></a><span class="co">##Prob(180 &lt;= X &lt; 230)</span></span>
-<span id="cb367-2"><a href="CONTNNAMED.html#cb367-2"></a><span class="kw">pnorm</span>(<span class="dv">230</span>,<span class="dv">200</span>,<span class="dv">15</span>)<span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">180</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.8860386</code></pre>
-<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="CONTNNAMED.html#cb369-1"></a><span class="co">##Prob(X&gt;mu+sig)</span></span>
-<span id="cb369-2"><a href="CONTNNAMED.html#cb369-2"></a><span class="dv">1</span><span class="op">-</span><span class="kw">pnorm</span>(<span class="dv">215</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 0.1586553</code></pre>
-<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="CONTNNAMED.html#cb371-1"></a><span class="co">## median</span></span>
-<span id="cb371-2"><a href="CONTNNAMED.html#cb371-2"></a><span class="kw">qnorm</span>(<span class="fl">0.5</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 200</code></pre>
-<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb373-1"><a href="CONTNNAMED.html#cb373-1"></a><span class="co">## 95th percentile</span></span>
-<span id="cb373-2"><a href="CONTNNAMED.html#cb373-2"></a><span class="kw">qnorm</span>(<span class="fl">0.95</span>,<span class="dv">200</span>,<span class="dv">15</span>)</span></code></pre></div>
-<pre><code>## [1] 224.6728</code></pre>
+because <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(x\)</span> are constants.</p>
+<p>It should be abundantly clear by now that <span class="math inline">\(\hat{Y}_*\)</span>, <span class="math inline">\(\hat{\beta}_0\)</span>, and <span class="math inline">\(\hat{\beta}_1\)</span> are <strong><em>estimators</em></strong>. Being estimators, they are dependent on our random sample, our data. If we collect a new random sample from the same population, we will get new estimates from these estimators. Thus, we can think of <span class="math inline">\(\hat{Y}_*\)</span>, <span class="math inline">\(\hat{\beta}_0\)</span>, and <span class="math inline">\(\hat{\beta}_1\)</span> as <strong>random variables</strong>. Like all random variables, they have distributions. We can use the distribution of an estimator to build confidence intervals and conduct hypothesis tests about the true values of the parameter it is intended to estimate. These estimators are unbiased, their distributions are centered around the actual values of <span class="math inline">\(Y\)</span>, <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, respectively.</p>
 </div>
-</div>
-<div id="beta-distribution" class="section level3">
-<h3><span class="header-section-number">13.2.7</span> Beta distribution</h3>
-<p>Another common continuous distribution is the beta distribution. This has a unique application in that the domain of a random variable with the beta distribution is <span class="math inline">\([0,1]\)</span>. Thus it is typically used to model proportions. The beta distribution has two parameters, <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. (In <code>R</code>, these are denoted not so cleverly as <code>shape1</code> and <code>shape2</code>.)</p>
-<p>Let <span class="math inline">\(X \sim \textsf{Beta}(\alpha,\beta)\)</span>. The pdf of <span class="math inline">\(X\)</span> is given by:
-<span class="math display">\[
-f_X(x)=\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}x^{\alpha-1}(1-x)^{\beta-1}, \hspace{0.3cm} 0\leq x \leq 1
-\]</span></p>
-<p>Yes, our old friend the Gamma function. In some resources, <span class="math inline">\(\frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}\)</span> is written as <span class="math inline">\(\frac{1}{B(\alpha,\beta)}\)</span>, where <span class="math inline">\(B\)</span> is known as the beta function.</p>
-<p>Note that <span class="math inline">\(\mbox{E}(X)=\frac{\alpha}{\alpha+\beta}\)</span> and <span class="math inline">\(\mbox{Var}(X)=\frac{\alpha \beta}{(\alpha+\beta)^2(\alpha+\beta+1)}\)</span>.</p>
-<p>For various values <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, the pdf of a beta distributed random variable is shown in Figure <a href="CONTNNAMED.html#fig:beta-fig">13.6</a>.</p>
-<div class="figure" style="text-align: center"><span id="fig:beta-fig"></span>
-<img src="13-Named-Continuous-Distributions_files/figure-html/beta-fig-1.png" alt="pdf of Beta for various values of alpha and beta" width="672" />
+<div id="review-of-assumptions" class="section level3">
+<h3><span class="header-section-number">27.2.2</span> Review of assumptions</h3>
+<p>We will review the assumptions of the least squares model because they are important for inference. Refer to Figure <a href="LRINF.html#fig:assump271-fig">27.1</a>, which plots the linear regression in the top row and the residuals in the second row. We generally assume the following:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Fit</strong>. The data should show a linear trend. If there is a nonlinear trend, a transformation of the explanatory variable or an advanced regression method from Math 378 should be applied. When looking at the residual plot, if the trend is linear, we should see a spread of points that are flat. The left column of Figure <a href="LRINF.html#fig:assump271-fig">27.1</a> is an example of a nonlinear relationship. The top plot is the regression plot and we can see what looks like a quadratic relationship instead of a linear one. The residual plot, the plot in the lower left corner of Figure <a href="LRINF.html#fig:assump271-fig">27.1</a>, also exhibits this non-linear trend.<br />
+</li>
+<li><strong>Nearly normal residuals</strong>. Generally the residuals must be nearly normal to use a <span class="math inline">\(t\)</span> or <span class="math inline">\(F\)</span> for inference. When this assumption is found to be unreasonable, it is usually because of <strong>outliers</strong> or concerns about <strong>influential</strong> points. An example of non-normal residuals is shown in the second column of Figure <a href="LRINF.html#fig:assump271-fig">27.1</a>. A <strong>qq</strong> plot is also useful as a diagnostic tool as we have seen. We can still use the <strong>bootstrap</strong> as an inference tool if the normality assumption is unreasonable.<br />
+</li>
+<li><strong>Constant variability</strong>. The variability of points around the least squares line remains roughly constant. An example of non-constant variability is shown in the third panel of Figure <a href="LRINF.html#fig:assump271-fig">27.1</a>. The constant variability assumption is needed for the <span class="math inline">\(t\)</span> and <span class="math inline">\(F\)</span> distributions. It is not required for the bootstrap method.<br />
+</li>
+<li><strong>Independent observations</strong>. Be cautious about applying regression to data collected sequentially in what is called a <strong>time series</strong>. Such data may have an underlying structure that should be considered in a model and analysis. An example of a time series where independence is violated is shown in the fourth panel of Figure <a href="LRINF.html#fig:assump271-fig">27.1</a>. More advanced methods are required for time series data even including using a bootstrap.</li>
+</ol>
+<p>In a future lesson we will explore more regression diagnostics.</p>
+<div class="figure"><span id="fig:assump271-fig"></span>
+<img src="27-Regression-Inference_files/figure-html/assump271-fig-1.png" alt="Plots of linear regression and residual to illustrate the assumptions of the model." width="672" />
 <p class="caption">
-Figure 13.6: pdf of Beta for various values of alpha and beta
+Figure 27.1: Plots of linear regression and residual to illustrate the assumptions of the model.
+</p>
+</div>
+</div>
+<div id="distribution-of-our-estimators" class="section level3">
+<h3><span class="header-section-number">27.2.3</span> Distribution of our estimators</h3>
+<p>With the assumption that the error term is normally distributed, we can find the distributions of our estimates, which turn out to be normal:</p>
+<p><span class="math display">\[
+\hat{\beta}_0\sim N\left(\beta_0, \sigma\sqrt{{1\over n}+{\bar{x}^2\over \sum (x_i-\bar{x})^2}}\right)
+\]</span></p>
+<p><span class="math display">\[
+\hat{\beta}_1\sim N\left(\beta_1, {\sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}\right)
+\]</span></p>
+<p><span class="math display">\[
+\hat{Y}_* \sim N\left(\beta_0+\beta_1x_*, \sigma\sqrt{{1\over n}+{(x_*-\bar{x})^2\over \sum (x_i-\bar{x})^2}}\right)
+\]</span></p>
+<p>Notice that all three of these are unbiased, the expected value is equal to the parameter being estimated. Looking at the variance of the slope estimate we can see that is a function of the underlying unexplained variance, <span class="math inline">\(\sigma^2\)</span> and the data. The denominator is increased by having a larger spread in the explanatory variable. The slope of the estimated line is more stable, less variable, if the independent variable has high variance. That is interesting. If you are designing an experiment, this gives you insight in how to select the range of values for your explanatory variable. Math 359 is a course that discusses this point in detail.</p>
+</div>
+</div>
+<div id="inference" class="section level2">
+<h2><span class="header-section-number">27.3</span> Inference</h2>
+<p>Now that we know how the coefficient estimates and the average predicted values behave, we can perform inference on their true values. Let’s take <span class="math inline">\(\hat{\beta}_1\)</span> for demonstration:</p>
+<p><span class="math display">\[
+\hat{\beta}_1\sim N\left(\beta_1, {\sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}\right)
+\]</span></p>
+<p>Thus,</p>
+<p><span class="math display">\[
+{\hat{\beta}_1-\beta_1 \over {\sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}}\sim N\left(0, 1\right)
+\]</span></p>
+<p>However, note that the expression on the left depends on error standard deviation, <span class="math inline">\(\sigma\)</span>. In reality, we will not know this value and will have to estimate it with</p>
+<p><span class="math display">\[
+\hat{\sigma}=\sqrt{{1\over n-2} \sum_{i=1}^n \hat{e}_i^2}
+\]</span></p>
+<p>where <span class="math inline">\(\hat{e}_i\)</span> is the observed <span class="math inline">\(i\)</span>th <strong>residual</strong> (<span class="math inline">\(\hat{e}_i=y_i-\hat{\beta}_0-\hat{\beta}_1x_i\)</span>).</p>
+<p>As we learned in the last block, if we replace population standard deviation (<span class="math inline">\(\sigma\)</span>) with an estimation, the resulting random variable no longer has the standard normal distribution. In fact, it can be shown that</p>
+<p><span class="math display">\[
+{\hat{\beta}_1-\beta_1 \over {\hat \sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}}\sim \textsf{t}\left(n-2\right)
+\]</span>
+We only have <span class="math inline">\(n-2\)</span> degrees of freedom because in the estimation of <span class="math inline">\(\sigma^2\)</span> we had to estimate two parameters, <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<p>We can use this information to build a <span class="math inline">\((1-\alpha)*100\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span>. First, we recognize that</p>
+<p><span class="math display">\[
+\mbox{P}\left(-t_{\alpha/2,n-2} \leq {\hat{\beta}_1-\beta_1 \over {\hat \sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}}\leq t_{\alpha/2,n-2} \right) = 1-\alpha
+\]</span></p>
+<p>Solving the expression inside the probability statement for <span class="math inline">\(\beta_1\)</span> yields a confidence interval of</p>
+<p><span class="math display">\[
+\beta_1 \in \left(\hat{\beta_1} \pm t_{\alpha/2,n-2}{\hat \sigma \over \sqrt{\sum(x_i-\bar{x})^2}}\right)
+\]</span></p>
+<p>We can also evaluate the null hypothesis <span class="math inline">\(H_0: \beta_1 =\beta^*_1\)</span>. If the true value of <span class="math inline">\(\beta_1\)</span> were <span class="math inline">\(\beta^*_1\)</span>, then the estimated <span class="math inline">\(\hat{\beta_1}\)</span> should be around that value. In fact, if <span class="math inline">\(H_0\)</span> were true, the value</p>
+<p><span class="math display">\[
+{\hat{\beta}_1-\beta^*_1 \over {\hat \sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}}
+\]</span></p>
+<p>has the <span class="math inline">\(\textsf{t}\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom. Thus, once we collect a sample and obtain the observed <span class="math inline">\(\hat{\beta_1}\)</span> and <span class="math inline">\(\hat \sigma\)</span>, we can calculate this quantity and determine whether it is far enough from zero to reject <span class="math inline">\(H_0\)</span>.</p>
+<p>Similarly, we can use the distribution of <span class="math inline">\(\hat \beta_0\)</span> to build a confidence interval or conduct a hypothesis test on <span class="math inline">\(\beta_0\)</span>, but we usually don’t. This has to do with the interpretation of <span class="math inline">\(\beta_0\)</span>.</p>
+<div id="starbucks" class="section level3">
+<h3><span class="header-section-number">27.3.1</span> Starbucks</h3>
+<p>That was a great deal of mathematics and theory. Let’s put it to use on the example from Starbucks. In the file <code>data/starbucks.csv</code> we have nutritional facts for several Starbucks’ food items. We used this data in the homework for last lesson. We will use this data again to illustrate the ideas we have introduced in this section.</p>
+<p>Read in the data.</p>
+<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb810-1"><a href="LRINF.html#cb810-1"></a>starbucks &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/starbucks.csv&quot;</span>)  <span class="op">%&gt;%</span></span>
+<span id="cb810-2"><a href="LRINF.html#cb810-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">type=</span><span class="kw">factor</span>(type))</span></code></pre></div>
+<blockquote>
+<p><strong>Exercise</strong>:<br />
+Summarize and explore the data.</p>
+</blockquote>
+<p>Let’s look at a summary of the data.</p>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="LRINF.html#cb811-1"></a><span class="kw">glimpse</span>(starbucks)</span></code></pre></div>
+<pre><code>## Rows: 77
+## Columns: 7
+## $ item     &lt;chr&gt; &quot;8-Grain Roll&quot;, &quot;Apple Bran Muffin&quot;, &quot;Apple Fritter&quot;, &quot;Ban...
+## $ calories &lt;dbl&gt; 350, 350, 420, 490, 130, 370, 460, 370, 310, 420, 380, 320...
+## $ fat      &lt;dbl&gt; 8, 9, 20, 19, 6, 14, 22, 14, 18, 25, 17, 12, 17, 21, 5, 18...
+## $ carb     &lt;dbl&gt; 67, 64, 59, 75, 17, 47, 61, 55, 32, 39, 51, 53, 34, 57, 52...
+## $ fiber    &lt;dbl&gt; 5, 7, 0, 4, 0, 5, 2, 0, 0, 0, 2, 3, 2, 2, 3, 3, 2, 3, 0, 2...
+## $ protein  &lt;dbl&gt; 10, 6, 5, 7, 0, 6, 7, 6, 5, 7, 4, 6, 5, 5, 12, 7, 8, 6, 0,...
+## $ type     &lt;fct&gt; bakery, bakery, bakery, bakery, bakery, bakery, bakery, ba...</code></pre>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="LRINF.html#cb813-1"></a><span class="kw">inspect</span>(starbucks)</span></code></pre></div>
+<pre><code>## 
+## categorical variables:  
+##   name     class levels  n missing
+## 1 item character     77 77       0
+## 2 type    factor      7 77       0
+##                                    distribution
+## 1 8-Grain Roll (1.3%) ...                      
+## 2 bakery (53.2%), petite (11.7%) ...           
+## 
+## quantitative variables:  
+##          name   class min  Q1 median  Q3 max       mean         sd  n missing
+## ...1 calories numeric  80 300    350 420 500 338.831169 105.368701 77       0
+## ...2      fat numeric   0   9     13  18  28  13.766234   7.095488 77       0
+## ...3     carb numeric  16  31     45  59  80  44.870130  16.551634 77       0
+## ...4    fiber numeric   0   0      2   4   7   2.220779   2.112764 77       0
+## ...5  protein numeric   0   5      7  15  34   9.480519   8.079556 77       0</code></pre>
+<p>Let’s predict calories from the carbohydrate content.</p>
+<blockquote>
+<p><strong>Exercise</strong>:<br />
+Create a scatterplot of calories and carbohydrate, carbs, content.</p>
+</blockquote>
+<p>Figure <a href="LRINF.html#fig:scat271-fig">27.2</a> is the scatterplot.</p>
+<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb815-1"><a href="LRINF.html#cb815-1"></a>starbucks <span class="op">%&gt;%</span></span>
+<span id="cb815-2"><a href="LRINF.html#cb815-2"></a><span class="st">  </span><span class="kw">gf_point</span>(calories<span class="op">~</span>carb) <span class="op">%&gt;%</span></span>
+<span id="cb815-3"><a href="LRINF.html#cb815-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x=</span><span class="st">&quot;Carbohydrates&quot;</span>,<span class="dt">y=</span><span class="st">&quot;Calories&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb815-4"><a href="LRINF.html#cb815-4"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>())</span></code></pre></div>
+<div class="figure"><span id="fig:scat271-fig"></span>
+<img src="27-Regression-Inference_files/figure-html/scat271-fig-1.png" alt="Scatterplot of calories and carbohydrate content in Starbucks' products." width="672" />
+<p class="caption">
+Figure 27.2: Scatterplot of calories and carbohydrate content in Starbucks’ products.
 </p>
 </div>
 <blockquote>
-<p><strong>Exercise</strong><br />
-What is the distribution if <span class="math inline">\(\alpha=\beta=1\)</span>?</p>
+<p><strong>Exercise</strong>:<br />
+Use <code>R</code> to fit a linear regression model by regressing <code>calories</code> on <code>carb</code>.</p>
 </blockquote>
-<p>It is the uniform. It is easy to verify that <span class="math inline">\(\Gamma(1)=1\)</span> so that <span class="math inline">\(B(1,1)=1\)</span>.</p>
+<p>The results of fitting a linear least squares model is stored in the <code>star_mod</code> object.</p>
+<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb816-1"><a href="LRINF.html#cb816-1"></a>star_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> calories <span class="op">~</span><span class="st"> </span>carb, <span class="dt">data =</span> starbucks)</span></code></pre></div>
+<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="LRINF.html#cb817-1"></a><span class="kw">summary</span>(star_mod)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = calories ~ carb, data = starbucks)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -151.962  -70.556   -0.636   54.908  179.444 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 146.0204    25.9186   5.634 2.93e-07 ***
+## carb          4.2971     0.5424   7.923 1.67e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 78.26 on 75 degrees of freedom
+## Multiple R-squared:  0.4556, Adjusted R-squared:  0.4484 
+## F-statistic: 62.77 on 1 and 75 DF,  p-value: 1.673e-11</code></pre>
+<div id="hypothesis-test" class="section level4">
+<h4><span class="header-section-number">27.3.1.1</span> Hypothesis test</h4>
+<p>In the second row of the <strong>Coefficients</strong> portion of the table we have our point estimate, standard error, test statistic, and p-value for the slope.</p>
+<p>The hypotheses for this output is<br />
+<span class="math inline">\(H_0\)</span>: <span class="math inline">\(\beta_1 = 0\)</span>. The true linear model has slope zero. The carb content has no impact on the the calorie content.<br />
+<span class="math inline">\(H_A\)</span>: <span class="math inline">\(\beta_1 \neq 0\)</span>. The true linear model has a slope different than zero. The higher the carb content, the greater the average calorie content or vice-versa.</p>
+<p>Our estimate of the slope is 4.297 with a standard error of 0.5424. Just for demonstration purposes, we will use <code>R</code> to calculate the test statistic and p-value as a series of steps. The test statistic under the null hypothesis is:</p>
+<p><span class="math display">\[
+{\hat{\beta}_1-0 \over {\hat \sigma \over \sqrt{ \sum (x_i-\bar{x})^2}}}
+\]</span>
+The denominator is the standard error of the estimate. The estimate of the residual standard deviation is reported in the last line as 78.26. But it is just the square root of the sum of squared residuals divided by the degrees of freedom.</p>
+<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb819-1"><a href="LRINF.html#cb819-1"></a>sighat&lt;-<span class="kw">sqrt</span>(<span class="kw">sum</span>((star_mod<span class="op">$</span>residuals)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">75</span>)</span>
+<span id="cb819-2"><a href="LRINF.html#cb819-2"></a>sighat</span></code></pre></div>
+<pre><code>## [1] 78.25956</code></pre>
+<p>The standard error of the slope estimate is, and confirmed in the table:</p>
+<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb821-1"><a href="LRINF.html#cb821-1"></a>std_er&lt;-sighat<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">sum</span>((starbucks<span class="op">$</span>carb<span class="op">-</span><span class="kw">mean</span>(starbucks<span class="op">$</span>carb))<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb821-2"><a href="LRINF.html#cb821-2"></a>std_er</span></code></pre></div>
+<pre><code>## [1] 0.5423626</code></pre>
+<p>The test statistic is</p>
+<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb823-1"><a href="LRINF.html#cb823-1"></a>(<span class="fl">4.2971</span><span class="dv">-0</span>)<span class="op">/</span>std_er</span></code></pre></div>
+<pre><code>## [1] 7.922928</code></pre>
+<p>And the p-value</p>
+<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb825-1"><a href="LRINF.html#cb825-1"></a><span class="dv">2</span><span class="op">*</span><span class="kw">pt</span>((<span class="fl">4.2971</span><span class="dv">-0</span>)<span class="op">/</span>std_er,<span class="dv">73</span>,<span class="dt">lower.tail =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## [1] 1.965319e-11</code></pre>
+<p>This is slightly different from the table value because of the precision of the computer and the small p-value.</p>
+<p>We reject <span class="math inline">\(H_0\)</span> in favor of <span class="math inline">\(H_A\)</span> because the data provide strong evidence that the true slope parameter is greater than zero.</p>
+<p>The computer software uses zero in the null hypothesis, if you wanted to test another value of the slope then you would have to do the calculations step by step like we did above.</p>
+<p>By the way, this was not a <code>tidy</code> way to do the calculation. The <code>broom</code> package makes it easier to use <code>tidy</code> ideas on the regression model. We used these ideas in the last lesson.</p>
+<p>As a reminder:</p>
+<div class="sourceCode" id="cb827"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb827-1"><a href="LRINF.html#cb827-1"></a><span class="kw">library</span>(broom)</span></code></pre></div>
+<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb828-1"><a href="LRINF.html#cb828-1"></a><span class="kw">tidy</span>(star_mod) </span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   146.      25.9        5.63 2.93e- 7
+## 2 carb            4.30     0.542      7.92 1.67e-11</code></pre>
+<p>And step by step:</p>
+<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb830-1"><a href="LRINF.html#cb830-1"></a><span class="kw">tidy</span>(star_mod) <span class="op">%&gt;%</span></span>
+<span id="cb830-2"><a href="LRINF.html#cb830-2"></a><span class="st">  </span><span class="kw">filter</span>(term<span class="op">==</span><span class="st">&quot;carb&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb830-3"><a href="LRINF.html#cb830-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">test_stat=</span>(estimate<span class="dv">-0</span>)<span class="op">/</span>std.error,<span class="dt">p_value=</span><span class="dv">2</span><span class="op">*</span><span class="kw">pt</span>(test_stat,<span class="dt">df=</span><span class="dv">73</span>,<span class="dt">lower.tail =</span> <span class="ot">FALSE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   test_stat  p_value
+##       &lt;dbl&gt;    &lt;dbl&gt;
+## 1      7.92 1.97e-11</code></pre>
+</div>
+<div id="confidence-interval-1" class="section level4">
+<h4><span class="header-section-number">27.3.1.2</span> Confidence interval</h4>
+<p>We could calculate the confidence interval from the point estimate, standard error, and critical value but we will let <code>R</code> do it for us.</p>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb832-1"><a href="LRINF.html#cb832-1"></a><span class="kw">confint</span>(star_mod)</span></code></pre></div>
+<pre><code>##                 2.5 %     97.5 %
+## (Intercept) 94.387896 197.652967
+## carb         3.216643   5.377526</code></pre>
+<p>This confidence interval does not contain the value 0. This suggests that a value of 0 is probably not feasible for <span class="math inline">\(\beta_1\)</span>.</p>
+<p>In the end, we would declare that carbohydrate and calorie content of Starbucks’ menu items are linearly correlated. However, we DID NOT prove causation. We simply showed that the two variables are correlated.</p>
 </div>
 </div>
-<div id="homework-problems-12" class="section level2">
-<h2><span class="header-section-number">13.3</span> Homework Problems</h2>
-<p>For problems 1-3 below, <strong><em>1)</em></strong> define a random variable that will help you answer the question, <strong><em>2)</em></strong> state the distribution and parameters of that random variable; <strong><em>3)</em></strong> determine the expected value and variance of that random variable, and <strong><em>4)</em></strong> use that random variable to answer the question.</p>
-<p>1. On a given Saturday, suppose vehicles arrive at the USAFA North Gate according to a Poisson process at a rate of 40 arrivals per hour.</p>
-<ol style="list-style-type: lower-alpha">
-<li>Find the probability no vehicles arrive in 10 minutes.<br />
-</li>
-<li>Find the probability that at least 5 minutes will pass before the next arrival.<br />
-</li>
-<li>Find the probability that the next vehicle will arrive between 2 and 10 minutes from now.<br />
-</li>
-<li>Find the probability that at least 7 minutes will pass before the next arrival, given that 2 minutes have already passed. Compare this answer to part (b). This is an example of the memoryless property of the exponential distribution.<br />
-</li>
-<li>Fill in the blank. There is a probability of 90% that the next vehicle will arrive within __ minutes. This value is known as the 90% percentile of the random variable.<br />
-</li>
-<li>Use the function <code>stripplot()</code> to visualize the arrival of 30 vehicles using a random sample from the appropriate exponential distribution.</li>
-</ol>
-<p>2. Suppose time until computer errors on the F-35 follows a Gamma distribution with mean 20 hours and variance 10.</p>
-<ol style="list-style-type: lower-alpha">
-<li>Find the probability that 20 hours pass without a computer error.<br />
-</li>
-<li>Find the probability that 45 hours pass without a computer error, given that 25 hours have already passed. Does the memoryless property apply to the Gamma distribution?<br />
-</li>
-<li>Find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>: There is a 95% probability time until next computer error will be between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. (note: technically, there are many answers to this question, but find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> such that each tail has equal probability.)</li>
-</ol>
-<div style="page-break-after: always;"></div>
-<p>3. Suppose PFT scores in the cadet wing follow a normal distribution with mean 330 and standard deviation 50.</p>
-<ol style="list-style-type: lower-alpha">
-<li>Find the probability a randomly selected cadet has a PFT score higher than 450.<br />
-</li>
-<li>Find the probability a randomly selected cadet has a PFT score within 2 standard deviations of the mean.<br />
-</li>
-<li>Find <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> such that 90% of PFT scores will be between <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.<br />
-</li>
-<li>Find the probability a randomly selected cadet has a PFT score higher than 450 given he/she is among the top 10% of cadets.</li>
-</ol>
-<p>4. Let <span class="math inline">\(X \sim \textsf{Beta}(\alpha=1,\beta=1)\)</span>. Show that <span class="math inline">\(X\sim \textsf{Unif}(0,1)\)</span>. Hint: write out the beta distribution pdf where <span class="math inline">\(\alpha=1\)</span> and <span class="math inline">\(\beta=1\)</span>.</p>
-<p>5. When using <code>R</code> to calculate probabilities related to the gamma distribution, we often use <code>pgamma</code>. Recall that <code>pgamma</code> is equivalent to the cdf of the gamma distribution. If <span class="math inline">\(X\sim\textsf{Gamma}(\alpha,\lambda)\)</span>, then
-<span class="math display">\[
-\mbox{P}(X\leq x)=\textsf{pgamma(x,alpha,lambda)}
+</div>
+<div id="inference-on-predictions" class="section level2">
+<h2><span class="header-section-number">27.4</span> Inference on Predictions</h2>
+<p>Similarly, we can take advantage of the distribution of <span class="math inline">\(\hat Y_*\)</span> to build a confidence interval on <span class="math inline">\(Y_*\)</span> (the average value of <span class="math inline">\(Y\)</span> at some value <span class="math inline">\(x_*\)</span>):</p>
+<p><span class="math display">\[
+Y_*\in \left(\hat Y_* \pm t_{\alpha/2,n-2}\hat \sigma \sqrt{{1\over n}+{(x_*-\bar{x})^2\over \sum (x_i-\bar{x})^2}} \right)
 \]</span></p>
+<p>There are a couple of things to point out about the above. First, note that the width of the confidence interval is dependent on how far <span class="math inline">\(x_*\)</span> is from the average value of <span class="math inline">\(x\)</span>. The further we are from the center of the data, the wider the interval will be.</p>
+<p>Second, note that this in an interval on <span class="math inline">\(Y_*\)</span> the <strong><em>average</em></strong> value of <span class="math inline">\(Y\)</span> at <span class="math inline">\(x_*\)</span>. If we want to build an interval for a single observation of <span class="math inline">\(Y\)</span> (<span class="math inline">\(Y_{new}\)</span>), we will need to build a <em>prediction</em> interval, which is considerably wider than a confidence interval on <span class="math inline">\(Y_*\)</span>:</p>
+<p><span class="math display">\[
+Y_{new}\in \left(\hat Y_* \pm t_{\alpha/2,n-2}\hat \sigma \sqrt{1+{1\over n}+{(x_*-\bar{x})^2\over \sum (x_i-\bar{x})^2}} \right)
+\]</span></p>
+<div id="starbucks-1" class="section level3">
+<h3><span class="header-section-number">27.4.1</span> Starbucks</h3>
+<p>Continuing with the <code>Starbucks</code> example. In plotting the data, we can have <code>R</code> plot the confidence and prediction bands, Figure <a href="LRINF.html#fig:ci271-fig">27.3</a>. We will observe the width of both of these intervals increase as we move away from the center of the data and also that prediction intervals are wider than the confidence interval.</p>
+<div class="sourceCode" id="cb834"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb834-1"><a href="LRINF.html#cb834-1"></a>starbucks <span class="op">%&gt;%</span></span>
+<span id="cb834-2"><a href="LRINF.html#cb834-2"></a><span class="st">  </span><span class="kw">gf_point</span>(calories<span class="op">~</span>carb) <span class="op">%&gt;%</span></span>
+<span id="cb834-3"><a href="LRINF.html#cb834-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x=</span><span class="st">&quot;Carbohydrates&quot;</span>,<span class="dt">y=</span><span class="st">&quot;Calories&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb834-4"><a href="LRINF.html#cb834-4"></a><span class="st">  </span><span class="kw">gf_lm</span>(<span class="dt">stat=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">interval=</span><span class="st">&quot;confidence&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb834-5"><a href="LRINF.html#cb834-5"></a><span class="st">  </span><span class="kw">gf_lm</span>(<span class="dt">stat=</span><span class="st">&quot;lm&quot;</span>,<span class="dt">interval=</span><span class="st">&quot;prediction&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb834-6"><a href="LRINF.html#cb834-6"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>())</span></code></pre></div>
+<div class="figure"><span id="fig:ci271-fig"></span>
+<img src="27-Regression-Inference_files/figure-html/ci271-fig-1.png" alt="Confidence and predictions bands for linear regression model of calories and carbs in Starbucks' products." width="672" />
+<p class="caption">
+Figure 27.3: Confidence and predictions bands for linear regression model of calories and carbs in Starbucks’ products.
+</p>
+</div>
+<p>We have not done diagnostics yet and it may be that using a linear regression model for this data may not be appropriate. But for the sake of learning we will continue. To find these confidence intervals we need a value for <code>carb</code> so let’s use 60 and 70.</p>
+<p>We create a data frame with the new values of <code>carb</code> in it. Then we will use the <code>predict</code> function to find the confidence interval. Using the option <code>interval</code> set to <code>confidence</code> will return a confidence interval for the average calorie content for each value in the new data frame.</p>
+<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb835-1"><a href="LRINF.html#cb835-1"></a>new_carb &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">carb=</span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">70</span>))</span>
+<span id="cb835-2"><a href="LRINF.html#cb835-2"></a><span class="kw">predict</span>(star_mod, <span class="dt">newdata =</span> new_carb, <span class="dt">interval =</span> <span class="st">&#39;confidence&#39;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 403.8455 379.7027 427.9883
+## 2 446.8163 414.3687 479.2640</code></pre>
+<p>As an example, we are 95% confident that the average calories in a Starbucks’ menu item with 60 grams of carbs is between 379.7 and 428.0.</p>
+<blockquote>
+<p><strong>Exercise</strong>:
+Give the 95% confidence interval of average calories for 70 grams of carbohydrates.</p>
+</blockquote>
+<p>We are 95% confident that the average calories in a Starbucks’ menu item with 70 grams carbs is between 414.4 and 479.3.</p>
+<p>For the prediction interval, we simply need to change the option in <code>interval</code>:</p>
+<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="LRINF.html#cb837-1"></a>new_carb &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">carb=</span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">70</span>))</span>
+<span id="cb837-2"><a href="LRINF.html#cb837-2"></a><span class="kw">predict</span>(star_mod, <span class="dt">newdata =</span> new_carb, <span class="dt">interval =</span> <span class="st">&#39;prediction&#39;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 403.8455 246.0862 561.6048
+## 2 446.8163 287.5744 606.0582</code></pre>
+<p>We are 95% confident the next Starbucks’ menu item that has 60 grams of carbs will have a calorie content between 246 and 561. Notice how prediction intervals are wider since they are intervals on individual observations and not an averages.</p>
+<blockquote>
+<p><strong>Exercise</strong>:
+Give the 90% prediction interval of average calories for 70 grams of carbohydrates.</p>
+</blockquote>
+<p>We changed the confidence level. Since we are less confident, the interval will be narrower than the 95% prediction interval we just calculated.</p>
+<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb839-1"><a href="LRINF.html#cb839-1"></a><span class="kw">predict</span>(star_mod, <span class="dt">newdata =</span> new_carb, <span class="dt">level=</span><span class="fl">0.9</span>, <span class="dt">interval =</span> <span class="st">&#39;prediction&#39;</span>)</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 403.8455 271.9565 535.7345
+## 2 446.8163 313.6879 579.9448</code></pre>
+<p>We are 90% confident the next Starbucks’ menu item that has 70 grams of carbs will have a calorie content between 313.7 and 579.9.</p>
+</div>
+<div id="summary-2" class="section level3">
+<h3><span class="header-section-number">27.4.2</span> Summary</h3>
+<p>This lesson has introduced the process of inference for a simple linear regression model. We tested the slope estimate as well as generated confidence intervals for average and individual predicted values.</p>
+</div>
+</div>
+<div id="homework-problems-26" class="section level2">
+<h2><span class="header-section-number">27.5</span> Homework Problems</h2>
+<p>1. In the lesson notes, we noticed that the 95% prediction interval was much wider than the 95% confidence interval. In words, explain why this is.</p>
+<p>2. Beer and blood alcohol content</p>
+<p>Many people believe that gender, weight, drinking habits, and many other factors are much more important in predicting blood alcohol content (BAC) than simply considering the number of drinks a person consumed. Here we examine data from sixteen student volunteers at Ohio State University who each drank a randomly assigned number of cans of beer. These students were evenly divided between men and women, and they differed in weight and drinking habits. Thirty minutes later, a police officer measured their blood alcohol content (BAC) in grams of alcohol per deciliter of blood. The data is in the <code>bac.csv</code> file under the <code>data</code> folder.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Create a scatterplot for cans of beer and blood alcohol level.<br />
+</li>
+<li>Describe the relationship between the number of cans of beer and BAC.<br />
+</li>
+<li>Write the equation of the regression line. Interpret the slope and intercept in context.<br />
+</li>
+<li>Do the data provide strong evidence that drinking more cans of beer is associated with an increase in blood alcohol? State the null and alternative hypotheses, report the p-value, and state your conclusion.<br />
+</li>
+<li>Build a 95% confidence interval for the slope and interpret it in the context of your hypothesis test from part d.<br />
+</li>
+<li>Suppose we visit a bar, ask people how many drinks they have had, and also take their BAC. Do you think the relationship between number of drinks and BAC would be as strong as the relationship found in the Ohio State study?<br />
+</li>
+<li>Predict the average BAC after two beers and build a 90% confidence interval around that prediction.<br />
+</li>
+<li>Repeat except build a 90% prediction interval and interpret.<br />
+</li>
+<li>Plot the data points with a regression line, confidence band, and prediction band.</li>
+</ol>
+<p>3. Suppose I build a regression fitting a response variable to one predictor variable. I build a 95% confidence interval on <span class="math inline">\(\beta_1\)</span> and find that it contains 0, meaning that a slope of 0 is feasible. Does this mean that the response and the predictor are independent?</p>
 
+<div id="refs" class="references">
+<div>
+<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
+</div>
+<div>
+<p>Çetinkaya-Rundel, Mine, David Diez, Andrew Bray, Albert Kim, Ben Baumer, Chester Ismay, and Christopher Barr. 2020. <em>Openintro: Data Sets and Supplemental Functions from ’Openintro’ Textbooks and Labs</em>. <a href="https://CRAN.R-project.org/package=openintro">https://CRAN.R-project.org/package=openintro</a>.</p>
+</div>
+<div>
+<p>Diez, David, Christopher Barr, and Mine Çetinkaya-Rundel. 2014. <em>Introductory Statistics with Randomization and Simulation</em>. 1st ed. Openintro. <a href="https://www.openintro.org/book/isrs/">https://www.openintro.org/book/isrs/</a>.</p>
+</div>
+<div>
+<p>James, Gareth, Daniela Witten, Trevor Hastie, and Rob Tibshirani. 2017. <em>ISLR: Data for an Introduction to Statistical Learning with Applications in R</em>. <a href="https://CRAN.R-project.org/package=ISLR">https://CRAN.R-project.org/package=ISLR</a>.</p>
+</div>
+<div>
+<p>Kaplan, Daniel T., Randall Pruim, and Nicholas J. Horton. 2020. <em>MosaicCalc: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation</em>. <a href="https://CRAN.R-project.org/package=mosaicCalc">https://CRAN.R-project.org/package=mosaicCalc</a>.</p>
+</div>
+<div>
+<p>Kerns, Jay. 2010. <em>Introductory to Probability and Statistics with R</em>. 1st ed. <a href="http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf">http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf</a>.</p>
+</div>
+<div>
+<p>Meyer, David, Achim Zeileis, and Kurt Hornik. 2020. <em>Vcd: Visualizing Categorical Data</em>. <a href="https://CRAN.R-project.org/package=vcd">https://CRAN.R-project.org/package=vcd</a>.</p>
+</div>
+<div>
+<p>Pruim, Randall J. 2011. <em>Foundations and Applications of Statistics: An Introduction Using R</em>. Vol. 13. American Mathematical Soc.</p>
+</div>
+<div>
+<p>Pruim, Randall, Daniel T. Kaplan, and Nicholas J. Horton. 2020. <em>Mosaic: Project Mosaic Statistics and Mathematics Teaching Utilities</em>. <a href="https://CRAN.R-project.org/package=mosaic">https://CRAN.R-project.org/package=mosaic</a>.</p>
+</div>
+<div>
+<p>Ripley, Brian. 2019. <em>MASS: Support Functions and Datasets for Venables and Ripley’s Mass</em>. <a href="https://CRAN.R-project.org/package=MASS">https://CRAN.R-project.org/package=MASS</a>.</p>
+</div>
+<div>
+<p>Robinson, David, Alex Hayes, and Simon Couch. 2020. <em>Broom: Convert Statistical Objects into Tidy Tibbles</em>. <a href="https://CRAN.R-project.org/package=broom">https://CRAN.R-project.org/package=broom</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley. 2019. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.</p>
+</div>
+<div>
+<p>Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey Dunnington. 2020. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>.</p>
+</div>
+<div>
+<p>Xie, Yihui. 2020a. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
+</div>
+<div>
+<p>———. 2020b. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr">https://CRAN.R-project.org/package=knitr</a>.</p>
+</div>
+<div>
+<p>Xie, Yihui, Joe Cheng, and Xianying Tan. 2020. <em>DT: A Wrapper of the Javascript Library ’Datatables’</em>. <a href="https://CRAN.R-project.org/package=DT">https://CRAN.R-project.org/package=DT</a>.</p>
+</div>
+<div>
+<p>Zhu, Hao. 2020. <em>KableExtra: Construct Complex Table with ’Kable’ and Pipe Syntax</em>. <a href="https://CRAN.R-project.org/package=kableExtra">https://CRAN.R-project.org/package=kableExtra</a>.</p>
 </div>
 </div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="DISCRETENAMED.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="MULTIDISTS.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="LRBASICS.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

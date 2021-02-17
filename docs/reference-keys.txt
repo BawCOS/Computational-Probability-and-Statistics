@@ -135,6 +135,9 @@ fig:scat263-fig
 fig:resid2-fig
 fig:resid3-fig
 fig:resid4-fig
+fig:assump271-fig
+fig:scat271-fig
+fig:ci271-fig
 who-is-this-book-for
 book-structure-and-how-to-use-it
 prerequisites
@@ -496,3 +499,17 @@ assumptions-1
 residual-plots
 summary-1
 homework-problems-25
+LRINF
+objectives-25
+introduction-4
+regression
+review-of-assumptions
+distribution-of-our-estimators
+inference
+starbucks
+hypothesis-test
+confidence-interval-1
+inference-on-predictions
+starbucks-1
+summary-2
+homework-problems-26
