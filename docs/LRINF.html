@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-17" />
+<meta name="date" content="2021-02-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -34,7 +34,7 @@
   
   
 <link rel="prev" href="LRBASICS.html"/>
-
+<link rel="next" href="LRDIAG.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -566,6 +566,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="27.5" data-path="LRINF.html"><a href="LRINF.html#homework-problems-26"><i class="fa fa-check"></i><b>27.5</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="28" data-path="LRDIAG.html"><a href="LRDIAG.html"><i class="fa fa-check"></i><b>28</b> Regression Diagnostics</a><ul>
+<li class="chapter" data-level="28.1" data-path="LRDIAG.html"><a href="LRDIAG.html#objectives-26"><i class="fa fa-check"></i><b>28.1</b> Objectives</a></li>
+<li class="chapter" data-level="28.2" data-path="LRDIAG.html"><a href="LRDIAG.html#introduction-5"><i class="fa fa-check"></i><b>28.2</b> Introduction</a></li>
+<li class="chapter" data-level="28.3" data-path="LRDIAG.html"><a href="LRDIAG.html#assessing-our-model---understanding-the-output-from-lm"><i class="fa fa-check"></i><b>28.3</b> Assessing our model - understanding the output from <code>lm</code></a><ul>
+<li class="chapter" data-level="28.3.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residual-standard-error"><i class="fa fa-check"></i><b>28.3.1</b> Residual Standard Error</a></li>
+<li class="chapter" data-level="28.3.2" data-path="LRDIAG.html"><a href="LRDIAG.html#r-squared"><i class="fa fa-check"></i><b>28.3.2</b> R-squared</a></li>
+<li class="chapter" data-level="28.3.3" data-path="LRDIAG.html"><a href="LRDIAG.html#f-statistic"><i class="fa fa-check"></i><b>28.3.3</b> F-Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="28.4" data-path="LRDIAG.html"><a href="LRDIAG.html#regression-diagnostics"><i class="fa fa-check"></i><b>28.4</b> Regression diagnostics</a><ul>
+<li class="chapter" data-level="28.4.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residual-plots-1"><i class="fa fa-check"></i><b>28.4.1</b> Residual plots</a></li>
+<li class="chapter" data-level="28.4.2" data-path="LRDIAG.html"><a href="LRDIAG.html#residuals-vs-fitted"><i class="fa fa-check"></i><b>28.4.2</b> Residuals vs Fitted</a></li>
+<li class="chapter" data-level="28.4.3" data-path="LRDIAG.html"><a href="LRDIAG.html#normal-q-q-plot"><i class="fa fa-check"></i><b>28.4.3</b> Normal Q-Q Plot</a></li>
+<li class="chapter" data-level="28.4.4" data-path="LRDIAG.html"><a href="LRDIAG.html#scale-location-plot"><i class="fa fa-check"></i><b>28.4.4</b> Scale-Location Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="28.5" data-path="LRDIAG.html"><a href="LRDIAG.html#outliers-and-leverage"><i class="fa fa-check"></i><b>28.5</b> Outliers and leverage</a><ul>
+<li class="chapter" data-level="28.5.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residuals-vs-leverage-plot"><i class="fa fa-check"></i><b>28.5.1</b> Residuals vs Leverage Plot</a></li>
+<li class="chapter" data-level="28.5.2" data-path="LRDIAG.html"><a href="LRDIAG.html#what-if-our-assumptions-are-violated"><i class="fa fa-check"></i><b>28.5.2</b> What If Our Assumptions Are Violated</a></li>
+</ul></li>
+<li class="chapter" data-level="28.6" data-path="LRDIAG.html"><a href="LRDIAG.html#homework-problems-27"><i class="fa fa-check"></i><b>28.6</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -919,170 +939,15 @@ Give the 90% prediction interval of average calories for 70 grams of carbohydrat
 </ol>
 <p>3. Suppose I build a regression fitting a response variable to one predictor variable. I build a 95% confidence interval on <span class="math inline">\(\beta_1\)</span> and find that it contains 0, meaning that a slope of 0 is feasible. Does this mean that the response and the predictor are independent?</p>
 
-<div id="refs" class="references">
-<div>
-<p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
-</div>
-<div>
-<p>Çetinkaya-Rundel, Mine, David Diez, Andrew Bray, Albert Kim, Ben Baumer, Chester Ismay, and Christopher Barr. 2020. <em>Openintro: Data Sets and Supplemental Functions from ’Openintro’ Textbooks and Labs</em>. <a href="https://CRAN.R-project.org/package=openintro">https://CRAN.R-project.org/package=openintro</a>.</p>
-</div>
-<div>
-<p>Diez, David, Christopher Barr, and Mine Çetinkaya-Rundel. 2014. <em>Introductory Statistics with Randomization and Simulation</em>. 1st ed. Openintro. <a href="https://www.openintro.org/book/isrs/">https://www.openintro.org/book/isrs/</a>.</p>
-</div>
-<div>
-<p>James, Gareth, Daniela Witten, Trevor Hastie, and Rob Tibshirani. 2017. <em>ISLR: Data for an Introduction to Statistical Learning with Applications in R</em>. <a href="https://CRAN.R-project.org/package=ISLR">https://CRAN.R-project.org/package=ISLR</a>.</p>
-</div>
-<div>
-<p>Kaplan, Daniel T., Randall Pruim, and Nicholas J. Horton. 2020. <em>MosaicCalc: Function-Based Numerical and Symbolic Differentiation and Antidifferentiation</em>. <a href="https://CRAN.R-project.org/package=mosaicCalc">https://CRAN.R-project.org/package=mosaicCalc</a>.</p>
-</div>
-<div>
-<p>Kerns, Jay. 2010. <em>Introductory to Probability and Statistics with R</em>. 1st ed. <a href="http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf">http://ipsur.r-forge.r-project.org/book/download/IPSUR.pdf</a>.</p>
-</div>
-<div>
-<p>Meyer, David, Achim Zeileis, and Kurt Hornik. 2020. <em>Vcd: Visualizing Categorical Data</em>. <a href="https://CRAN.R-project.org/package=vcd">https://CRAN.R-project.org/package=vcd</a>.</p>
-</div>
-<div>
-<p>Pruim, Randall J. 2011. <em>Foundations and Applications of Statistics: An Introduction Using R</em>. Vol. 13. American Mathematical Soc.</p>
-</div>
-<div>
-<p>Pruim, Randall, Daniel T. Kaplan, and Nicholas J. Horton. 2020. <em>Mosaic: Project Mosaic Statistics and Mathematics Teaching Utilities</em>. <a href="https://CRAN.R-project.org/package=mosaic">https://CRAN.R-project.org/package=mosaic</a>.</p>
-</div>
-<div>
-<p>Ripley, Brian. 2019. <em>MASS: Support Functions and Datasets for Venables and Ripley’s Mass</em>. <a href="https://CRAN.R-project.org/package=MASS">https://CRAN.R-project.org/package=MASS</a>.</p>
-</div>
-<div>
-<p>Robinson, David, Alex Hayes, and Simon Couch. 2020. <em>Broom: Convert Statistical Objects into Tidy Tibbles</em>. <a href="https://CRAN.R-project.org/package=broom">https://CRAN.R-project.org/package=broom</a>.</p>
-</div>
-<div>
-<p>Wickham, Hadley. 2019. <em>Tidyverse: Easily Install and Load the ’Tidyverse’</em>. <a href="https://CRAN.R-project.org/package=tidyverse">https://CRAN.R-project.org/package=tidyverse</a>.</p>
-</div>
-<div>
-<p>Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, Kara Woo, Hiroaki Yutani, and Dewey Dunnington. 2020. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2">https://CRAN.R-project.org/package=ggplot2</a>.</p>
-</div>
-<div>
-<p>Xie, Yihui. 2020a. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown">https://CRAN.R-project.org/package=bookdown</a>.</p>
-</div>
-<div>
-<p>———. 2020b. <em>Knitr: A General-Purpose Package for Dynamic Report Generation in R</em>. <a href="https://CRAN.R-project.org/package=knitr">https://CRAN.R-project.org/package=knitr</a>.</p>
-</div>
-<div>
-<p>Xie, Yihui, Joe Cheng, and Xianying Tan. 2020. <em>DT: A Wrapper of the Javascript Library ’Datatables’</em>. <a href="https://CRAN.R-project.org/package=DT">https://CRAN.R-project.org/package=DT</a>.</p>
-</div>
-<div>
-<p>Zhu, Hao. 2020. <em>KableExtra: Construct Complex Table with ’Kable’ and Pipe Syntax</em>. <a href="https://CRAN.R-project.org/package=kableExtra">https://CRAN.R-project.org/package=kableExtra</a>.</p>
 </div>
 </div>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </section>
 
           </div>
         </div>
       </div>
-<a href="LRBASICS.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="LRBASICS.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="LRDIAG.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

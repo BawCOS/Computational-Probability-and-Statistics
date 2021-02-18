@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-17" />
+<meta name="date" content="2021-02-18" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -566,6 +566,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="27.5" data-path="LRINF.html"><a href="LRINF.html#homework-problems-26"><i class="fa fa-check"></i><b>27.5</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="28" data-path="LRDIAG.html"><a href="LRDIAG.html"><i class="fa fa-check"></i><b>28</b> Regression Diagnostics</a><ul>
+<li class="chapter" data-level="28.1" data-path="LRDIAG.html"><a href="LRDIAG.html#objectives-26"><i class="fa fa-check"></i><b>28.1</b> Objectives</a></li>
+<li class="chapter" data-level="28.2" data-path="LRDIAG.html"><a href="LRDIAG.html#introduction-5"><i class="fa fa-check"></i><b>28.2</b> Introduction</a></li>
+<li class="chapter" data-level="28.3" data-path="LRDIAG.html"><a href="LRDIAG.html#assessing-our-model---understanding-the-output-from-lm"><i class="fa fa-check"></i><b>28.3</b> Assessing our model - understanding the output from <code>lm</code></a><ul>
+<li class="chapter" data-level="28.3.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residual-standard-error"><i class="fa fa-check"></i><b>28.3.1</b> Residual Standard Error</a></li>
+<li class="chapter" data-level="28.3.2" data-path="LRDIAG.html"><a href="LRDIAG.html#r-squared"><i class="fa fa-check"></i><b>28.3.2</b> R-squared</a></li>
+<li class="chapter" data-level="28.3.3" data-path="LRDIAG.html"><a href="LRDIAG.html#f-statistic"><i class="fa fa-check"></i><b>28.3.3</b> F-Statistic</a></li>
+</ul></li>
+<li class="chapter" data-level="28.4" data-path="LRDIAG.html"><a href="LRDIAG.html#regression-diagnostics"><i class="fa fa-check"></i><b>28.4</b> Regression diagnostics</a><ul>
+<li class="chapter" data-level="28.4.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residual-plots-1"><i class="fa fa-check"></i><b>28.4.1</b> Residual plots</a></li>
+<li class="chapter" data-level="28.4.2" data-path="LRDIAG.html"><a href="LRDIAG.html#residuals-vs-fitted"><i class="fa fa-check"></i><b>28.4.2</b> Residuals vs Fitted</a></li>
+<li class="chapter" data-level="28.4.3" data-path="LRDIAG.html"><a href="LRDIAG.html#normal-q-q-plot"><i class="fa fa-check"></i><b>28.4.3</b> Normal Q-Q Plot</a></li>
+<li class="chapter" data-level="28.4.4" data-path="LRDIAG.html"><a href="LRDIAG.html#scale-location-plot"><i class="fa fa-check"></i><b>28.4.4</b> Scale-Location Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="28.5" data-path="LRDIAG.html"><a href="LRDIAG.html#outliers-and-leverage"><i class="fa fa-check"></i><b>28.5</b> Outliers and leverage</a><ul>
+<li class="chapter" data-level="28.5.1" data-path="LRDIAG.html"><a href="LRDIAG.html#residuals-vs-leverage-plot"><i class="fa fa-check"></i><b>28.5.1</b> Residuals vs Leverage Plot</a></li>
+<li class="chapter" data-level="28.5.2" data-path="LRDIAG.html"><a href="LRDIAG.html#what-if-our-assumptions-are-violated"><i class="fa fa-check"></i><b>28.5.2</b> What If Our Assumptions Are Violated</a></li>
+</ul></li>
+<li class="chapter" data-level="28.6" data-path="LRDIAG.html"><a href="LRDIAG.html#homework-problems-27"><i class="fa fa-check"></i><b>28.6</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -731,10 +751,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class        min        Q1    median       Q3       max      mean
-## ...1 sqrt numeric 0.01366573 0.4931281 0.7068702 0.867323 0.9999483 0.6645619
+##      name   class         min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.008773724 0.4989672 0.7132119 0.8722241 0.9999758 0.6685413
 ##             sd     n missing
-## ...1 0.2377501 10000       0</code></pre>
+## ...1 0.2377419 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -764,9 +784,9 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -4.292864 -0.7069863 -0.3469083 -0.1423439 -5.166593e-05
+## ...1    y numeric -4.735994 -0.6952148 -0.3379767 -0.1367089 -2.417958e-05
 ##            mean        sd     n missing
-## ...1 -0.5048633 0.5018173 10000       0</code></pre>
+## ...1 -0.4983191 0.5030165 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
