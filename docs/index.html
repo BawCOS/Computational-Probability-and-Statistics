@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-18" />
+<meta name="date" content="2021-02-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -586,6 +586,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="28.6" data-path="LRDIAG.html"><a href="LRDIAG.html#homework-problems-27"><i class="fa fa-check"></i><b>28.6</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="29" data-path="LRSIM.html"><a href="LRSIM.html"><i class="fa fa-check"></i><b>29</b> Simulation Based Linear Regression</a><ul>
+<li class="chapter" data-level="29.1" data-path="LRSIM.html"><a href="LRSIM.html#objectives-27"><i class="fa fa-check"></i><b>29.1</b> Objectives</a></li>
+<li class="chapter" data-level="29.2" data-path="LRSIM.html"><a href="LRSIM.html#introduction-6"><i class="fa fa-check"></i><b>29.2</b> Introduction</a></li>
+<li class="chapter" data-level="29.3" data-path="LRSIM.html"><a href="LRSIM.html#confidence-intervals-for-parameters"><i class="fa fa-check"></i><b>29.3</b> Confidence intervals for parameters</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="LRSIM.html"><a href="LRSIM.html#resampling"><i class="fa fa-check"></i><b>29.3.1</b> Resampling</a></li>
+<li class="chapter" data-level="29.3.2" data-path="LRSIM.html"><a href="LRSIM.html#resample-residuals"><i class="fa fa-check"></i><b>29.3.2</b> Resample residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="LRSIM.html"><a href="LRSIM.html#confidence-intervals-for-prediction"><i class="fa fa-check"></i><b>29.4</b> Confidence intervals for prediction</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="LRSIM.html"><a href="LRSIM.html#prediction-interval"><i class="fa fa-check"></i><b>29.4.1</b> Prediction interval</a></li>
+</ul></li>
+<li class="chapter" data-level="29.5" data-path="LRSIM.html"><a href="LRSIM.html#categorical-predictor"><i class="fa fa-check"></i><b>29.5</b> Categorical predictor</a><ul>
+<li class="chapter" data-level="29.5.1" data-path="LRSIM.html"><a href="LRSIM.html#lending-club"><i class="fa fa-check"></i><b>29.5.1</b> Lending Club</a></li>
+<li class="chapter" data-level="29.5.2" data-path="LRSIM.html"><a href="LRSIM.html#bootstrap-2"><i class="fa fa-check"></i><b>29.5.2</b> Bootstrap</a></li>
+<li class="chapter" data-level="29.5.3" data-path="LRSIM.html"><a href="LRSIM.html#anova-table"><i class="fa fa-check"></i><b>29.5.3</b> ANOVA Table</a></li>
+<li class="chapter" data-level="29.5.4" data-path="LRSIM.html"><a href="LRSIM.html#pairwise-comparisons"><i class="fa fa-check"></i><b>29.5.4</b> Pairwise Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="29.6" data-path="LRSIM.html"><a href="LRSIM.html#assumptions-2"><i class="fa fa-check"></i><b>29.6</b> Assumptions</a></li>
+<li class="chapter" data-level="29.7" data-path="LRSIM.html"><a href="LRSIM.html#homework-problems-28"><i class="fa fa-check"></i><b>29.7</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -611,7 +630,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="author"><em>Ken Horton</em></p>
 <p class="author"><em>Kris Pruitt</em></p>
 <p class="author"><em>Bradley Warner</em></p>
-<p class="date"><em>2021-02-18</em></p>
+<p class="date"><em>2021-02-19</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
@@ -644,7 +663,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="packages" class="section level2">
 <h2><span class="header-section-number">0.4</span> Packages</h2>
-<p>These notes make use of the following packages in R <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-R-knitr" role="doc-biblioref">2020</a><a href="#ref-R-knitr" role="doc-biblioref">b</a>)</span>, <strong>rmarkdown</strong> <span class="citation">(Allaire et al. <a href="#ref-R-rmarkdown" role="doc-biblioref">2020</a>)</span>, <strong>mosaic</strong> <span class="citation">(Pruim, Kaplan, and Horton <a href="#ref-R-mosaic" role="doc-biblioref">2020</a>)</span>, <strong>mosaicCalc</strong> <span class="citation">(Kaplan, Pruim, and Horton <a href="#ref-R-mosaicCalc" role="doc-biblioref">2020</a>)</span>, <strong>tidyverse</strong> <span class="citation">(Wickham <a href="#ref-R-tidyverse" role="doc-biblioref">2019</a>)</span>, <strong>ISLR</strong> <span class="citation">(James et al. <a href="#ref-R-ISLR" role="doc-biblioref">2017</a>)</span>, <strong>vcd</strong> <span class="citation">(Meyer, Zeileis, and Hornik <a href="#ref-R-vcd" role="doc-biblioref">2020</a>)</span>, <strong>ggplot2</strong> <span class="citation">(Wickham et al. <a href="#ref-R-ggplot2" role="doc-biblioref">2020</a>)</span>, <strong>MASS</strong> <span class="citation">(Ripley <a href="#ref-R-MASS" role="doc-biblioref">2019</a>)</span>, <strong>openintro</strong> <span class="citation">(Çetinkaya-Rundel et al. <a href="#ref-R-openintro" role="doc-biblioref">2020</a>)</span>, <strong>broom</strong> <span class="citation">(Robinson, Hayes, and Couch <a href="#ref-R-broom" role="doc-biblioref">2020</a>)</span>, <strong>kableExtra</strong> <span class="citation">(Zhu <a href="#ref-R-kableExtra" role="doc-biblioref">2020</a>)</span>, <strong>DT</strong> <span class="citation">(Xie, Cheng, and Tan <a href="#ref-R-DT" role="doc-biblioref">2020</a>)</span>.</p>
+<p>These notes make use of the following packages in R <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-R-knitr" role="doc-biblioref">2020</a><a href="#ref-R-knitr" role="doc-biblioref">b</a>)</span>, <strong>rmarkdown</strong> <span class="citation">(Allaire et al. <a href="#ref-R-rmarkdown" role="doc-biblioref">2020</a>)</span>, <strong>mosaic</strong> <span class="citation">(Pruim, Kaplan, and Horton <a href="#ref-R-mosaic" role="doc-biblioref">2020</a>)</span>, <strong>mosaicCalc</strong> <span class="citation">(Kaplan, Pruim, and Horton <a href="#ref-R-mosaicCalc" role="doc-biblioref">2020</a>)</span>, <strong>tidyverse</strong> <span class="citation">(Wickham <a href="#ref-R-tidyverse" role="doc-biblioref">2019</a>)</span>, <strong>ISLR</strong> <span class="citation">(James et al. <a href="#ref-R-ISLR" role="doc-biblioref">2017</a>)</span>, <strong>vcd</strong> <span class="citation">(Meyer, Zeileis, and Hornik <a href="#ref-R-vcd" role="doc-biblioref">2020</a>)</span>, <strong>ggplot2</strong> <span class="citation">(Wickham et al. <a href="#ref-R-ggplot2" role="doc-biblioref">2020</a>)</span>, <strong>MASS</strong> <span class="citation">(Ripley <a href="#ref-R-MASS" role="doc-biblioref">2019</a>)</span>, <strong>openintro</strong> <span class="citation">(Çetinkaya-Rundel et al. <a href="#ref-R-openintro" role="doc-biblioref">2020</a>)</span>, <strong>broom</strong> <span class="citation">(Robinson, Hayes, and Couch <a href="#ref-R-broom" role="doc-biblioref">2020</a>)</span>, <strong>infer</strong> <span class="citation">(Bray et al. <a href="#ref-R-infer" role="doc-biblioref">2020</a>)</span>, <strong>kableExtra</strong> <span class="citation">(Zhu <a href="#ref-R-kableExtra" role="doc-biblioref">2020</a>)</span>, <strong>DT</strong> <span class="citation">(Xie, Cheng, and Tan <a href="#ref-R-DT" role="doc-biblioref">2020</a>)</span>.</p>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2><span class="header-section-number">0.5</span> Acknowledgements</h2>
@@ -662,6 +681,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="refs" class="references">
 <div id="ref-R-rmarkdown">
 <p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2020. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
+</div>
+<div id="ref-R-infer">
+<p>Bray, Andrew, Chester Ismay, Evgeni Chasnovski, Ben Baumer, and Mine Cetinkaya-Rundel. 2020. <em>Infer: Tidy Statistical Inference</em>. <a href="https://CRAN.R-project.org/package=infer">https://CRAN.R-project.org/package=infer</a>.</p>
 </div>
 <div id="ref-R-openintro">
 <p>Çetinkaya-Rundel, Mine, David Diez, Andrew Bray, Albert Kim, Ben Baumer, Chester Ismay, and Christopher Barr. 2020. <em>Openintro: Data Sets and Supplemental Functions from ’Openintro’ Textbooks and Labs</em>. <a href="https://CRAN.R-project.org/package=openintro">https://CRAN.R-project.org/package=openintro</a>.</p>

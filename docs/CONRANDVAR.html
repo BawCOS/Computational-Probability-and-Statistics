@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-18" />
+<meta name="date" content="2021-02-19" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -586,6 +586,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="28.6" data-path="LRDIAG.html"><a href="LRDIAG.html#homework-problems-27"><i class="fa fa-check"></i><b>28.6</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="29" data-path="LRSIM.html"><a href="LRSIM.html"><i class="fa fa-check"></i><b>29</b> Simulation Based Linear Regression</a><ul>
+<li class="chapter" data-level="29.1" data-path="LRSIM.html"><a href="LRSIM.html#objectives-27"><i class="fa fa-check"></i><b>29.1</b> Objectives</a></li>
+<li class="chapter" data-level="29.2" data-path="LRSIM.html"><a href="LRSIM.html#introduction-6"><i class="fa fa-check"></i><b>29.2</b> Introduction</a></li>
+<li class="chapter" data-level="29.3" data-path="LRSIM.html"><a href="LRSIM.html#confidence-intervals-for-parameters"><i class="fa fa-check"></i><b>29.3</b> Confidence intervals for parameters</a><ul>
+<li class="chapter" data-level="29.3.1" data-path="LRSIM.html"><a href="LRSIM.html#resampling"><i class="fa fa-check"></i><b>29.3.1</b> Resampling</a></li>
+<li class="chapter" data-level="29.3.2" data-path="LRSIM.html"><a href="LRSIM.html#resample-residuals"><i class="fa fa-check"></i><b>29.3.2</b> Resample residuals</a></li>
+</ul></li>
+<li class="chapter" data-level="29.4" data-path="LRSIM.html"><a href="LRSIM.html#confidence-intervals-for-prediction"><i class="fa fa-check"></i><b>29.4</b> Confidence intervals for prediction</a><ul>
+<li class="chapter" data-level="29.4.1" data-path="LRSIM.html"><a href="LRSIM.html#prediction-interval"><i class="fa fa-check"></i><b>29.4.1</b> Prediction interval</a></li>
+</ul></li>
+<li class="chapter" data-level="29.5" data-path="LRSIM.html"><a href="LRSIM.html#categorical-predictor"><i class="fa fa-check"></i><b>29.5</b> Categorical predictor</a><ul>
+<li class="chapter" data-level="29.5.1" data-path="LRSIM.html"><a href="LRSIM.html#lending-club"><i class="fa fa-check"></i><b>29.5.1</b> Lending Club</a></li>
+<li class="chapter" data-level="29.5.2" data-path="LRSIM.html"><a href="LRSIM.html#bootstrap-2"><i class="fa fa-check"></i><b>29.5.2</b> Bootstrap</a></li>
+<li class="chapter" data-level="29.5.3" data-path="LRSIM.html"><a href="LRSIM.html#anova-table"><i class="fa fa-check"></i><b>29.5.3</b> ANOVA Table</a></li>
+<li class="chapter" data-level="29.5.4" data-path="LRSIM.html"><a href="LRSIM.html#pairwise-comparisons"><i class="fa fa-check"></i><b>29.5.4</b> Pairwise Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="29.6" data-path="LRSIM.html"><a href="LRSIM.html#assumptions-2"><i class="fa fa-check"></i><b>29.6</b> Assumptions</a></li>
+<li class="chapter" data-level="29.7" data-path="LRSIM.html"><a href="LRSIM.html#homework-problems-28"><i class="fa fa-check"></i><b>29.7</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -725,16 +744,16 @@ Figure 11.5: Probability represented by shaded area
 2. Find the random variable <span class="math inline">\(X\)</span> from <span class="math inline">\(F_{X}^{-1}(U)\)</span>.<br />
 In <code>R</code> for our example, this looks like the following.</p>
 <div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="CONRANDVAR.html#cb262-1"></a><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">1</span>))</span></code></pre></div>
-<pre><code>## [1] 0.9112495</code></pre>
+<pre><code>## [1] 0.9098626</code></pre>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="CONRANDVAR.html#cb264-1"></a>results &lt;-<span class="st"> </span><span class="kw">do</span>(<span class="dv">10000</span>)<span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">1</span>))</span></code></pre></div>
 <div style="page-break-after: always;"></div>
 <div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="CONRANDVAR.html#cb265-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class        min        Q1    median       Q3       max      mean
-## ...1 sqrt numeric 0.01660951 0.5021472 0.7065859 0.865108 0.9999623 0.6674646
+## ...1 sqrt numeric 0.01240623 0.5013226 0.7067755 0.865333 0.9999922 0.6653417
 ##             sd     n missing
-## ...1 0.2346633 10000       0</code></pre>
+## ...1 0.2368846 10000       0</code></pre>
 <div style="page-break-after: always;"></div>
 <p>Figure <a href="CONRANDVAR.html#fig:plot116-fig">11.6</a> is a density plot of the simulated density function.</p>
 <div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="CONRANDVAR.html#cb267-1"></a>results <span class="op">%&gt;%</span></span>
@@ -787,7 +806,7 @@ Consider the random variable <span class="math inline">\(X\)</span> from above. 
 <pre><code>## [1] 0.6666667</code></pre>
 <p>Using our simulation.</p>
 <div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="CONRANDVAR.html#cb272-1"></a><span class="kw">mean</span>(<span class="op">~</span>sqrt,<span class="dt">data=</span>results)</span></code></pre></div>
-<pre><code>## [1] 0.6674646</code></pre>
+<pre><code>## [1] 0.6653417</code></pre>
 <p><span class="math display">\[
 \sigma^2_X = \mbox{Var}(X)= \mbox{E}(X^2)-\mbox{E}(X)^2 = \int_0^1 x^2\cdot 2x\mathop{}\!\mathrm{d}x - \left(\frac{2}{3}\right)^2 = \frac{2x^4}{4}\bigg|_0^1-\frac{4}{9}=\frac{1}{2}-\frac{4}{9}=\frac{1}{18}=0.056
 \]</span></p>
@@ -798,7 +817,7 @@ Consider the random variable <span class="math inline">\(X\)</span> from above. 
 <span id="cb276-2"><a href="CONRANDVAR.html#cb276-2"></a><span class="kw">Vx</span>(<span class="dv">1</span>)<span class="op">-</span><span class="kw">Vx</span>(<span class="dv">0</span>)<span class="op">-</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)<span class="op">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.05555556</code></pre>
 <div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="CONRANDVAR.html#cb278-1"></a><span class="kw">var</span>(<span class="op">~</span>sqrt,<span class="dt">data=</span>results)<span class="op">*</span><span class="dv">9999</span><span class="op">/</span><span class="dv">10000</span></span></code></pre></div>
-<pre><code>## [1] 0.05506137</code></pre>
+<pre><code>## [1] 0.0561087</code></pre>
 <p>And finally, the standard deviation of <span class="math inline">\(X\)</span> is <span class="math inline">\(\sigma_X = \sqrt{\sigma^2_X}=\sqrt{1/18}=0.236\)</span>.</p>
 </div>
 </div>

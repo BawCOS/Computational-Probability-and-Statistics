@@ -315,11 +315,8 @@ tally(___)
   c. Report the percent of patients in the treatment group who were pain free 24 hours after receiving acupuncture.  
   d. Repeat for the control group.  
   e. At first glance, does acupuncture appear to be an effective treatment for migraines? Explain your reasoning.  
-  f. Do the data provide convincing evidence that there is a real pain reduction for those patients in the treatment group? Or do you think that the observed difference might just be due to chance?
+  f. Do the data provide convincing evidence that there is a real pain reduction for those patients in the treatment group? Or do you think that the observed difference might just be due to chance?  
   
-  
-
-
-3. Compile, `knit`, this report into a pdf.
+Compile, `knit`, this report into a pdf.
 
 
