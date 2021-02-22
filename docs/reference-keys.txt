@@ -156,6 +156,18 @@ fig:hist297-fig
 fig:diag291-fig
 fig:diag292-fig
 fig:diag293-fig
+fig:box301-fig
+fig:scat301-fig
+fig:scat302-fig
+fig:qq301-fig
+fig:diag301-fig
+fig:diag302-fig
+eq:multilr
+tab:tab301
+fig:diag305-fig
+fig:scat305-fig
+fig:scat306-fig
+fig:scat307-fig
 who-is-this-book-for
 book-structure-and-how-to-use-it
 prerequisites
@@ -562,8 +574,6 @@ anova-table
 pairwise-comparisons
 assumptions-2
 homework-problems-28
-fig:box301-fig
-fig:scat301-fig
 LRMULTI
 objectives-28
 introduction-to-multiple-regression

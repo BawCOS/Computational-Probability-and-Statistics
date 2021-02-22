@@ -153,7 +153,6 @@ summary(mario_mod)
 ## F-statistic: 2.325 on 1 and 141 DF,  p-value: 0.1296
 ```
 
-
 The model may be written as  
 
 $$
@@ -214,7 +213,7 @@ mariokart %>%
 ## # ... with 3 more variables: stock_photo <fct>, wheels <dbl>, title <chr>
 ```
 
-If you look at the variable `title` there were additional items in the sale for these two observations. Let's remove those two outliers and run the model again. Note that the reason we are removing them is not because they are annoying us and messing up our model. It is because we don't think they are representative of the population of interest.
+If you look at the variable `title` there were additional items in the sale for these two observations. Let's remove those two outliers and run the model again. Note that the reason we are removing them is not because they are annoying us and messing up our model. It is because we don't think they are representative of the population of interest. Figure \@ref(fig:scat302-fig) is a scatterplot of the data with the outliers dropped.
 
 
 ```r
@@ -247,7 +246,10 @@ mariokart_new %>%
   gf_labs(title="Ebay Auction Prices",subtitle="Outliers removed",x="Condition", y="Total Price")
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/scat302-fig-1.png" alt="Scatterplot of total price and condition with outliers removed." width="672" />
+<p class="caption">(\#fig:scat302-fig)Scatterplot of total price and condition with outliers removed.</p>
+</div>
 
 
 ```r
@@ -279,6 +281,7 @@ summary(mario_mod2)
 ## Multiple R-squared:  0.3506,	Adjusted R-squared:  0.3459 
 ## F-statistic: 75.03 on 1 and 139 DF,  p-value: 1.056e-14
 ```
+
 Notice how much the residual standard error has decreased and likewise the $R$-squared has increased.   
 
 The model may be written as:  
@@ -292,14 +295,17 @@ Now we see that the average price for a used items is \$10.90 less.
 > **Exercise**:  
 Does the linear model seem reasonable? Which assumptions should you check?
 
-The model does seem reasonable although prices for new items appears to be skewed to the left and may not meet the normality assumptions. 
+The model does seem reasonable although prices for new items appears to be skewed to the left and may not meet the normality assumptions, Figure \@ref(fig:qq301-fig). 
 
 
 ```r
 plot(mario_mod2,2)
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/qq301-fig-1.png" alt="Check of normality using quantile-quantile plot." width="672" />
+<p class="caption">(\#fig:qq301-fig)Check of normality using quantile-quantile plot.</p>
+</div>
 
 The normality assumption is somewhat suspect but we have more than 100 data points so the short tails of the distribution are not a concern. The shape of this curve indicates a positive skew.
 
@@ -308,18 +314,24 @@ The normality assumption is somewhat suspect but we have more than 100 data poin
 plot(mario_mod2,3)
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/diag301-fig-1.png" alt="Residual plot to assess equal variance assumption." width="672" />
+<p class="caption">(\#fig:diag301-fig)Residual plot to assess equal variance assumption.</p>
+</div>
 
-Equal variance seems reasonable. 
+From Figure \@ref(fig:diag301-fig), equal variance seems reasonable. 
 
 
 ```r
 plot(mario_mod2,5)
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/diag302-fig-1.png" alt="Residual plot for checking leverage points." width="672" />
+<p class="caption">(\#fig:diag302-fig)Residual plot for checking leverage points.</p>
+</div>
 
-No high leverage points. 
+No high leverage points, Figure \@ref(fig:diag302-fig). 
 
 No need to check linearity, we only have two different values for the explanatory variable.
 
@@ -339,16 +351,19 @@ $$
 	= \beta_0 + \beta_1 \times \text{cond} + \beta_2 \times \text{stockphoto} 
 	+ \beta_3 \times  \text{duration} +
 		\beta_4 \times  \text{wheels} 
-$$		
+$$	
+
 or:
 
-$$
-\hat{y}
+\begin{equation} 
+ \hat{y}
 	= \beta_0 + \beta_1 x_1 + \beta_2 x_2 +
 		\beta_3 x_3 + \beta_4 x_4
-$$
+  (\#eq:multilr)
+\end{equation} 
 
-In this equation, $y$ represents the total price, $x_1$ indicates whether the game is new, $x_2$ indicates whether a stock photo was used, $x_3$ is the duration of the auction, and $x_4$ is the number of Wii wheels included with the game. Just as with the single predictor case, a multiple regression model may be missing important components or it might not precisely represent the relationship between the outcome and the available explanatory variables. While no model is perfect, we wish to explore the possibility that this model may fit the data reasonably well.
+
+In Equation \@ref(eq:multilr), $y$ represents the total price, $x_1$ indicates whether the game is new, $x_2$ indicates whether a stock photo was used, $x_3$ is the duration of the auction, and $x_4$ is the number of Wii wheels included with the game. Just as with the single predictor case, a multiple regression model may be missing important components or it might not precisely represent the relationship between the outcome and the available explanatory variables. While no model is perfect, we wish to explore the possibility that this model may fit the data reasonably well.
 
 We estimate the parameters $\beta_0$, $\beta_1$, ..., $\beta_4$ in the same way as we did in the case of a single predictor. We select $b_0$, $b_1$, ..., $b_4$ that minimize the sum of the squared residuals:
 
@@ -358,7 +373,7 @@ $$
 	 = \sum_{i=1}^{141} \left(y_i - \hat{y}_i\right)^2
 $$  
 
-Here there are 141 residuals, one for each observation. We use a computer to minimize the sum and compute point estimates.
+In our problem, there are 141 residuals, one for each observation. We use a computer to minimize the sum and compute point estimates.
 
 
 ```r
@@ -373,6 +388,8 @@ mario_mod_multi <- lm(total_pr~cond+stock_photo+duration+wheels, data=mariokart_
 ```
 
 Recall, the `+` symbol does not mean to literally add the predictors together. It is not a mathematical operation but a formula operation that means to include the predictor.
+
+You can view a summary of the model using the `summmary()` function.
 
 
 ```r
@@ -403,30 +420,64 @@ summary(mario_mod_multi)
 ## F-statistic: 87.01 on 4 and 136 DF,  p-value: < 2.2e-16
 ```
 
-Using this output, we identify the point estimates $b_i$ of each $\beta_i$, just as we did in the one-predictor case.
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{rrrrr}
-  \hline
-  \vspace{-3.7mm} & & & & \\
- & Estimate & Std. Error & t value & Pr($>$$|$t$|$) \\ 
-  \hline
-  \vspace{-3.8mm} & & & & \\
-(Intercept) & 41.3415 & 1.71167 & 24.153 & 0.0000 \\ 
-  cond\_\hspace{0.3mm}new & -5.1306 & 1.0511 & -4.88 & 0.0000 \\ 
-  stock\_\hspace{0.3mm}photo & 1.0803 & 1.0568 & 1.02 & 0.308 \\ 
-  duration & -0.0268 & 0.1904 & -0.14 & 0.888 \\ 
-  wheels & 7.2852 & 0.5547 & 13.13 & 0.0000 \\ 
-   \hline
-   &&&\multicolumn{2}{r}{$df=136$}
-\end{tabular}
-\end{table}
+<table>
+<caption>(\#tab:tab301)Multiple regression coefficients.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> term </th>
+   <th style="text-align:right;"> estimate </th>
+   <th style="text-align:right;"> std.error </th>
+   <th style="text-align:right;"> statistic </th>
+   <th style="text-align:right;"> p.value </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> (Intercept) </td>
+   <td style="text-align:right;"> 41.3415318 </td>
+   <td style="text-align:right;"> 1.7116684 </td>
+   <td style="text-align:right;"> 24.1527693 </td>
+   <td style="text-align:right;"> 0.0000000 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> condused </td>
+   <td style="text-align:right;"> -5.1305641 </td>
+   <td style="text-align:right;"> 1.0511238 </td>
+   <td style="text-align:right;"> -4.8810276 </td>
+   <td style="text-align:right;"> 0.0000029 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> stock_photoyes </td>
+   <td style="text-align:right;"> 1.0803108 </td>
+   <td style="text-align:right;"> 1.0568238 </td>
+   <td style="text-align:right;"> 1.0222241 </td>
+   <td style="text-align:right;"> 0.3084897 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> duration </td>
+   <td style="text-align:right;"> -0.0268075 </td>
+   <td style="text-align:right;"> 0.1904122 </td>
+   <td style="text-align:right;"> -0.1407868 </td>
+   <td style="text-align:right;"> 0.8882467 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> wheels </td>
+   <td style="text-align:right;"> 7.2851779 </td>
+   <td style="text-align:right;"> 0.5546928 </td>
+   <td style="text-align:right;"> 13.1337172 </td>
+   <td style="text-align:right;"> 0.0000000 </td>
+  </tr>
+</tbody>
+</table>
 
-\pagebreak
+Using this output, Table \@ref(tab:tab301), we identify the point estimates $b_i$ of each $\beta_i$, just as we did in the one-predictor case.
+
 
 > **Multiple regression model**  
-A multiple regression model is a linear model with many predictors. In general, we write the model as
+A multiple regression model is a linear model with many predictors. 
+
+In general, we write the model as
 
 $$
 \hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_k x_k %+ \epsilon
@@ -734,14 +785,17 @@ We are 95\% confident that the price of a Mario Kart sale for a new item with 2 
 
 ### Diagnostics
 
-The diagnostics for the model are similar to what we did in a previous lesson. Nothing in these plots gives us concern.
+The diagnostics for the model are similar to what we did in a previous lesson. Nothing in these plots gives us concern, Figure \@ref(fig:diag305-fig).
 
 
 ```r
 plot(mario_mod_multi3)
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-35-1.png" width="672" /><img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-35-2.png" width="672" /><img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-35-3.png" width="672" /><img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-35-4.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/diag305-fig-1.png" alt="Diagnostic residual plots for multiple regression model." width="50%" /><img src="30-Multiple-Regression_files/figure-html/diag305-fig-2.png" alt="Diagnostic residual plots for multiple regression model." width="50%" /><img src="30-Multiple-Regression_files/figure-html/diag305-fig-3.png" alt="Diagnostic residual plots for multiple regression model." width="50%" /><img src="30-Multiple-Regression_files/figure-html/diag305-fig-4.png" alt="Diagnostic residual plots for multiple regression model." width="50%" />
+<p class="caption">(\#fig:diag305-fig)Diagnostic residual plots for multiple regression model.</p>
+</div>
 
 
 ## Interaction and Higher Order Terms
@@ -815,7 +869,7 @@ summary(credit_mod1)
 ## F-statistic: 76.22 on 2 and 397 DF,  p-value: < 2.2e-16
 ```
 
-Let's plot the data and the regression line. The impact of putting in the categorical variable `Student` is to just shift the intercept. The slope remains the same.
+Let's plot the data and the regression line. The impact of putting in the categorical variable `Student` is to just shift the intercept. The slope remains the same, Figure \@ref(fig:scat305-fig).
 
 
 
@@ -823,16 +877,17 @@ Let's plot the data and the regression line. The impact of putting in the catego
 augment(credit_mod1) %>%
   gf_point(Balance~Income,color=~Student) %>%
   gf_line(.fitted~Income,data=subset(augment(credit_mod1), Student == "Yes"),color=~Student)%>%
-  gf_line(.fitted~Income,data=subset(augment(credit_mod1), Student == "No"),color=~Student)
+  gf_line(.fitted~Income,data=subset(augment(credit_mod1), Student == "No"),color=~Student) %>%
+  gf_theme(theme_bw())
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-40-1.png" width="672" />
-
-
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/scat305-fig-1.png" alt="Scatterplot of credit card balance for income and student status." width="672" />
+<p class="caption">(\#fig:scat305-fig)Scatterplot of credit card balance for income and student status.</p>
+</div>
 
 >**Exercise**:  
 Write the equation for the regression model.
-
 
 $$
 \mbox{E}(Balance)=\beta_0 + \beta_1*\text{Income}+ \beta_2*\text{(Student=Yes)} 
@@ -886,12 +941,16 @@ summary(credit_mod2)
 augment(credit_mod2) %>%
   gf_point(Balance~Income,color=~Student) %>%
   gf_line(.fitted~Income,data=subset(augment(credit_mod2), Student == "Yes"),color=~Student)%>%
-  gf_line(.fitted~Income,data=subset(augment(credit_mod2), Student == "No"),color=~Student)
+  gf_line(.fitted~Income,data=subset(augment(credit_mod2), Student == "No"),color=~Student) %>%
+  gf_theme(theme_bw())
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-43-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/scat306-fig-1.png" alt="Scatterplot of credit card balance for income and student status with an interaction term." width="672" />
+<p class="caption">(\#fig:scat306-fig)Scatterplot of credit card balance for income and student status with an interaction term.</p>
+</div>
 
-Now we have a different slope and intercept for each case of the `Student` variable. Thus there is a synergy or interaction between these variables. The student status changes the impact of `Income` on `Balance`. If you are a student, then for every increase in income of 1 the balance increase by 4.219 on average. If you are not a student, every increase in income of 1 increases the average balance by 6.2182. 
+Now we have a different slope and intercept for each case of the `Student` variable, Figure \@ref(fig:scat306-fig). Thus there is a synergy or interaction between these variables. The student status changes the impact of `Income` on `Balance`. If you are a student, then for every increase in income of 1 the balance increase by 4.219 on average. If you are not a student, every increase in income of 1 increases the average balance by 6.2182. 
 
 Furthermore, if you suspect that perhaps a curved relationship exists between two variables, we could include a higher order term. As an example, let's add a quadratic term for `Income` to our model (without the interaction). To do this in `R`, we need to wrap the higher order term in `I()`. If we include a higher order term, we usually want to include the lower order terms as well, in Math 378 you will make the decision on what to include using predictive performance.
 
@@ -931,12 +990,16 @@ summary(credit_mod3)
 ```r
 augment(credit_mod3) %>%
   gf_point(Balance~Income) %>%
-  gf_line(.fitted~Income)
+  gf_line(.fitted~Income) %>%
+  gf_theme(theme_bw())
 ```
 
-<img src="30-Multiple-Regression_files/figure-html/unnamed-chunk-46-1.png" width="672" />
+<div class="figure">
+<img src="30-Multiple-Regression_files/figure-html/scat307-fig-1.png" alt="Scatterplot of credit card balance for income with a quadratic fit." width="672" />
+<p class="caption">(\#fig:scat307-fig)Scatterplot of credit card balance for income with a quadratic fit.</p>
+</div>
 
-There is not much of a quadratic relationship.
+There is not much of a quadratic relationship, Figure \@ref(fig:scat307-fig).
 
 ### Summary  
 
@@ -944,7 +1007,7 @@ In this lesson we have extended the linear regression model by allowing multiple
 
 ## Homework Problems  
 
-\indent 1. The `mtcars` dataset contains average mileage (mpg) and other information about specific makes and models of cars. (This dataset is built-in to `R`; for more information about this dataset, reference the documentation with `?mtcars`). 
+\indent 1. The `mtcars` data set contains average mileage (mpg) and other information about specific makes and models of cars. (This data set is built-in to `R`; for more information about this data set, reference the documentation with `?mtcars`). 
 
 a. Build and interpret the coefficients of a model fitting `mpg` against displacement (`disp`), horsepower (`hp`), rear axle ratio (`drat`), and weight in 1000 lbs (`wt`).   
 b. Given your model, what is the expected mpg for a vehicle with a displacement of 170, a horsepower of 100, a `drat` of 3.80 and a wt of 2,900 lbs. Construct a 95% confidence interval and prediction interval for that expected mpg.   

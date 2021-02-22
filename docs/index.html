@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-19" />
+<meta name="date" content="2021-02-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -605,6 +605,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29.6" data-path="LRSIM.html"><a href="LRSIM.html#assumptions-2"><i class="fa fa-check"></i><b>29.6</b> Assumptions</a></li>
 <li class="chapter" data-level="29.7" data-path="LRSIM.html"><a href="LRSIM.html#homework-problems-28"><i class="fa fa-check"></i><b>29.7</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="30" data-path="LRMULTI.html"><a href="LRMULTI.html"><i class="fa fa-check"></i><b>30</b> Multiple Linear Regression</a><ul>
+<li class="chapter" data-level="30.1" data-path="LRMULTI.html"><a href="LRMULTI.html#objectives-28"><i class="fa fa-check"></i><b>30.1</b> Objectives</a></li>
+<li class="chapter" data-level="30.2" data-path="LRMULTI.html"><a href="LRMULTI.html#introduction-to-multiple-regression"><i class="fa fa-check"></i><b>30.2</b> Introduction to multiple regression</a></li>
+<li class="chapter" data-level="30.3" data-path="LRMULTI.html"><a href="LRMULTI.html#multiple-regression"><i class="fa fa-check"></i><b>30.3</b> Multiple regression</a><ul>
+<li class="chapter" data-level="30.3.1" data-path="LRMULTI.html"><a href="LRMULTI.html#a-single-variable-model-for-the-mario-kart-data"><i class="fa fa-check"></i><b>30.3.1</b> A single-variable model for the Mario Kart data</a></li>
+<li class="chapter" data-level="30.3.2" data-path="LRMULTI.html"><a href="LRMULTI.html#including-and-assessing-many-variables-in-a-model"><i class="fa fa-check"></i><b>30.3.2</b> Including and assessing many variables in a model</a></li>
+<li class="chapter" data-level="30.3.3" data-path="LRMULTI.html"><a href="LRMULTI.html#inference-1"><i class="fa fa-check"></i><b>30.3.3</b> Inference</a></li>
+<li class="chapter" data-level="30.3.4" data-path="LRMULTI.html"><a href="LRMULTI.html#adjusted-r2-as-a-better-estimate-of-explained-variance"><i class="fa fa-check"></i><b>30.3.4</b> Adjusted <span class="math inline">\(R^2\)</span> as a better estimate of explained variance</a></li>
+<li class="chapter" data-level="30.3.5" data-path="LRMULTI.html"><a href="LRMULTI.html#reduced-model"><i class="fa fa-check"></i><b>30.3.5</b> Reduced model</a></li>
+<li class="chapter" data-level="30.3.6" data-path="LRMULTI.html"><a href="LRMULTI.html#confidence-and-prediction-intervals"><i class="fa fa-check"></i><b>30.3.6</b> Confidence and prediction intervals</a></li>
+<li class="chapter" data-level="30.3.7" data-path="LRMULTI.html"><a href="LRMULTI.html#diagnostics"><i class="fa fa-check"></i><b>30.3.7</b> Diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="30.4" data-path="LRMULTI.html"><a href="LRMULTI.html#interaction-and-higher-order-terms"><i class="fa fa-check"></i><b>30.4</b> Interaction and Higher Order Terms</a><ul>
+<li class="chapter" data-level="30.4.1" data-path="LRMULTI.html"><a href="LRMULTI.html#summary-3"><i class="fa fa-check"></i><b>30.4.1</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="30.5" data-path="LRMULTI.html"><a href="LRMULTI.html#homework-problems-29"><i class="fa fa-check"></i><b>30.5</b> Homework Problems</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -630,7 +647,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p class="author"><em>Ken Horton</em></p>
 <p class="author"><em>Kris Pruitt</em></p>
 <p class="author"><em>Bradley Warner</em></p>
-<p class="date"><em>2021-02-19</em></p>
+<p class="date"><em>2021-02-22</em></p>
 </div>
 <div id="preface" class="section level1 unnumbered">
 <h1>Preface</h1>
@@ -663,7 +680,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="packages" class="section level2">
 <h2><span class="header-section-number">0.4</span> Packages</h2>
-<p>These notes make use of the following packages in R <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-R-knitr" role="doc-biblioref">2020</a><a href="#ref-R-knitr" role="doc-biblioref">b</a>)</span>, <strong>rmarkdown</strong> <span class="citation">(Allaire et al. <a href="#ref-R-rmarkdown" role="doc-biblioref">2020</a>)</span>, <strong>mosaic</strong> <span class="citation">(Pruim, Kaplan, and Horton <a href="#ref-R-mosaic" role="doc-biblioref">2020</a>)</span>, <strong>mosaicCalc</strong> <span class="citation">(Kaplan, Pruim, and Horton <a href="#ref-R-mosaicCalc" role="doc-biblioref">2020</a>)</span>, <strong>tidyverse</strong> <span class="citation">(Wickham <a href="#ref-R-tidyverse" role="doc-biblioref">2019</a>)</span>, <strong>ISLR</strong> <span class="citation">(James et al. <a href="#ref-R-ISLR" role="doc-biblioref">2017</a>)</span>, <strong>vcd</strong> <span class="citation">(Meyer, Zeileis, and Hornik <a href="#ref-R-vcd" role="doc-biblioref">2020</a>)</span>, <strong>ggplot2</strong> <span class="citation">(Wickham et al. <a href="#ref-R-ggplot2" role="doc-biblioref">2020</a>)</span>, <strong>MASS</strong> <span class="citation">(Ripley <a href="#ref-R-MASS" role="doc-biblioref">2019</a>)</span>, <strong>openintro</strong> <span class="citation">(Çetinkaya-Rundel et al. <a href="#ref-R-openintro" role="doc-biblioref">2020</a>)</span>, <strong>broom</strong> <span class="citation">(Robinson, Hayes, and Couch <a href="#ref-R-broom" role="doc-biblioref">2020</a>)</span>, <strong>infer</strong> <span class="citation">(Bray et al. <a href="#ref-R-infer" role="doc-biblioref">2020</a>)</span>, <strong>kableExtra</strong> <span class="citation">(Zhu <a href="#ref-R-kableExtra" role="doc-biblioref">2020</a>)</span>, <strong>DT</strong> <span class="citation">(Xie, Cheng, and Tan <a href="#ref-R-DT" role="doc-biblioref">2020</a>)</span>.</p>
+<p>These notes make use of the following packages in R <strong>knitr</strong> <span class="citation">(Xie <a href="#ref-R-knitr" role="doc-biblioref">2020</a><a href="#ref-R-knitr" role="doc-biblioref">b</a>)</span>, <strong>rmarkdown</strong> <span class="citation">(Allaire et al. <a href="#ref-R-rmarkdown" role="doc-biblioref">2020</a>)</span>, <strong>mosaic</strong> <span class="citation">(Pruim, Kaplan, and Horton <a href="#ref-R-mosaic" role="doc-biblioref">2020</a>)</span>, <strong>mosaicCalc</strong> <span class="citation">(Kaplan, Pruim, and Horton <a href="#ref-R-mosaicCalc" role="doc-biblioref">2020</a>)</span>, <strong>tidyverse</strong> <span class="citation">(Wickham <a href="#ref-R-tidyverse" role="doc-biblioref">2019</a>)</span>, <strong>ISLR</strong> <span class="citation">(James et al. <a href="#ref-R-ISLR" role="doc-biblioref">2017</a>)</span>, <strong>vcd</strong> <span class="citation">(Meyer, Zeileis, and Hornik <a href="#ref-R-vcd" role="doc-biblioref">2020</a>)</span>, <strong>ggplot2</strong> <span class="citation">(Wickham et al. <a href="#ref-R-ggplot2" role="doc-biblioref">2020</a>)</span>, <strong>MASS</strong> <span class="citation">(Ripley <a href="#ref-R-MASS" role="doc-biblioref">2019</a>)</span>, <strong>openintro</strong> <span class="citation">(Çetinkaya-Rundel et al. <a href="#ref-R-openintro" role="doc-biblioref">2020</a>)</span>, <strong>broom</strong> <span class="citation">(Robinson, Hayes, and Couch <a href="#ref-R-broom" role="doc-biblioref">2020</a>)</span>, <strong>infer</strong> <span class="citation">(Bray et al. <a href="#ref-R-infer" role="doc-biblioref">2020</a>)</span>, <strong>ISLR</strong> <span class="citation">(James et al. <a href="#ref-R-ISLR" role="doc-biblioref">2017</a>)</span>, <strong>kableExtra</strong> <span class="citation">(Zhu <a href="#ref-R-kableExtra" role="doc-biblioref">2020</a>)</span>, <strong>DT</strong> <span class="citation">(Xie, Cheng, and Tan <a href="#ref-R-DT" role="doc-biblioref">2020</a>)</span>.</p>
 </div>
 <div id="acknowledgements" class="section level2">
 <h2><span class="header-section-number">0.5</span> Acknowledgements</h2>
