@@ -81,6 +81,13 @@ knitr::write_bib(c(
 ), 'packages.bib')
 ```
 
+## File Creation Information 
+
+  * File creation date: `r Sys.Date()`
+  * Windows version: `r win.version()`
+  * `r R.version.string`
+
+
 ```{r warning=FALSE,message=FALSE,include=FALSE}
 library(knitr)
 library(kableExtra)

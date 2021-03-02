@@ -1,0 +1,712 @@
+# Logistic Regression {#LOGREG}
+
+## Objectives
+
+1) Using `R`, conduct logistic regression and interpret the output, check assumptions, and perform model selection.  
+2) Write the logistic regression model and predict outputs for given inputs.  
+3) Use the bootstrap to find confidence intervals for parameter estimates and predictions.  
+
+## Logistic regression introduction
+
+In this lesson we introduce **logistic regression** as a tool for building models when there is a categorical response variable with two levels. Logistic regression is a type of **generalized linear model** (GLM) for response variables where the assumptions of normally distributed errors is not appropriate. We are prepping you for advanced statistical models and machine learning, where we will explore predictive models of many different types of response variables including ones that don't assume an underlying functional relationship between inputs and outputs. So cool!
+
+GLMs can be thought of as a two-stage modeling approach. We first model the response variable using a probability distribution, such as the binomial or Poisson distribution. Second, we model the parameter of the distribution using a collection of predictors and a special form of multiple regression.
+
+To explore and explain these ideas, we will again use the Ebay auctions of a video game called **Mario Kart** for the Nintendo Wii. Remember, the data set is in the file `mariokart.csv` and includes results from 141 auctions.^[Diez DM, Barr CD, and \c{C}etinkaya-Rundel M. 2012. `openintro`: OpenIntro data sets and supplemental functions. http://cran.r-project.org/web/packages/openintro] 
+
+In this chapter, we want the outcome variable of interest to be game condition, `cond`. In Chapter \@ref(LRMULTI) we used the total price of an auction as the response. We are moving from a quantitative response to a binary qualitative variable. If we were only interested in determining if an association exists between the variables `cond` and `total_pr`, we could use linear regression with `total_pr` as the response. However, in this problem we want to predict game condition. We will start by reviewing some of the previous models and then introduce logistic regression. We will finish with a multiple logistic regression model, more than one predictor. 
+
+### Mario Kart data
+
+Read the data and summarize. 
+
+```{r warning=FALSE,message=FALSE}
+mariokart <-read_csv("data/mariokart.csv")
+head(mariokart,n=10)
+```
+
+```{r}
+inspect(mariokart)
+```
+
+We are again only interested in `total_pr`, `cond`, `stock_photo`, `duration`, and `wheels`. These variables are described in the following list:
+
+1. `total_pr`: final auction price plus shipping costs, in US dollars  
+2. `cond`: a two-level categorical factor variable  
+3. `stock_photo`: a two-level categorical factor variable  
+4. `duration`: the length of the auction, in days, taking values from 1 to 10  
+5. `wheels`: the number of Wii wheels included with the auction (a **Wii wheel** is a plastic racing wheel that holds the Wii controller and is an optional but helpful accessory for playing Mario Kart) 
+
+Remember that we a couple of outlier sales that included multiple items. Before we start let's clean up the data again.
+
+```{r}
+mariokart <- mariokart %>%
+  filter(total_pr <= 100) %>% 
+  mutate(cond=factor(cond),
+         stock_photo=factor(stock_photo)) %>% 
+  select(cond,stock_photo,total_pr,duration,wheels)
+```
+
+Next let's summarize the data.
+
+```{r warning=FALSE,message=FALSE}
+inspect(mariokart)
+```
+
+### Analyzing contingency table  
+
+As a review and introduction to logistic regression, let's analyze the relationship between game condition and stock photo. 
+
+```{r}
+tally(cond~stock_photo,data=mariokart
+      ,margins = TRUE,format = "proportion")
+```
+
+We could analyze this by comparing the proportion of new condition games for each stock photo value using both randomization, empirical p-values, and the central limit theorem. We will just use an exact permutation test, **Fisher Exact Test."  
+
+```{r}
+fisher.test(tally(~cond+stock_photo,data=mariokart))
+```
+Clearly, these variables are not independent of each other. This model does not gives us much more information so let's move to logistic regression.  
+
+### Modeling the probability of an event
+
+The outcome variable for a GLM is denoted by $Y_i$, where the index $i$ is used to represent observation $i$. In the Mario Kart application, $Y_i$ will be used to represent whether the game condition $i$ is new ($Y_i=1$) or used ($Y_i=0$). 
+
+The predictor variables are represented as follows: $x_{1,i}$ is the value of variable 1 for observation $i$, $x_{2,i}$ is the value of variable 2 for observation $i$, and so on.
+
+Logistic regression is a generalized linear model where the outcome is a two-level categorical variable. The outcome, $Y_i$, takes the value 1 (in our application, this represents a game in new condition but we could easily switch and make the outcom of interest a used game) with probability $p_i$ and the value 0 with probability $1-p_i$. It is the probability $p_i$ that we model in relation to the predictor variables.
+
+The logistic regression model relates the probability a game is new ($p_i$) to the predictors $x_{1,i}$, $x_{2,i}$, ..., $x_{k,i}$ through a framework much like that of multiple regression:
+
+$$
+\text{transformation}(p_{i}) = \beta_0 + \beta_1x_{1,i} + \beta_2 x_{2,i} + \cdots \beta_k x_{k,i}
+$$ 
+
+We want to choose a transformation that makes practical and mathematical sense. For example, we want a transformation that makes the range of possibilities on the left hand side of the above equation equal to the range of possibilities for the right hand side. If there was no transformation for this equation, the left hand side could only take values between 0 and 1, but the right hand side could take values outside of this range. A common transformation for $p_i$ is the **logit transformation**, which may be written as
+
+$$
+\text{logit}(p_i) = \log_{e}\left( \frac{p_i}{1-p_i} \right)
+$$  
+
+Below, we expand the equation using the logit transformation of $p_i$:
+
+$$
+\log_{e}\left( \frac{p_i}{1-p_i} \right)
+	= \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
+$$  
+
+The logit transformation is shown in the next figure. 
+
+```{r echo=FALSE}
+library(openintro)
+data(COL)
+p  <- seq(0.0001, 0.9999, 0.0002)
+lp <- log(p/(1-p))
+
+pts  <- seq(0.01, 0.99, length.out=25)
+R    <- c(-6,6)
+adj  <- 0.07
+adj1 <- 0.02
+
+
+plot(lp, p, ylab="", xlab=expression(logit(p[i])), xlim=c(-5.8, 6.5), ylim=c(-0.05, 1.1), type="n")
+lines(lp, p, type="l", col=COL[5], lwd=1.5)
+mtext(expression(p[i]), 2, 2.4)
+abline(h=0:1, lty=2, col=COL[1], lwd=1.5)
+this <- which.min(abs(p-0.2))
+#lines(rep(p[this], 2), c(-50, lp[this]), col="#00000044")#, lty=3, lwd=2)
+#lines(c(-1, p[this]), rep(lp[this], 2), col="#00000044")#, lty=3, lwd=2)
+LP    <- c(seq(6, -5, -1)) #log(P/(1-P))
+P     <- exp(LP)/(1+exp(LP))#1-c(0.01, 0.05, 0.1, 0.20, 0.3, 0.4, 0.5)
+POS   <- c(3, 1, 3, 1, 2, 2, 2, 2, 4, 3, 1, 3)
+xOFF  <- c()
+Round <- c(3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3)
+for(i in 1:length(LP)){
+  points(LP[i], P[i], col=COL[4], lwd=2)
+  t1   <- format(round(c(LP,0.9), Round[i]))[i]
+  t2   <- format(round(P, Round[i]))[i]
+  temp <- paste("(", t1, ", ", t2, ")", sep="")
+  text(LP[i], P[i], temp, cex=0.6, pos=POS[i], col=COL[5])
+  
+}
+#points(lp[this], p[this])
+#text(lp[this], p[this], "(-1.39, 0.20)", cex=0.7, pos=4)
+
+
+
+
+# plot(R, c(-0.4, 2.4), type="n", xlab="", ylab="", axes=FALSE)
+
+# lines(0:1, c(2,2))
+# segments(0:1, 2-adj, 0:1, 2+adj)
+# text(0:1, 2+adj1, 0:1,pos=3)
+# text(0.5, 2.1, expression(p[i]), pos=3)
+
+# #arrows(0, 1, R[2], 1, length=0.08)
+# #segments(0:(R[2]-1), 1-adj, 0:(R[2]-1), 1+adj)
+# pts1 <- pts/(1-pts)
+# #segments(pts, 2, pts1, 1)
+
+# arrows(R[1], 0, R[2], 0, length=0.08, code=3)
+# segments((R[1]+1):(R[2]-1), -adj, (R[1]+1):(R[2]-1), adj)
+# pts2 <- log(pts1)
+# arrows(pts, 2, pts2, 0, length=0.05)
+# text((R[1]+1):(R[2]-1), rep(-adj1, R[2]-R[1]-2), (R[1]+1):(R[2]-1), pos=1, cex=0.8)
+
+# text(-4, 1, expression(logit(p[i])))
+
+# #abline(h=0:1)
+
+```
+
+Notice the output of the `logit` function restricts the values between 0 and 1. The curve is fairly flat on the edges with a sharp rise in the center. There are other functions that achieve this same result. However, for reasons beyond the scope of this class, the logit function has desirable mathematical properties that relate making sure all the common GLMs fall within the exponential family of distributions. This topic is at the graduate school level and not needed for our studies. 
+
+In our Mario Kart example, there are 4 predictor variables, so $k = 4$. This nonlinear model isn't very intuitive, but it still has some resemblance to multiple regression, and we can fit this model using software. In fact, once we look at results from software, it will start to feel like we're back in multiple regression, even if the interpretation of the coefficients is more complex.
+
+### First model - intercept only
+
+Here we create a model with just `stock_photo` as a predictor.  
+
+In `R` we use the `glm()` function to fit a logistic regression model. It has the same formula format as `lm` but also requires a `family` argument. Since our response is binary, we use `binomial`. If we wanted to use `glm()` for linear regression assuming normally distributed residual, the family argument would be `gaussian`. This implies that multiple linear regression with the assumption of normally distributed errors is a special case of a generalized linear model. In `R`, the response is a 0/1 variable, we can control the outcome of interest, the 1, by using a logical argument in the formula.
+
+First to understand the output of logistic regression, let's just run a model with an intercept term. Notice in the code chunk that the left hand side of the formula has a logical argument, this gives a 0/1 output with 1 being the value we want to predict.
+
+```{r}
+mario_mod1 <- glm(cond=="new"~1,data=mariokart,
+                 family="binomial")
+```
+
+Let's get regression output using the `summary()` function.  
+
+```{r}
+summary(mario_mod1)
+```  
+
+This looks similar to the regression output we saw in previous chapters. However, the model has a different, nonlinear, form. Remember, Equation \@ref(eq:logistic) is the general form of the model.
+
+\begin{equation} 
+  \log_{e}\left( \frac{p_i}{1-p_i} \right)
+	= \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
+  (\#eq:logistic)
+\end{equation} 
+
+Thus using the output of `R`, Equation \@ref(eq:logistic2) is the estimated model.
+
+\begin{equation}
+\log\left( \frac{p_i}{1-p_i} \right) = -0.329 
+  (\#eq:logistic2)
+\end{equation} 
+
+Solving Equation \@ref(eq:logistic2) for $p_i$: $\frac{e^{-0.329}}{1 + e^{-0.329}} = 0.418$. This is the estimated probability of the game condition being new. We can check this using a summary table.
+
+```{r}
+tally(~cond,data=mariokart,format="proportion")
+```
+
+
+### Second model - stock_photo
+
+Now that we are starting to understand the logistic regression model. Let's add a predictor variable.  
+
+```{r}
+mario_mod2 <- glm(cond=="new"~stock_photo,data=mariokart,
+                 family="binomial")
+```
+
+```{r}
+summary(mario_mod2)
+```
+
+We can use the `broom` package to summarize the output and generate model fits.
+
+```{r}
+tidy(mario_mod2)
+```
+
+Let's convert these coefficients to estimated probabilities using the `augment()` function. We need to specify the output as the *response*, the probability, or else we will get the logit of the probability.
+
+```{r}
+augment(mario_mod2,
+        newdata=tibble(stock_photo=c("yes","no")),
+        type.predict="response")
+```
+
+These are the conditional probability of a new condition based on status of `stock_photo`. We can see this using the `tally()` function.
+
+```{r}
+tally(cond~stock_photo,data=mariokart,margins = TRUE,format="proportion")
+```
+
+Or from the model coefficients.
+
+```{r}
+exp(-2.079442)/(1+exp(-2.079442))
+exp(-2.079442+2.174752)/(1+exp(-2.079442+2.174752))
+```
+
+> **Exercise**: 
+Fit a logistic regression model with `cond` as used and `stock_photo` as a predictor.
+
+We repeat the code from above.
+
+```{r}
+mario_mod3 <- glm(cond=="used"~stock_photo,data=mariokart,
+                 family="binomial")
+```
+
+
+```{r}
+tidy(mario_mod3)
+```
+
+Again, let's convert these coefficients to estimated probabilities using the `augment()` function. 
+
+```{r}
+augment(mario_mod3,
+        newdata=tibble(stock_photo=c("yes","no")),
+        type.predict="response")
+```
+
+Finally confirm with the `tally()` function.  
+
+```{r}
+tally(cond~stock_photo,data=mariokart,margins = TRUE,format="proportion")
+```
+Notice that is was not important whether we select new condition as the desired outcome or used status. In either case, the logistic regression model returns the conditional probability given the value of the predictor.  
+
+### Interpreting ANOVA table
+
+At this point it seems that we created a great deal of work just to get the same results that we had from other methods. However, the logistic regression model allows us to add other predictors and it also gives us standard errors for the parameter estimates.  
+
+
+```{r}
+summary(mario_mod2)
+```
+
+
+
+### Confusion matrix  
+
+## Multiple logistic regression  
+
+## Confidence intervals  
+
+======================================
+To convert from values on the regression-scale (e.g. -2.12 and -3.93 in our example), we used the following formula, which is the result of solving for $p_i$ in the regression model:
+
+$$
+p_i
+	= \frac{e^{\beta_0 + \beta_1 x_{1,i}+\cdots+\beta_k x_{k,i}}}
+		{\ 1\ \ +\ \ e^{\beta_0 + \beta_1 x_{1,i}+\cdots+\beta_k x_{k,i}}\ }
+$$
+
+As with most applied data problems, we substitute the point estimates for the parameters (the $\beta_i$) so that we may make use of this formula. In our example, the probabilities were calculated as
+
+$$
+\frac{\ e^{-2.12}\ }{\ 1\ +\ e^{-2.12}\ } = 0.11, \frac{\ e^{-2.12 - 1.81}\ }{\ 1\ +\ e^{-2.12 - 1.81}\ } = 0.02
+$$  
+
+While the information about whether the email is addressed to multiple people is a helpful start in classifying email as spam or not, the probabilities of 11\% and 2\% are not dramatically different, and neither provides very strong evidence about which particular email messages are spam. To get more precise estimates, we'll need to include many more variables in the model.
+
+
+
+
+```{r}
+mario_mod2 <- glm(cond=="new"~stock_photo,data=mariokart,
+                 family="binomial")
+```
+
+
+$$
+\log_{e}\left( \frac{p_i}{1-p_i} \right)
+	= \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
+$$ 
+
+```{r}
+summary(email_mod)
+```
+
+The following logistic regression model was found using `R`:
+
+$$
+\log\left( \frac{p_i}{1-p_i} \right) = -2.12 - 1.81 \times \text{to\_multiple}
+$$
+
+> **Exercise**:  
+If an email is randomly selected and it has just one address in the **To** field, what is the probability it is spam? What if more than one address is listed in the **To** field?
+
+If there is only one email in the **To** field, then `to_multiple` takes value 0 and the right side of the model equation equals -2.12. Solving for $p_i$: $\frac{e^{-2.12}}{1 + e^{-2.12}} = 0.11$. Just as we labeled a fitted value of $y_i$ with a ``hat'' in single-variable and multiple regression, we will do the same for this probability: $\hat{p}_i = 0.11$.
+
+If there is more than one address listed in the **To** field, then the right side of the model equation is $-2.12 - 1.81\times1 = -3.93$, which corresponds to a probability $\hat{p}_i = 0.02$.
+
+Notice that we could examine -2.12 and -3.93 in our logistic graph above to estimate the probability before formally calculating the value.
+
+To convert from values on the regression-scale (e.g. -2.12 and -3.93 in our example), we used the following formula, which is the result of solving for $p_i$ in the regression model:
+
+$$
+p_i
+	= \frac{e^{\beta_0 + \beta_1 x_{1,i}+\cdots+\beta_k x_{k,i}}}
+		{\ 1\ \ +\ \ e^{\beta_0 + \beta_1 x_{1,i}+\cdots+\beta_k x_{k,i}}\ }
+$$
+
+As with most applied data problems, we substitute the point estimates for the parameters (the $\beta_i$) so that we may make use of this formula. In our example, the probabilities were calculated as
+
+$$
+\frac{\ e^{-2.12}\ }{\ 1\ +\ e^{-2.12}\ } = 0.11, \frac{\ e^{-2.12 - 1.81}\ }{\ 1\ +\ e^{-2.12 - 1.81}\ } = 0.02
+$$  
+
+While the information about whether the email is addressed to multiple people is a helpful start in classifying email as spam or not, the probabilities of 11\% and 2\% are not dramatically different, and neither provides very strong evidence about which particular email messages are spam. To get more precise estimates, we'll need to include many more variables in the model.
+
+### Model with multiple predictors  
+
+> **Exercise**: 
+Fit a logistic regression model with all ten predictors listed above. 
+
+Let's build the model and summarize it. As a reminder, we can use `.` on the right-hand side of the formula to tell `R` to include all predictors.  
+
+```{r}
+email_mod2 <- glm(spam=="spam"~.,data=email,family="binomial")
+```
+
+```{r}
+summary(email_mod2)
+```
+
+Like multiple regression, the results are presented in a summary table. The structure of this table is almost identical to that of multiple regression; the only notable difference is that the p-values are calculated using the normal distribution rather than the $t$ distribution.
+
+In Math 378 we will learn more about tuning models but in this lesson we will do a simple procedure of just trimming  variables from the model using the p-value. Using a method called backwards elimination with a p-value cutoff of 0.05 (start with the full model and trim the predictors with p-values greater than 0.05), we ultimately eliminate the `exclaim_subj` and `cc` predictors. The remainder of this section will rely on this smaller model. The code for this process is below, note there are more efficient ways to do this.
+
+Take out `exclaim_subj` because it has largest p-value. 
+
+```{r}
+email_mod2 <- glm(spam=="spam"~to_multiple+cc+attach+dollar+winner+
+                  inherit+password+format+re_subj,
+                  data=email,family="binomial")
+summary(email_mod2)
+```
+
+Take out `cc` because it has largest p-value. 
+
+```{r}
+email_mod2 <- glm(spam=="spam"~to_multiple+attach+dollar+winner+
+                  inherit+password+format+re_subj,
+                  data=email,family="binomial")
+summary(email_mod2)
+```  
+
+Now `inherit` is significant but since we are generating multiple p-values we may want to adjust these p-values for the multiple comparison problem.^[For a further discussion on the multiple comparison problem see the linked [video.](https://www.youtube.com/watch?v=dzi1CSvzCoU)] This p-value is close to the 0.05 threshold. We can do this adjustment using the `broom` package.
+
+```{r}
+library(broom)
+```
+
+```{r}
+tidy(email_mod2) %>%
+  mutate(p_adjusted=p.adjust(p.value))
+```
+
+Based on this work, none of the adjusted p-value exceed 0.05. we will stop our model selection process at this point and use this reduced model for the remainder of the lesson.
+
+
+>**Exercise**:  
+Examine the summary of the reduced model above, and in particular, examine the `to_multiple` row. Is the point estimate the same as we found before, -1.81, or is it different? Explain why this might be.^[The new estimate is different: -2.78. This new value represents the estimated coefficient when we are also accounting for other variables in the logistic regression model.]
+
+Point estimates will generally change a little -- and sometimes a lot -- depending on which other variables are included in the model. This is usually due to colinearity in the predictor variables. We previously saw this in the Ebay auction example when we compared the coefficient of `cond` in a single-variable model and the corresponding coefficient in the multiple regression model that used three additional variables.
+
+>*Example*: 
+Spam filters are built to be automated, meaning a piece of software is written to collect information about emails as they arrive, and this information is put in the form of variables. These variables are then put into an algorithm that uses a statistical model, like the one we've fit, to classify the email. Suppose we write software for a spam filter using the reduced model in the `email_mod2` object. If an incoming email has the word "winner" in it, will this raise or lower the model's calculated probability that the incoming email is spam?
+
+The estimated coefficient of `winner` is positive (1.86675). A positive coefficient estimate in logistic regression, just like in multiple regression, corresponds to a positive association between the predictor and response variables when accounting for the other variables in the model. Since the response variable takes value 1 if an email is spam and 0 otherwise, the positive coefficient indicates that the presence of ``winner'' in an email raises the model probability that the message is spam.
+
+
+>*Example*: 
+Suppose the same email from the last example was in HTML format, meaning the `format` variable took value 1. Does this characteristic increase or decrease the probability that the email is spam according to the model?
+
+Since HTML corresponds to a value of 1 in the `format` variable and the coefficient of this variable is negative (-1.51770), this would lower the probability estimate returned from the model.
+
+
+### Practical decisions in the email application  
+
+The last two examples highlight a key feature of logistic multiple regression. In the spam filter example, some email characteristics will push an email's classification in the direction of spam while other characteristics will push it in the opposite direction.
+
+If we were to implement a spam filter using the model we have fit, then each future email we analyze would fall into one of three categories based on the email's characteristics:
+
+\begin{enumerate}
+\item The email characteristics generally indicate the email is not spam, and so the resulting probability that the email is spam is quite low, say, under 0.05.
+\item The characteristics generally indicate the email is spam, and so the resulting probability that the email is spam is quite large, say, over 0.95.
+\item The characteristics roughly balance each other out in terms of evidence for and against the message being classified as spam. Its probability falls in the remaining range, meaning the email cannot be adequately classified as spam or not spam.
+\end{enumerate}
+
+If we were managing an email service, we would have to think about what should be done in each of these three instances. In an email application, there are usually just two possibilities: filter the email out from the regular inbox and put it in a "spambox", or let the email go to the regular inbox.
+
+>**Exercise**:  
+The first and second scenarios are intuitive. If the evidence strongly suggests a message is not spam, send it to the inbox. If the evidence strongly suggests the message is spam, send it to the spambox. How should we handle emails in the third category?^[In this particular application, we should err on the side of sending more mail to the inbox rather than mistakenly putting good messages in the spambox. So, in summary: emails in the first and last categories go to the regular inbox, and those in the second scenario go to the spambox.]
+
+>**Exercise**:  
+Suppose we apply the logistic model we have built as a spam filter and that 100 messages are placed in the spambox over 3 months. If we used the guidelines above for putting messages into the spambox, about how many legitimate (non-spam) messages would you expect to find among the 100 messages?^[First, note that we proposed a cutoff for the predicted probability of 0.95 for spam. In a worst case scenario, all the messages in the spambox had the minimum probability equal to about 0.95. Thus, we should expect to find about 5 or fewer legitimate messages among the 100 messages placed in the spambox.]
+
+Almost any classifier will have some error. In the spam filter guidelines above, we have decided that it is okay to allow up to 5\% of the messages in the spambox to be real messages. If we wanted to make it a little harder to classify messages as spam, we could use a cutoff of 0.99. This would have two effects. Because it raises the standard for what can be classified as spam, it reduces the number of good emails that are classified as spam. However, it will also fail to correctly classify an increased fraction of spam messages. No matter the complexity and the confidence we might have in our model, these practical considerations are absolutely crucial to making a helpful spam filter. Without them, we could actually do more harm than good by using our statistical model. This tradeoff is similar to the one we found between Type 1 and Type 2 errors.
+
+
+## Diagnostics for the email classifier
+
+There are two key conditions for fitting a logistic regression model: 
+
+\begin{enumerate}
+\setlength{\itemsep}{0mm}
+\item Each predictor $x_i$ is linearly related to logit$(p_i)$ if all other predictors are held constant. This is similar to our linear fit diagnostic in linear multiple regression.
+\item Each outcome $Y_i$ is independent of the other outcomes.
+\end{enumerate}
+
+The first condition of the logistic regression model is not easily checked without a fairly sizable amount of data. In our data set we have mostly categorical variables where this check is irrelevant. The second problem we have with our data is that `spam` is a fairly rare outcome, only about 10\% of the data has `spam` as the outcome. 
+
+Let's first visualize these data by plotting the true classification of the emails against the model's fitted probabilities. 
+
+First get the predicted values using `augment()` from the `broom` package. We have to convert the first column from a logic variable into a numeric variable and changed `.fitted` into a predicted probability. If the first assumption is valid we would expect a 45 degree line which is close to what we have. Note we could use the code option `type.predict = "response"` in the `augment()` function to have `R` calculate the probability of success directly.
+
+```{r}
+mod_data <- augment(email_mod2) %>%
+  mutate(p_hat=exp(.fitted)/(1+exp(.fitted)),spam_num=as.numeric(`spam == "spam"`))
+```
+
+Now we can plot the data, since there is significant overlap, we will use the `gf_jitter()` geom to move the data point in the vertical direction to create visual separation. We also add the fitted line from using a `glm` model.
+
+```{r}
+gf_jitter(mod_data,spam_num~p_hat,width=0,height=0.05,alpha=0.2)  %>% 
+  gf_theme(theme_bw()) %>%
+  gf_labs(title="Predicted probabilites of Spam",
+           subtitle="Jitter for spam condition",
+          x="Predicted Probabilities",
+          y="Spam") %>%
+  gf_smooth(method = "glm", se = FALSE, 
+            color = "red",method.args = list(family = "binomial")) 
+```
+
+
+Many of the emails, including those that are truly spam, have fitted probabilities below 0.5. This may at first seem very discouraging: we have fit a logistic model to create a spam filter, but few emails have a fitted probability of being spam above 0.5. Don't despair; we will discuss ways to improve the model in Math 378.
+
+We'd like to assess the quality of our model. For example, we might ask: if we look at emails that we modeled as having a 10\% chance of being spam, do we find about 10\% of them actually are spam? In Math 378 you will learn about ROC curves and smoothing splines that may help to assess the quality of the fit. That is beyond the scope of this class.
+
+The problem with this data is that essentially all the predictors are binary. Some like `dollar` and `password` are counting variables but most of the values are zero. However, we will use the variable `passwords` to show how we can tell if the variable is linear on the logit scale.
+
+```{r}
+email$logit <- log(email_mod2$fitted.values/(1-email_mod2$fitted.values))
+```
+
+
+```{r warning=FALSE}
+# Graph the logit variable against password
+ggplot(data = email, aes(x = password, y = logit))+
+  geom_point(color = "gray") +
+  geom_smooth(method = "lm", se = FALSE, color = "gray") + 
+  theme_bw() +
+  labs(title="Linearity check of passwords",
+            x="Passwords", y="logit scale")
+```
+
+Again, not enough data for the larger counts to make this plot of value.
+
+We could evaluate the second logistic regression model assumption -- independence of the outcomes -- using the model residuals. The residuals for a logistic regression model are calculated the same way as with multiple regression: the observed outcome minus the expected outcome. For logistic regression, the expected value of the outcome is the fitted probability for the observation, and the residual may be written as
+
+$$
+e_i = Y_i - \hat{p}_i
+$$
+
+We could plot these residuals against a variety of variables or in their order of collection, as we did with the residuals in multiple regression. However, since the model will need to be revised to effectively classify spam and you have already seen similar residual plots in previous lessons on regression, we won't investigate the residuals here.
+
+## Confidence intervals  
+
+In this section we will generate confidence intervals. This section is experimental since we are not sure how `do()` from the `mosaic` package will work with the `glm()` function, but let's experiment.  
+
+### Confidence intervals for a parameter
+
+First, let's use the `R` built-in function `confint()` to find the confidence interval for the simple logistic regression model.
+
+```{r}
+confint(email_mod)
+```
+Now, let's work with the first model and experiment with `do()`.
+
+```{r}
+do(1)*email_mod
+```
+
+```{r}
+summary(email_mod)
+```
+It looks like `do()` is performing as expected. Let's now perform one resample to see what happens.
+
+```{r}
+do(1)*glm(formula = spam=="spam" ~ to_multiple, family = "binomial", data = resample(email))
+```
+
+Again, it looks like what we expect. Now let's bootstrap the coefficient.
+
+```{r}
+set.seed(5011)
+results <- do(1000)*glm(formula = spam=="spam" ~ to_multiple, 
+                        family = "binomial", data = resample(email))
+```
+
+```{r}
+head(results)
+```
+
+Now we will plot the bootstrap sampling distribution on the slope parameter.
+
+```{r}
+results %>%
+  gf_histogram(~to_multiple) %>%
+  gf_theme(theme_bw()) %>%
+  gf_labs(title="Bootstrap sampling distribtuion",
+          x="to_multiple paramater estimate")
+```  
+
+The printout from the logistic regression model assumes normality for the sampling distribution of the `to_multiple` coefficient, but it appears to be negatively skewed, skewed to the left. The 95% confidence interval found using `cdata()`.
+
+```{r}
+cdata(~to_multiple,data=results)
+```
+
+Since this does not include the value of zero, we can be 95% confident that it is not zero. This is close to what we found using the `R` function `confint()`.
+
+We can use `results` to get a confidence interval on probability of success if the email has more than one recipient in the **To** line.
+
+```{r}
+results_pred <- results %>% 
+  mutate(pred=exp(Intercept+to_multiple)/(1+exp(Intercept+to_multiple)))
+```
+
+```{r}
+cdata(~pred,data=results_pred)
+```
+
+We are 95% confident that expected probability an email with more than one recipient is spam is between 0.96\% and 3.1\%%.
+
+### Bootstrap for multiple logistic regression
+
+As a reminder, the output from our multiple logistic regression model is:   
+
+```{r}
+summary(email_mod2)
+```
+Let's see if the `do()` function works on this model:
+
+
+```{r}
+do(1)*glm(formula = spam=="spam" ~ to_multiple + attach + dollar + winner + 
+    inherit + password + format + re_subj, family = "binomial", 
+    data = email)
+```
+This looks good. Let's bootstrap the data.
+
+```{r warning=FALSE}
+set.seed(54321)
+results <-do(1000)*glm(formula = spam=="spam" ~ to_multiple + attach + dollar + winner + 
+    inherit + password + format + re_subj, family = "binomial", 
+    data = resample(email))
+```
+
+```{r}
+head(results)
+```
+
+In our model `inherit` had the largest p-value, let's build a confidence interval for this parameter.
+
+```{r}
+results %>%
+  gf_histogram(~inherit)
+```
+
+
+```{r}
+cdata(~inherit,data=results)
+```
+
+In the output, we rejected the null hypothesis that `inherit` was equal to zero, but in the confidence interval we fail to reject. This variable may not be important for the model. In Math 378, we will look at model selection from the perspective of predictive performance.
+
+
+
+## Improving the set of variables for a spam filter
+
+If we were building a spam filter for an email service that managed many accounts (e.g. Gmail or Hotmail), we would spend much more time thinking about additional variables that could be useful in classifying emails as spam or not. We also would use transformations or other techniques that would help us include strongly skewed numerical variables as predictors.
+
+Take a few minutes to think about additional variables that might be useful in identifying spam. Below is a list of variables we think might be useful:
+\begin{enumerate}
+\item[(1)] An indicator variable could be used to represent whether there was prior two-way correspondence with a message's sender. For instance, if you sent a message to john@example.com and then John sent you an email, this variable would take value 1 for the email that John sent. If you had never sent John an email, then the variable would be set to~0.
+\item[(2)] A second indicator variable could utilize an account's past spam flagging information. The variable could take value 1 if the sender of the message has previously sent messages flagged as~spam.
+\item[(3)] A third indicator variable could flag emails that contain links included in previous spam messages. If such a link is found, then set the variable to~1 for the email. Otherwise, set it to~0.
+\end{enumerate}  
+
+The variables described above take one of two approaches. Variable (1) is specially designed to capitalize on the fact that spam is rarely sent between individuals that have two-way communication. Variables (2) and (3) are specially designed to flag common spammers or spam messages. While we would have to verify using the data that each of the variables is effective, these seem like promising ideas.
+
+The table below shows a contingency table for spam and also for the new variable described in (1) above. If we look at the 1,090 emails where there was correspondence with the sender in the preceding 30 days, not one of these message was spam. This suggests variable (1) would be very effective at accurately classifying some messages as not spam. With this single variable, we would be able to send about 28\% of messages through to the inbox with confidence that almost none are spam.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+& \multicolumn{3}{c}{prior correspondence} & \\
+\cline{2-4}
+ & \ {no} & \ {yes} && \ {Total} \\
+\hline
+\vspace{-3.8mm} & & & & \\
+{spam} &  367 &    0 &&  367 \\
+{not spam}\  & 2464 & 1090 && 3554 \\
+\hline
+\vspace{-3.8mm} & & & & \\
+Total & 2831 & 1090 && 3921 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+The variables described in (2) and (3) would provide an excellent foundation for distinguishing messages coming from known spammers or messages that take a known form of spam. To utilize these variables, we would need to build databases: one holding email addresses of known spammers, and one holding URLs found in known spam messages. Our access to such information is limited, so we cannot implement these two variables in this lesson. However, if we were hired by an email service to build a spam filter, these would be important next steps.
+
+In addition to finding more and better predictors, we would need to create a customized logistic regression model for each email account. This may sound like an intimidating task, but its complexity is not as daunting as it may at first seem. We'll save the details for a course where large data sets and better computer programming play a more central role.
+
+For what is the extremely challenging task of classifying spam messages, we have made a lot of progress. We have seen that simple email variables, such as the format, inclusion of certain words, and other circumstantial characteristics, provide helpful information for spam classification. Many challenges remain, from better understanding logistic regression to carrying out the necessary computer programming, but completing such a task is very nearly within your reach.
+
+## Homework Problems
+
+# Exercises
+
+\indent 1. Possum classification 
+
+Let's investigate the `possum` data set again. This time we want to model a binary outcome variable. As a reminder, the common brushtail possum of the Australia region is a bit cuter than its distant cousin, the American opossum. We consider 104 brushtail possums from two regions in Australia, where the possums may be considered a random sample from the population. The first region is Victoria, which is in the eastern half of Australia and traverses the southern coast. The second region consists of New South Wales and Queensland, which make up eastern and northeastern Australia.
+
+We use logistic regression to differentiate between possums in these two regions. The outcome variable, called `pop`, takes value `Vic` when a possum is from Victoria and `other` when it is from New South Wales or Queensland. We consider five predictors: `sex`, `head_l`, `skull_w`, `total_l`, and `tail_l`. 
+
+a. Explore the data by making histograms or boxplots of the quantitative variables, and bar charts of the discrete variables.  
+Are there any outliers that are likely to have a very large influence on the logistic regression model?
+b. Build a logistic regression model with all the variable. Report a summary of the model.  
+c. Using the p-values decide if you want to remove a variable(S) and if so build that model.
+d. For any variable you decide to remove, build a 95% confidence interval for the parameter.
+e. Explain why the remaining parameter estimates change between the two models.
+f. Write out the form of the model. Also identify which of the following variables are positively associated (when controlling for other variables) with a possum being from Victoria: `head_l`, `skull_w`, `total_l`, and `tail_l`.
+g. Suppose we see a brushtail possum at a zoo in the US, and a sign says the possum had been captured in the wild in Australia, but it doesn't say which part of Australia. However, the sign does indicate that the possum is male, its skull is about 63 mm wide, its tail is 37 cm long, and its total length is 83 cm. What is the reduced model's computed probability that this possum is from Victoria? How confident are you in the model's accuracy of this probability calculation?
+
+\indent 2. Medical school admission
+
+The file `MedGPA.csv` in the `data` folder has information on medical school admission status and GPA and standardized test scores gathered on 55 medical school applicants from a liberal arts college in the Midwest.
+
+The variables are:
+
+`Accept Status`: A=accepted to medical school or D=denied admission
+`Acceptance`:	Indicator for Accept: 1=accepted or 0=denied
+`Sex`: F=female or M=male
+`BCPM`:	Bio/Chem/Physics/Math grade point average
+`GPA`:	College grade point average
+`VR`:	Verbal reasoning (subscore)
+`PS`:	Physical sciences (subscore)
+`WS`:	Writing sample (subcore)
+`BS`:	Biological sciences (subscore)
+`MCAT`:	Score on the MCAT exam (sum of CR+PS+WS+BS)
+`Apps`:	Number of medical schools applied to
+
+a. Build a logistic regression model to predict `Acceptance` from `GPA`.
+b. Plot `Acceptance` versus `GPA`, add *jitter* in the vertical direction. 
+c. Repeat the plot in part b but add linear and logistic fitted line to the plot.
+d. Check the linearity assumption by plotting `GPA` versus the logit of `Acceptance`, the response on the logit scale.
+
+
