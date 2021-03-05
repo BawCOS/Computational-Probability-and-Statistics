@@ -20,13 +20,74 @@ In this chapter, we want the outcome variable of interest to be game condition, 
 
 Read the data and summarize. 
 
-```{r warning=FALSE,message=FALSE}
+
+```r
 mariokart <-read_csv("data/mariokart.csv")
 head(mariokart,n=10)
 ```
 
-```{r}
+```
+## # A tibble: 10 x 12
+##         id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
+##      <dbl>    <dbl>  <dbl> <chr>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
+##  1 1.50e11        3     20 new       0.99    4        51.6 standa~        1580
+##  2 2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
+##  3 3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
+##  4 2.80e11        3     18 new       0.99    0        44   standa~           7
+##  5 1.70e11        1     20 new       0.01    0        71   media           820
+##  6 3.60e11        3     19 new       0.99    4        45   standa~      270144
+##  7 1.20e11        1     13 used      0.01    0        37.0 standa~        7284
+##  8 3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
+##  9 2.00e11        3     29 used      0.99    4        47   priori~          27
+## 10 3.30e11        7      8 used     20.0     4        50   firstC~         201
+## # ... with 3 more variables: stock_photo <chr>, wheels <dbl>, title <chr>
+```
+
+
+```r
 inspect(mariokart)
+```
+
+```
+## Warning: `data_frame()` is deprecated as of tibble 1.1.0.
+## Please use `tibble()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.
+```
+
+```
+## 
+## categorical variables:  
+##          name     class levels   n missing
+## 1        cond character      2 143       0
+## 2     ship_sp character      8 143       0
+## 3 stock_photo character      2 143       0
+## 4       title character     80 142       1
+##                                    distribution
+## 1 used (58.7%), new (41.3%)                    
+## 2 standard (23.1%), upsGround (21.7%) ...      
+## 3 yes (73.4%), no (26.6%)                      
+## 4  (%) ...                                     
+## 
+## quantitative variables:  
+##             name   class          min           Q1       median           Q3
+## ...1          id numeric 1.104392e+11 1.403506e+11 2.204911e+11 2.953551e+11
+## ...2    duration numeric 1.000000e+00 1.000000e+00 3.000000e+00 7.000000e+00
+## ...3      n_bids numeric 1.000000e+00 1.000000e+01 1.400000e+01 1.700000e+01
+## ...4    start_pr numeric 1.000000e-02 9.900000e-01 1.000000e+00 1.000000e+01
+## ...5     ship_pr numeric 0.000000e+00 0.000000e+00 3.000000e+00 4.000000e+00
+## ...6    total_pr numeric 2.898000e+01 4.117500e+01 4.650000e+01 5.399000e+01
+## ...7 seller_rate numeric 0.000000e+00 1.090000e+02 8.200000e+02 4.858000e+03
+## ...8      wheels numeric 0.000000e+00 0.000000e+00 1.000000e+00 2.000000e+00
+##               max         mean           sd   n missing
+## ...1 4.000775e+11 2.235290e+11 8.809543e+10 143       0
+## ...2 1.000000e+01 3.769231e+00 2.585693e+00 143       0
+## ...3 2.900000e+01 1.353846e+01 5.878786e+00 143       0
+## ...4 6.995000e+01 8.777203e+00 1.506745e+01 143       0
+## ...5 2.551000e+01 3.143706e+00 3.213179e+00 143       0
+## ...6 3.265100e+02 4.988049e+01 2.568856e+01 143       0
+## ...7 2.701440e+05 1.589842e+04 5.184032e+04 143       0
+## ...8 4.000000e+00 1.146853e+00 8.471829e-01 143       0
 ```
 
 We are again only interested in `total_pr`, `cond`, `stock_photo`, `duration`, and `wheels`. These variables are described in the following list:
@@ -39,7 +100,8 @@ We are again only interested in `total_pr`, `cond`, `stock_photo`, `duration`, a
 
 Remember that we removed a couple of outlier sales that included multiple items. Before we start let's clean up the data again to include removing those outliers.
 
-```{r}
+
+```r
 mariokart <- mariokart %>%
   filter(total_pr <= 100) %>% 
   mutate(cond=factor(cond),
@@ -49,23 +111,65 @@ mariokart <- mariokart %>%
 
 Next let's summarize the data.
 
-```{r warning=FALSE,message=FALSE}
+
+```r
 inspect(mariokart)
+```
+
+```
+## 
+## categorical variables:  
+##          name  class levels   n missing
+## 1        cond factor      2 141       0
+## 2 stock_photo factor      2 141       0
+##                                    distribution
+## 1 used (58.2%), new (41.8%)                    
+## 2 yes (74.5%), no (25.5%)                      
+## 
+## quantitative variables:  
+##          name   class   min Q1 median    Q3 max      mean        sd   n missing
+## ...1 total_pr numeric 28.98 41  46.03 53.99  75 47.431915 9.1136514 141       0
+## ...2 duration numeric  1.00  1   3.00  7.00  10  3.751773 2.5888663 141       0
+## ...3   wheels numeric  0.00  0   1.00  2.00   4  1.148936 0.8446146 141       0
 ```
 
 ### Analyzing contingency table  
 
 As a review and introduction to logistic regression, let's analyze the relationship between game condition and stock photo. 
 
-```{r}
+
+```r
 tally(cond~stock_photo,data=mariokart
       ,margins = TRUE,format = "proportion")
 ```
 
+```
+##        stock_photo
+## cond           no       yes
+##   new   0.1111111 0.5238095
+##   used  0.8888889 0.4761905
+##   Total 1.0000000 1.0000000
+```
+
 We could analyze this by comparing the proportion of new condition games for each stock photo value using both randomization, empirical p-values, and the central limit theorem. We will just use an exact permutation test, **Fisher Exact Test."  
 
-```{r}
+
+```r
 fisher.test(tally(~cond+stock_photo,data=mariokart))
+```
+
+```
+## 
+## 	Fisher's Exact Test for Count Data
+## 
+## data:  tally(~cond + stock_photo, data = mariokart)
+## p-value = 9.875e-06
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.02766882 0.35763723
+## sample estimates:
+## odds ratio 
+##  0.1152058
 ```
 Clearly, these variables are not independent of each other. This model does not gives us much more information so let's move to logistic regression.  
 
@@ -98,69 +202,10 @@ $$
 
 The logit transformation is shown in Figure \@ref(fig:logit-fig). 
 
-```{r logit-fig,echo=FALSE,fig.cap="Logitstic function with some example points plotted."}
-library(openintro)
-data(COL)
-p  <- seq(0.0001, 0.9999, 0.0002)
-lp <- log(p/(1-p))
-
-pts  <- seq(0.01, 0.99, length.out=25)
-R    <- c(-6,6)
-adj  <- 0.07
-adj1 <- 0.02
-
-
-plot(lp, p, ylab="", xlab=expression(logit(p[i])), xlim=c(-5.8, 6.5), ylim=c(-0.05, 1.1), type="n")
-lines(lp, p, type="l", col=COL[5], lwd=1.5)
-mtext(expression(p[i]), 2, 2.4)
-abline(h=0:1, lty=2, col=COL[1], lwd=1.5)
-this <- which.min(abs(p-0.2))
-#lines(rep(p[this], 2), c(-50, lp[this]), col="#00000044")#, lty=3, lwd=2)
-#lines(c(-1, p[this]), rep(lp[this], 2), col="#00000044")#, lty=3, lwd=2)
-LP    <- c(seq(6, -5, -1)) #log(P/(1-P))
-P     <- exp(LP)/(1+exp(LP))#1-c(0.01, 0.05, 0.1, 0.20, 0.3, 0.4, 0.5)
-POS   <- c(3, 1, 3, 1, 2, 2, 2, 2, 4, 3, 1, 3)
-xOFF  <- c()
-Round <- c(3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3)
-for(i in 1:length(LP)){
-  points(LP[i], P[i], col=COL[4], lwd=2)
-  t1   <- format(round(c(LP,0.9), Round[i]))[i]
-  t2   <- format(round(P, Round[i]))[i]
-  temp <- paste("(", t1, ", ", t2, ")", sep="")
-  text(LP[i], P[i], temp, cex=0.6, pos=POS[i], col=COL[5])
-  
-}
-points(-.33,.42, col=COL[4], lwd=2)
-text(-.33,.42,"(-.329, .418)",cex=0.6,pos=2,col=COL[5])
-#points(lp[this], p[this])
-#text(lp[this], p[this], "(-1.39, 0.20)", cex=0.7, pos=4)
-
-
-
-
-# plot(R, c(-0.4, 2.4), type="n", xlab="", ylab="", axes=FALSE)
-
-# lines(0:1, c(2,2))
-# segments(0:1, 2-adj, 0:1, 2+adj)
-# text(0:1, 2+adj1, 0:1,pos=3)
-# text(0.5, 2.1, expression(p[i]), pos=3)
-
-# #arrows(0, 1, R[2], 1, length=0.08)
-# #segments(0:(R[2]-1), 1-adj, 0:(R[2]-1), 1+adj)
-# pts1 <- pts/(1-pts)
-# #segments(pts, 2, pts1, 1)
-
-# arrows(R[1], 0, R[2], 0, length=0.08, code=3)
-# segments((R[1]+1):(R[2]-1), -adj, (R[1]+1):(R[2]-1), adj)
-# pts2 <- log(pts1)
-# arrows(pts, 2, pts2, 0, length=0.05)
-# text((R[1]+1):(R[2]-1), rep(-adj1, R[2]-R[1]-2), (R[1]+1):(R[2]-1), pos=1, cex=0.8)
-
-# text(-4, 1, expression(logit(p[i])))
-
-# #abline(h=0:1)
-
-```
+<div class="figure">
+<img src="31-Logistic-Regression_files/figure-html/logit-fig-1.png" alt="Logitstic function with some example points plotted." width="672" />
+<p class="caption">(\#fig:logit-fig)Logitstic function with some example points plotted.</p>
+</div>
 
 Notice the output of the `logit` function restricts the values between 0 and 1. The curve is fairly flat on the edges with a sharp rise in the center. There are other functions that achieve this same result. However, for reasons beyond the scope of this class, the logit function has desirable mathematical properties that relate making sure all the common GLMs fall within the exponential family of distributions. This topic is at the graduate school level and not needed for our studies. 
 
@@ -174,16 +219,42 @@ In `R` we use the `glm()` function to fit a logistic regression model. It has th
 
 First to understand the output of logistic regression, let's just run a model with an intercept term. Notice in the code chunk that the left hand side of the formula has a logical argument, this gives a 0/1 output with 1 being the value we want to predict.
 
-```{r}
+
+```r
 mario_mod1 <- glm(cond=="new"~1,data=mariokart,
                  family="binomial")
 ```
 
 Let's get regression output using the `summary()` function.  
 
-```{r}
+
+```r
 summary(mario_mod1)
-```  
+```
+
+```
+## 
+## Call:
+## glm(formula = cond == "new" ~ 1, family = "binomial", data = mariokart)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.041  -1.041  -1.041   1.320   1.320  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(>|z|)  
+## (Intercept)  -0.3292     0.1707  -1.928   0.0538 .
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.7  on 140  degrees of freedom
+## Residual deviance: 191.7  on 140  degrees of freedom
+## AIC: 193.7
+## 
+## Number of Fisher Scoring iterations: 4
+```
 
 This looks similar to the regression output we saw in previous chapters. However, the model has a different, nonlinear, form. Remember, Equation \@ref(eq:logistic) is the general form of the model.
 
@@ -202,8 +273,15 @@ Thus using the output of `R`, Equation \@ref(eq:logistic2) is the estimated mode
 
 Solving Equation \@ref(eq:logistic2) for $p_i$: $\frac{e^{-0.329}}{1 + e^{-0.329}} = 0.418$. This is the estimated probability of the game condition being new. This point is plotted in Figure \@ref(fig:logit-fig). We can also check this result using a summary table.
 
-```{r}
+
+```r
 tally(~cond,data=mariokart,format="proportion")
+```
+
+```
+## cond
+##       new      used 
+## 0.4184397 0.5815603
 ```
 
 
@@ -211,42 +289,109 @@ tally(~cond,data=mariokart,format="proportion")
 
 Now that we are starting to understand the logistic regression model. Let's add a predictor variable, `stock_photo`. Again, we have many methods to determine if a relationship between two categorical variables exists, logistic regression is another method. 
 
-```{r}
+
+```r
 mario_mod2 <- glm(cond=="new"~stock_photo,data=mariokart,
                  family="binomial")
 ```
 
-```{r}
+
+```r
 summary(mario_mod2)
+```
+
+```
+## 
+## Call:
+## glm(formula = cond == "new" ~ stock_photo, family = "binomial", 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.2181  -1.2181  -0.4854   1.1372   2.0963  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)     -2.0794     0.5303  -3.921 8.81e-05 ***
+## stock_photoyes   2.1748     0.5652   3.848 0.000119 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 170.44  on 139  degrees of freedom
+## AIC: 174.44
+## 
+## Number of Fisher Scoring iterations: 4
 ```
 
 Examining the **p-value** associated with the coefficient for `stock_photo`, we can see that it is significant. Thus we reject the null hypothesis that the coefficient is zero. There is a relationship between `cond` and `stock_photo`, as we found with the Fisher's test.
 
 We can use the `broom` package to summarize the output and generate model fits.
 
-```{r}
+
+```r
 tidy(mario_mod2)
+```
+
+```
+## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   <chr>             <dbl>     <dbl>     <dbl>     <dbl>
+## 1 (Intercept)       -2.08     0.530     -3.92 0.0000881
+## 2 stock_photoyes     2.17     0.565      3.85 0.000119
 ```
 
 Let's convert these coefficients to estimated probabilities using the `augment()` function. We need to specify the output as the *response*, this returns a probability, or else we will get the logit of the probability, the link value.
 
-```{r}
+
+```r
 augment(mario_mod2,
         newdata=tibble(stock_photo=c("yes","no")),
         type.predict="response")
 ```
 
+```
+## # A tibble: 2 x 2
+##   stock_photo .fitted
+##   <chr>         <dbl>
+## 1 yes           0.524
+## 2 no            0.111
+```
+
 These are the conditional probability of a new condition based on status of `stock_photo`. We can see this using the `tally()` function.
 
-```{r}
+
+```r
 tally(cond~stock_photo,data=mariokart,margins = TRUE,format="proportion")
+```
+
+```
+##        stock_photo
+## cond           no       yes
+##   new   0.1111111 0.5238095
+##   used  0.8888889 0.4761905
+##   Total 1.0000000 1.0000000
 ```
 
 Or from the model coefficients.
 
-```{r}
+
+```r
 exp(-2.079442)/(1+exp(-2.079442))
+```
+
+```
+## [1] 0.1111111
+```
+
+```r
 exp(-2.079442+2.174752)/(1+exp(-2.079442+2.174752))
+```
+
+```
+## [1] 0.5238095
 ```
 
 > **Exercise**: 
@@ -254,22 +399,41 @@ Fit a logistic regression model with `cond` as used and `stock_photo` as a predi
 
 We repeat the code from above.
 
-```{r}
+
+```r
 mario_mod3 <- glm(cond=="used"~stock_photo,data=mariokart,
                  family="binomial")
 ```
 
 
-```{r}
+
+```r
 tidy(mario_mod3)
+```
+
+```
+## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   <chr>             <dbl>     <dbl>     <dbl>     <dbl>
+## 1 (Intercept)        2.08     0.530      3.92 0.0000881
+## 2 stock_photoyes    -2.17     0.565     -3.85 0.000119
 ```
 
 Again, let's convert these coefficients to estimated probabilities using the `augment()` function. 
 
-```{r}
+
+```r
 augment(mario_mod3,
         newdata=tibble(stock_photo=c("yes","no")),
         type.predict="response")
+```
+
+```
+## # A tibble: 2 x 2
+##   stock_photo .fitted
+##   <chr>         <dbl>
+## 1 yes           0.476
+## 2 no            0.889
 ```
 
 This matches the output from the `tally()` function we observed above.  
@@ -282,8 +446,17 @@ At this point it seems that we created a great deal of work just to get the same
 
 Let's first discuss the interpretation of coefficients. As a reminder, the fitted coefficients are reported from the model summary.  
 
-```{r}
+
+```r
 tidy(mario_mod2)
+```
+
+```
+## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   <chr>             <dbl>     <dbl>     <dbl>     <dbl>
+## 1 (Intercept)       -2.08     0.530     -3.92 0.0000881
+## 2 stock_photoyes     2.17     0.565      3.85 0.000119
 ```
 
 The variable `stock_photo` takes on the values 0 and 1, the value 1 of indicates the sale had a stock photo. The logistic regression model we are fitting is Equation \@ref(eq:logistic4).
@@ -337,14 +510,54 @@ $$
 
 Just as is the case for linear regression, we can compare nested models. When we examine the output of model there is a line with the **residual deviance**. This model is not fit using least squares but using maximum likelihood. Deviance is 2 times the negative of the log likelihood. We negate the log likelihood so that maximizing the log likelihood is equivalent to minimizing the negation. This allows the same thought process of minimizing deviance as we had for minimizing residual sum of squares. The multiplication by 2 is because an asymptotic argument shows that 2 times the negative log likelihood is approximately distributed as a Chi-square random variable. 
 
-```{r}
+
+```r
 summary(mario_mod2)
+```
+
+```
+## 
+## Call:
+## glm(formula = cond == "new" ~ stock_photo, family = "binomial", 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.2181  -1.2181  -0.4854   1.1372   2.0963  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)     -2.0794     0.5303  -3.921 8.81e-05 ***
+## stock_photoyes   2.1748     0.5652   3.848 0.000119 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 170.44  on 139  degrees of freedom
+## AIC: 174.44
+## 
+## Number of Fisher Scoring iterations: 4
 ```
 
 Similar to linear regression, we can use the `anova()` function to compare nested models. 
 
-```{r}
+
+```r
 anova(mario_mod1,mario_mod2,test="Chisq")
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model 1: cond == "new" ~ 1
+## Model 2: cond == "new" ~ stock_photo
+##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)    
+## 1       140     191.70                         
+## 2       139     170.44  1    21.26 4.01e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 Adding, `stock_photo` is a statistically significant result. The p-value is different from the `summary()` function, because it assumes the coefficient follows a normal distribution. Different assumptions, but the same conclusion.   
@@ -353,7 +566,8 @@ The use of p-value to pick a best model uses statistical assumptions to select t
 
 A confusion matrix generates a 2 by 2 matrix of predicted outcomes versus actual outcomes. For logistic regression, the output is a probability of success. To convert this to 0/1 outcome we pick a threshold. It is common to use 0.5 as the threshold. Probabilities above 0.5 are considered a success, in the context of our problem a new game. Let's generate the confusion matrix.
 
-```{r}
+
+```r
 augment(mario_mod2,type.predict = "response") %>%
   rename(actual=starts_with('cond')) %>%
   transmute(result=as.integer(.fitted>0.5),
@@ -361,12 +575,27 @@ augment(mario_mod2,type.predict = "response") %>%
   table()
 ```
 
+```
+##       actual
+## result  0  1
+##      0 32  4
+##      1 50 55
+```
+
 One single number summary metric is accuracy. In this case the model was correct on $32 + 55$ out of the 141 cases, or 61.7% are correct.
 
 This looks like the same table we get comparing `cond` to `stock_photo`. This is the case because of the binary nature of the predictor. We only have two probability values in our prediction. 
 
-```{r}
+
+```r
 tally(~cond+stock_photo,data=mariokart)
+```
+
+```
+##       stock_photo
+## cond   no yes
+##   new   4  55
+##   used 32  50
 ```
 
 If we change the threshold we get a different accuracy. In Math 378, we will learn about other metrics such as area under the ROC curve. But let's add another variable to see if we can improve the model.  
@@ -375,7 +604,8 @@ If we change the threshold we get a different accuracy. In Math 378, we will lea
 
 Let's add `total_pr` to the model. This model is something that we could not have done in the previous models we learned.  
 
-```{r}
+
+```r
 mario_mod4 <- glm(cond=="new"~stock_photo+total_pr,
                   data=mariokart,
                  family="binomial")
@@ -383,8 +613,36 @@ mario_mod4 <- glm(cond=="new"~stock_photo+total_pr,
 
 Notice that we use the same formula syntax as we had done with linear regression. 
 
-```{r}
+
+```r
 summary(mario_mod4)
+```
+
+```
+## 
+## Call:
+## glm(formula = cond == "new" ~ stock_photo + total_pr, family = "binomial", 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3699  -0.6479  -0.2358   0.6532   2.5794  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)    -11.31951    1.88333  -6.010 1.85e-09 ***
+## stock_photoyes   2.11633    0.68551   3.087  0.00202 ** 
+## total_pr         0.19348    0.03562   5.431 5.60e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 119.21  on 138  degrees of freedom
+## AIC: 125.21
+## 
+## Number of Fisher Scoring iterations: 5
 ```
 From the summary, both `stock_photo` and `total_pr` are statistically significant.  
 
@@ -397,38 +655,90 @@ This is similar to an interpretation we had for multiple linear regression. We h
 
 Besides using individual predictor p-values to assess the model, can also use a confusion matrix.
 
-```{r}
+
+```r
 augment(mario_mod4,type.predict = "response") %>%
   rename(actual=starts_with('cond')) %>%
   transmute(result=as.integer(.fitted>0.5),
             actual=as.integer(actual)) %>%
   table()
 ```
+
+```
+##       actual
+## result  0  1
+##      0 71 16
+##      1 11 43
+```
 For our new model, the accuracy improved to $71 + 43$ out of the 141 cases, or 80.9.7%. Without a measure of variability, we don't know if this significant improvement or just the variability in the modeling procedure. On the surface, it appears to be an improvement.    
 
 As another preview of what we will be doing in Math 378, let's use a quadratic term in our model.
 
-```{r}
+
+```r
 mario_mod5 <- glm(cond=="new"~stock_photo+poly(total_pr,2),
                   data=mariokart,
                  family="binomial")
-```  
+```
 
 Using the individual p-values, it appears that a quadratic term is significant but it is marginal. 
 
-```{r}
+
+```r
 summary(mario_mod5)
+```
+
+```
+## 
+## Call:
+## glm(formula = cond == "new" ~ stock_photo + poly(total_pr, 2), 
+##     family = "binomial", data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1555  -0.6511  -0.1200   0.5987   2.6760  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(>|z|)    
+## (Intercept)         -2.4407     0.6347  -3.845  0.00012 ***
+## stock_photoyes       2.0411     0.6494   3.143  0.00167 ** 
+## poly(total_pr, 2)1  23.7534     4.5697   5.198 2.01e-07 ***
+## poly(total_pr, 2)2  -9.9724     4.1999  -2.374  0.01758 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 114.05  on 137  degrees of freedom
+## AIC: 122.05
+## 
+## Number of Fisher Scoring iterations: 6
 ```
 
 We get a similar result if we use the `anova()` function.  
 
-```{r}
+
+```r
 anova(mario_mod4,mario_mod5,test="Chi")
+```
+
+```
+## Analysis of Deviance Table
+## 
+## Model 1: cond == "new" ~ stock_photo + total_pr
+## Model 2: cond == "new" ~ stock_photo + poly(total_pr, 2)
+##   Resid. Df Resid. Dev Df Deviance Pr(>Chi)  
+## 1       138     119.21                       
+## 2       137     114.05  1   5.1687    0.023 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ```
 
 Finally, the confusion matrix results in a slight improvement in accuracy to 82.3%.
 
-```{r}
+
+```r
 augment(mario_mod5,type.predict = "response") %>%
   rename(actual=starts_with('cond')) %>%
   transmute(result=as.integer(.fitted>0.5),
@@ -436,16 +746,31 @@ augment(mario_mod5,type.predict = "response") %>%
   table()
 ```
 
+```
+##       actual
+## result  0  1
+##      0 69 12
+##      1 13 47
+```
+
 
 Almost any classifier will have some error. In the model above, we have decided that it is okay to allow up to 9\%, 13 out of 141, of the games for sale to be classified as new when they are really used. If we wanted to make it a little harder to classify  as new, we could use a cutoff of 0.75. This would have two effects. Because it raises the standard for what can be classified as new, it reduces the number of used games that are classified as new. However, it will also fail to correctly classify an increased fraction of new games as new, see the code below. No matter the complexity and the confidence we might have in our model, these practical considerations are absolutely crucial to making a helpful classification model. Without them, we could actually do more harm than good by using our statistical model. This tradeoff is similar to the one we found between Type 1 and Type 2 errors. Notice that the accuracy has also dropped slightly.  
 
 
-```{r}
+
+```r
 augment(mario_mod5,type.predict = "response") %>%
   rename(actual=starts_with('cond')) %>%
   transmute(result=as.integer(.fitted>0.75),
             actual=as.integer(actual)) %>%
   table()
+```
+
+```
+##       actual
+## result  0  1
+##      0 78 22
+##      1  4 37
 ```
 
 In Math 378, we will learn about better methods to assess predictive accuracy as well as more sophisticated methods to transform and adapt our predictor variables.  
@@ -454,31 +779,56 @@ In Math 378, we will learn about better methods to assess predictive accuracy as
 
 It is not clear how to use the coefficients in the regression output since `R` is performing a transformation on `total_pr` variable. Let's approach this in two ways. First we will use the `augment()` function to do the hard work.
 
-```{r}
+
+```r
 augment(mario_mod5,
         newdata = tibble(stock_photo="yes",total_pr=50),
         type.predict = "response")
+```
+
+```
+## # A tibble: 1 x 3
+##   stock_photo total_pr .fitted
+##   <chr>          <dbl>   <dbl>
+## 1 yes               50   0.693
 ```
 
 We predict that the probability of the game being new if it uses a stock photo and the total price is 50 is 0.693%.
 
 If we want to recreate the calculation, we need to use a **raw** polynomial.  
 
-```{r}
+
+```r
 mario_mod6 <- glm(cond=="new"~stock_photo+total_pr+I(total_pr^2),
                   data=mariokart,
                  family="binomial")
 tidy(mario_mod6)
+```
+
+```
+## # A tibble: 4 x 5
+##   term            estimate std.error statistic  p.value
+##   <chr>              <dbl>     <dbl>     <dbl>    <dbl>
+## 1 (Intercept)    -30.7       9.08        -3.38 0.000732
+## 2 stock_photoyes   2.04      0.649        3.14 0.00167 
+## 3 total_pr         0.969     0.343        2.83 0.00470 
+## 4 I(total_pr^2)   -0.00760   0.00320     -2.37 0.0176
 ```
 We can calculate the link as a linear combination, an inner product of coefficients and values.
 
 $$
 -30.67 + 2.04 + 0.969 * 50 -0.007*50^2 = 0.814
 $$
-```{r}
+
+```r
 tidy(mario_mod6) %>%
   select(estimate) %>% 
   pull() %*% c(1,1,50,50^2)
+```
+
+```
+##           [,1]
+## [1,] 0.8140013
 ```
 
 Using the inverse transform of the logit function, we find the probability of the game being new given the predictor values.
@@ -487,8 +837,13 @@ $$
 \frac{\ e^{.814}\ }{\ 1\ +\ e^{.814}\ } = 0.693
 $$ 
 
-```{r}
+
+```r
 exp(.814)/(1+exp(.814))
+```
+
+```
+## [1] 0.6929612
 ```
 
 ### Diagnostics for logistic regression
@@ -508,63 +863,130 @@ In this section we will generate confidence intervals. This section is experimen
 
 First, let's use the `R` built-in function `confint()` to find the confidence interval for the simple logistic regression model coefficients.
 
-```{r}
+
+```r
 confint(mario_mod4)
+```
+
+```
+## Waiting for profiling to be done...
+```
+
+```
+##                      2.5 %     97.5 %
+## (Intercept)    -15.4048022 -7.9648042
+## stock_photoyes   0.8888216  3.6268545
+## total_pr         0.1297024  0.2705395
 ```
 
 These are not symmetric around the estimate because the method is using a profile-likelihood method. We can get symmetric intervals based on the central limit theorem using the function `confint.default()`. 
 
-```{r}
+
+```r
 confint.default(mario_mod4)
+```
+
+```
+##                      2.5 %     97.5 %
+## (Intercept)    -15.0107641 -7.6282654
+## stock_photoyes   0.7727450  3.4599054
+## total_pr         0.1236583  0.2632982
 ```
 
 These results are close. We recommend using the profile-likelihood method. 
 
 Now, let's work with the `do()` function to determine if we can get similar results.
 
-```{r}
+
+```r
 do(1)*mario_mod4
 ```
 
-```{r}
+```
+##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.31951       2.116325 0.1934783    1      1
+```
+
+
+```r
 tidy(mario_mod4)
+```
+
+```
+## # A tibble: 3 x 5
+##   term           estimate std.error statistic       p.value
+##   <chr>             <dbl>     <dbl>     <dbl>         <dbl>
+## 1 (Intercept)     -11.3      1.88       -6.01 0.00000000185
+## 2 stock_photoyes    2.12     0.686       3.09 0.00202      
+## 3 total_pr          0.193    0.0356      5.43 0.0000000560
 ```
 
 It looks like `do()` is performing as expected. Let's now perform one resample to see what happens.
 
-```{r}
+
+```r
 do(1)*glm(cond=="new"~stock_photo+total_pr,
                   data=resample(mariokart),
                  family="binomial")
 ```
 
+```
+##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.51907       1.644894 0.2146462    1      1
+```
+
 Again, it looks like what we expect. Now let's bootstrap the coefficients and summarize the results.
 
-```{r cache=TRUE}
+
+```r
 set.seed(5011)
 results <- do(1000)*glm(cond=="new"~stock_photo+total_pr,
                   data=resample(mariokart),
                  family="binomial")
 ```
 
-```{r}
+```
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+```
+
+
+```r
 head(results)
+```
+
+```
+##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.22155       1.665492 0.1986654    1      1
+## 2 -13.25708       1.889510 0.2371109    1      2
+## 3 -11.54544       2.871460 0.1867757    1      3
+## 4 -19.25785       5.816050 0.2829247    1      4
+## 5 -10.86631       3.255767 0.1672335    1      5
+## 6 -13.62425       1.842765 0.2533934    1      6
 ```
 
 Now we will plot the bootstrap sampling distribution on the  parameter associated with `total_pr`.
 
-```{r}
+
+```r
 results %>%
   gf_histogram(~total_pr,fill="cyan",color = "black") %>%
   gf_theme(theme_bw()) %>%
   gf_labs(title="Bootstrap sampling distribtuion",
           x="total price paramater estimate")
-```  
+```
+
+<img src="31-Logistic-Regression_files/figure-html/unnamed-chunk-43-1.png" width="672" />
 
 The printout from the logistic regression model assumes normality for the sampling distribution of the `total_pr` coefficient, but it appears to be positively skewed, skewed to the right. The 95% confidence interval found using `cdata()`. 
 
-```{r}
+
+```r
 cdata(~total_pr,data=results)
+```
+
+```
+##          lower     upper central.p
+## 2.5% 0.1388783 0.3082659      0.95
 ```
 
 This result is closer to the result from profile-likelihood. Since the interval does not include the value of zero, we can be 95% confident that it is not zero. This is close to what we found using the `R` function `confint()`.
@@ -573,26 +995,52 @@ This result is closer to the result from profile-likelihood. Since the interval 
 
 We can use the results from the bootstrap to get a confidence interval on probability of success. We will calculate a confidence for a game with a stock photo and total price of $50. As a reminder, the probability of the game being new is 0.69. 
 
-```{r}
+
+```r
 augment(mario_mod5,
         newdata = tibble(stock_photo="yes",total_pr=50),
         type.predict = "response")
 ```
 
+```
+## # A tibble: 1 x 3
+##   stock_photo total_pr .fitted
+##   <chr>          <dbl>   <dbl>
+## 1 yes               50   0.693
+```
+
 The key is to use the coefficient from each resampled data set to calculate a probability of success. 
 
-```{r}
+
+```r
 head(results)
 ```
 
+```
+##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.22155       1.665492 0.1986654    1      1
+## 2 -13.25708       1.889510 0.2371109    1      2
+## 3 -11.54544       2.871460 0.1867757    1      3
+## 4 -19.25785       5.816050 0.2829247    1      4
+## 5 -10.86631       3.255767 0.1672335    1      5
+## 6 -13.62425       1.842765 0.2533934    1      6
+```
 
-```{r}
+
+
+```r
 results_pred <- results %>% 
   mutate(pred=1/(1+exp(-1*(Intercept+stock_photoyes+50*total_pr))))
 ```
 
-```{r}
+
+```r
 cdata(~pred,data=results_pred)
+```
+
+```
+##        lower     upper central.p
+## 2.5% 0.50388 0.7445598      0.95
 ```
 
 We are 95% confident that expected probability a game with a stock photo and a total price of $50 is between 50.4\% and 74.4\%.

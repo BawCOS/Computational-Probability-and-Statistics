@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-22" />
+<meta name="date" content="2021-03-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -144,6 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>0.3</b> Prerequisites</a></li>
 <li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#packages"><i class="fa fa-check"></i><b>0.4</b> Packages</a></li>
 <li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>0.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#file-creation-information"><i class="fa fa-check"></i><b>0.6</b> File Creation Information</a></li>
 </ul></li>
 <li class="part"><span><b>I Descriptive Statistical Modeling</b></span></li>
 <li class="chapter" data-level="1" data-path="CS1.html"><a href="CS1.html"><i class="fa fa-check"></i><b>1</b> Case Study</a><ul>
@@ -622,6 +623,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="30.5" data-path="LRMULTI.html"><a href="LRMULTI.html#homework-problems-29"><i class="fa fa-check"></i><b>30.5</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="31" data-path="LOGREG.html"><a href="LOGREG.html"><i class="fa fa-check"></i><b>31</b> Logistic Regression</a><ul>
+<li class="chapter" data-level="31.1" data-path="LOGREG.html"><a href="LOGREG.html#objectives-29"><i class="fa fa-check"></i><b>31.1</b> Objectives</a></li>
+<li class="chapter" data-level="31.2" data-path="LOGREG.html"><a href="LOGREG.html#logistic-regression-introduction"><i class="fa fa-check"></i><b>31.2</b> Logistic regression introduction</a><ul>
+<li class="chapter" data-level="31.2.1" data-path="LOGREG.html"><a href="LOGREG.html#mario-kart-data"><i class="fa fa-check"></i><b>31.2.1</b> Mario Kart data</a></li>
+<li class="chapter" data-level="31.2.2" data-path="LOGREG.html"><a href="LOGREG.html#analyzing-contingency-table"><i class="fa fa-check"></i><b>31.2.2</b> Analyzing contingency table</a></li>
+<li class="chapter" data-level="31.2.3" data-path="LOGREG.html"><a href="LOGREG.html#modeling-the-probability-of-an-event"><i class="fa fa-check"></i><b>31.2.3</b> Modeling the probability of an event</a></li>
+<li class="chapter" data-level="31.2.4" data-path="LOGREG.html"><a href="LOGREG.html#first-model---intercept-only"><i class="fa fa-check"></i><b>31.2.4</b> First model - intercept only</a></li>
+<li class="chapter" data-level="31.2.5" data-path="LOGREG.html"><a href="LOGREG.html#second-model---stock_photo"><i class="fa fa-check"></i><b>31.2.5</b> Second model - stock_photo</a></li>
+<li class="chapter" data-level="31.2.6" data-path="LOGREG.html"><a href="LOGREG.html#interpreting-the-coefficients"><i class="fa fa-check"></i><b>31.2.6</b> Interpreting the coefficients</a></li>
+<li class="chapter" data-level="31.2.7" data-path="LOGREG.html"><a href="LOGREG.html#comparing-models"><i class="fa fa-check"></i><b>31.2.7</b> Comparing models</a></li>
+</ul></li>
+<li class="chapter" data-level="31.3" data-path="LOGREG.html"><a href="LOGREG.html#multiple-logistic-regression"><i class="fa fa-check"></i><b>31.3</b> Multiple logistic regression</a><ul>
+<li class="chapter" data-level="31.3.1" data-path="LOGREG.html"><a href="LOGREG.html#diagnostics-for-logistic-regression"><i class="fa fa-check"></i><b>31.3.1</b> Diagnostics for logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="31.4" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-2"><i class="fa fa-check"></i><b>31.4</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="31.4.1" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-for-a-parameter"><i class="fa fa-check"></i><b>31.4.1</b> Confidence intervals for a parameter</a></li>
+<li class="chapter" data-level="31.4.2" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-for-probability-of-success"><i class="fa fa-check"></i><b>31.4.2</b> Confidence intervals for probability of success</a></li>
+</ul></li>
+<li class="chapter" data-level="31.5" data-path="LOGREG.html"><a href="LOGREG.html#summary-4"><i class="fa fa-check"></i><b>31.5</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="LOGREG.html"><a href="LOGREG.html#homework-problems-30"><i class="fa fa-check"></i><b>31.6</b> Homework Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -761,16 +784,16 @@ Figure 11.5: Probability represented by shaded area
 2. Find the random variable <span class="math inline">\(X\)</span> from <span class="math inline">\(F_{X}^{-1}(U)\)</span>.<br />
 In <code>R</code> for our example, this looks like the following.</p>
 <div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="CONRANDVAR.html#cb262-1"></a><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">1</span>))</span></code></pre></div>
-<pre><code>## [1] 0.9462473</code></pre>
+<pre><code>## [1] 0.5494882</code></pre>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="CONRANDVAR.html#cb264-1"></a>results &lt;-<span class="st"> </span><span class="kw">do</span>(<span class="dv">10000</span>)<span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">1</span>))</span></code></pre></div>
 <div style="page-break-after: always;"></div>
 <div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="CONRANDVAR.html#cb265-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1    median        Q3       max     mean
-## ...1 sqrt numeric 0.006717421 0.5017956 0.7133135 0.8706805 0.9999952 0.669844
+##      name   class        min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.01194657 0.4974367 0.7069148 0.8726122 0.9999805 0.6682831
 ##             sd     n missing
-## ...1 0.2370762 10000       0</code></pre>
+## ...1 0.2362323 10000       0</code></pre>
 <div style="page-break-after: always;"></div>
 <p>Figure <a href="CONRANDVAR.html#fig:plot116-fig">11.6</a> is a density plot of the simulated density function.</p>
 <div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="CONRANDVAR.html#cb267-1"></a>results <span class="op">%&gt;%</span></span>
@@ -823,7 +846,7 @@ Consider the random variable <span class="math inline">\(X\)</span> from above. 
 <pre><code>## [1] 0.6666667</code></pre>
 <p>Using our simulation.</p>
 <div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="CONRANDVAR.html#cb272-1"></a><span class="kw">mean</span>(<span class="op">~</span>sqrt,<span class="dt">data=</span>results)</span></code></pre></div>
-<pre><code>## [1] 0.669844</code></pre>
+<pre><code>## [1] 0.6682831</code></pre>
 <p><span class="math display">\[
 \sigma^2_X = \mbox{Var}(X)= \mbox{E}(X^2)-\mbox{E}(X)^2 = \int_0^1 x^2\cdot 2x\mathop{}\!\mathrm{d}x - \left(\frac{2}{3}\right)^2 = \frac{2x^4}{4}\bigg|_0^1-\frac{4}{9}=\frac{1}{2}-\frac{4}{9}=\frac{1}{18}=0.056
 \]</span></p>
@@ -834,7 +857,7 @@ Consider the random variable <span class="math inline">\(X\)</span> from above. 
 <span id="cb276-2"><a href="CONRANDVAR.html#cb276-2"></a><span class="kw">Vx</span>(<span class="dv">1</span>)<span class="op">-</span><span class="kw">Vx</span>(<span class="dv">0</span>)<span class="op">-</span>(<span class="dv">2</span><span class="op">/</span><span class="dv">3</span>)<span class="op">^</span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.05555556</code></pre>
 <div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="CONRANDVAR.html#cb278-1"></a><span class="kw">var</span>(<span class="op">~</span>sqrt,<span class="dt">data=</span>results)<span class="op">*</span><span class="dv">9999</span><span class="op">/</span><span class="dv">10000</span></span></code></pre></div>
-<pre><code>## [1] 0.05619949</code></pre>
+<pre><code>## [1] 0.0558001</code></pre>
 <p>And finally, the standard deviation of <span class="math inline">\(X\)</span> is <span class="math inline">\(\sigma_X = \sqrt{\sigma^2_X}=\sqrt{1/18}=0.236\)</span>.</p>
 </div>
 </div>

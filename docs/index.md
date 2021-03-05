@@ -4,7 +4,7 @@ author:
 - Ken Horton
 - Kris Pruitt
 - Bradley Warner
-date: "2021-02-22"
+date: "2021-03-05"
 header-includes:
    - \usepackage{multirow}
    - \usepackage{multicol}
@@ -70,6 +70,13 @@ This book was written using the **bookdown** package [@R-bookdown].
 
 This book is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
+
+
+## File Creation Information 
+
+  * File creation date: 2021-03-05
+  * Windows version: Windows 10 x64 (build 18362)
+  * R version 3.6.3 (2020-02-29)
 
 
 

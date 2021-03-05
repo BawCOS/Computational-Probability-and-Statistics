@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 15 Multivariate Expectation | Computational Probability and Statistics</title>
+  <title>Chapter 31 Logistic Regression | Computational Probability and Statistics</title>
   <meta name="description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 15 Multivariate Expectation | Computational Probability and Statistics" />
+  <meta property="og:title" content="Chapter 31 Logistic Regression | Computational Probability and Statistics" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="figures/Cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 15 Multivariate Expectation | Computational Probability and Statistics" />
+  <meta name="twitter:title" content="Chapter 31 Logistic Regression | Computational Probability and Statistics" />
   
   <meta name="twitter:description" content="This is a set of notes used for Math 377 starting in the fall of 2020 that has been compiled into a book." />
   <meta name="twitter:image" content="figures/Cover.png" />
@@ -33,8 +33,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="MULTIDISTS.html"/>
-<link rel="next" href="TRANS.html"/>
+<link rel="prev" href="LRMULTI.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -665,429 +665,729 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="MULTIEXP" class="section level1">
-<h1><span class="header-section-number">Chapter 15</span> Multivariate Expectation</h1>
-
-<div id="objectives-14" class="section level2">
-<h2><span class="header-section-number">15.1</span> Objectives</h2>
+<div id="LOGREG" class="section level1">
+<h1><span class="header-section-number">Chapter 31</span> Logistic Regression</h1>
+<div id="objectives-29" class="section level2">
+<h2><span class="header-section-number">31.1</span> Objectives</h2>
 <ol style="list-style-type: decimal">
-<li>Given a joint pmf/pdf, obtain means and variances of random variables and functions of random variables.<br />
+<li>Using <code>R</code>, conduct logistic regression and interpret the output, check assumptions, and perform model selection.<br />
 </li>
-<li>Define the terms covariance and correlation, and given a joint pmf/pdf, obtain the covariance and correlation between two random variables.<br />
+<li>Write the logistic regression model and predict outputs for given inputs.<br />
 </li>
-<li>Given a joint pmf/pdf, determine whether random variables are independent of one another.<br />
-</li>
-<li>Find conditional expectations.</li>
+<li>Use the bootstrap to find confidence intervals for parameter estimates and predictions.</li>
 </ol>
 </div>
-<div id="expectation---moments" class="section level2">
-<h2><span class="header-section-number">15.2</span> Expectation - moments</h2>
-<p>Computing expected values of random variables in the joint context is similar to the univariate case. Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be discrete random variables with joint pmf <span class="math inline">\(f_{X,Y}(x,y)\)</span>. Let <span class="math inline">\(g(X,Y)\)</span> be some function of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Then:
-<span class="math display">\[
-\mbox{E}[g(X,Y)]=\sum_x\sum_y g(x,y)f_{X,Y}(x,y)
-\]</span></p>
-<p>(Note that <span class="math inline">\(\sum\limits_{x}\)</span> is shorthand for the sum across all possible values of <span class="math inline">\(x\)</span>.)</p>
-<p>In the case of continuous random variables with a joint pdf <span class="math inline">\(f_{X,Y}(x,y)\)</span>, expectation becomes:
-<span class="math display">\[
-\mbox{E}[g(X,Y)]=\int_x\int_y g(x,y)f_{X,Y}(x,y)\,\mathrm{d}y \,\mathrm{d}x
-\]</span></p>
-<div id="expectation-of-discrete-random-variables" class="section level3">
-<h3><span class="header-section-number">15.2.1</span> Expectation of discrete random variables</h3>
-<p>Given a joint pmf, one can find the mean of <span class="math inline">\(X\)</span> by using the joint function or by finding the marginal pmf first and then using that to find <span class="math inline">\(\mbox{E}(X)\)</span>. In the end, both ways are the same. For the discrete case:
-<span class="math display">\[
-\mbox{E}(X)=\sum_x\sum_y xf_{X,Y}(x,y) = \sum_x x \sum_y f_{X,Y}(x,y)
-\]</span></p>
-<p>The <span class="math inline">\(x\)</span> can be moved outside the inner sum since the inner sum is with respect to variable <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> is a constant with respect to <span class="math inline">\(y\)</span>. Note that the inner sum is the marginal pmf of <span class="math inline">\(X\)</span>. So,
-<span class="math display">\[
-\mbox{E}(X)=\sum_x x \sum_y f_{X,Y}(x,y)=\sum_x x f_X(x)
-\]</span></p>
-<div style="page-break-after: always;"></div>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be discrete random variables with joint pmf below.</p>
-</blockquote>
-<p><span class="math display">\[
-\begin{array}{cc|ccc} &amp; &amp; &amp; \textbf{Y} &amp;
-\\ &amp; &amp; 0 &amp; 1 &amp; 2  
-\\&amp;\hline0 &amp; 0.10 &amp; 0.08 &amp; 0.11  
-\\\textbf{X} &amp;1 &amp; 0.18 &amp; 0.20 &amp; 0.12  
-\\&amp;2 &amp; 0.07 &amp; 0.05 &amp; 0.09 
-\end{array} 
-\]</span></p>
-<p>Find <span class="math inline">\(\mbox{E}(X)\)</span></p>
-<p>First we will use the joint pmf directly, then we find the marginal pmf of <span class="math inline">\(X\)</span> and use that as we would in a univariate case.</p>
-<p><span class="math display">\[
-\mbox{E}(X)=\sum_{x=0}^2 \sum_{y=0}^2 x f_{X,Y}(x,y)=0*0.10+0*0.08+0*0.11+1*0.18+...+2*0.09 = 0.92
-\]</span></p>
-<p>The marginal pmf of <span class="math inline">\(X\)</span> is
-<span class="math display">\[
-f_X(x)=\left\{\begin{array}{ll} 0.10+0.08+0.11, &amp; x=0 \\
-0.18+0.20+0.12, &amp; x=1 \\
-0.07+0.05+0.09, &amp; x=2 \\
-0, &amp; \mbox{otherwise} 
-\end{array}\right. = \left\{\begin{array}{ll} 0.29, &amp; x=0 \\
-0.50, &amp; x=1 \\
-0.21, &amp; x=2 \\
-0, &amp; \mbox{otherwise} 
-\end{array}\right.
-\]</span></p>
-<p>So, <span class="math inline">\(\mbox{E}(X)=0*0.29+1*0.5+2*0.21=0.92\)</span>.</p>
+<div id="logistic-regression-introduction" class="section level2">
+<h2><span class="header-section-number">31.2</span> Logistic regression introduction</h2>
+<p>In this lesson we introduce <strong>logistic regression</strong> as a tool for building models when there is a categorical response variable with two levels. Logistic regression is a type of <strong>generalized linear model</strong> (GLM) for response variables where the assumptions of normally distributed errors is not appropriate. We are prepping you for advanced statistical models and machine learning, where we will explore predictive models of many different types of response variables including ones that don’t assume an underlying functional relationship between inputs and outputs. So cool!</p>
+<p>GLMs can be thought of as a two-stage modeling approach. We first model the response variable using a probability distribution, such as the binomial or Poisson distribution. Second, we model the parameter of the distribution using a collection of predictors and a special form of multiple regression.</p>
+<p>To explore and explain these ideas, we will again use the Ebay auctions of a video game called <strong>Mario Kart</strong> for the Nintendo Wii. Remember, the data set is in the file <code>mariokart.csv</code> and includes results from 141 auctions.<a href="#fn103" class="footnote-ref" id="fnref103"><sup>103</sup></a></p>
+<p>In this chapter, we want the outcome variable of interest to be game condition, <code>cond</code>. In Chapter <a href="LRMULTI.html#LRMULTI">30</a> we used the total price of an auction as the response. We are moving from a quantitative response to a binary qualitative variable. If we were only interested in determining if an association exists between the variables <code>cond</code> and <code>total_pr</code>, we could use linear regression with <code>total_pr</code> as the response. However, in this problem we want to predict game condition. We will start by reviewing some of the previous models and then introduce logistic regression. We will finish with a multiple logistic regression model, more than one predictor.</p>
+<div id="mario-kart-data" class="section level3">
+<h3><span class="header-section-number">31.2.1</span> Mario Kart data</h3>
+<p>Read the data and summarize.</p>
+<div class="sourceCode" id="cb1017"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1017-1"><a href="LOGREG.html#cb1017-1"></a>mariokart &lt;-<span class="kw">read_csv</span>(<span class="st">&quot;data/mariokart.csv&quot;</span>)</span>
+<span id="cb1017-2"><a href="LOGREG.html#cb1017-2"></a><span class="kw">head</span>(mariokart,<span class="dt">n=</span><span class="dv">10</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 10 x 12
+##         id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
+##      &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;         &lt;dbl&gt;
+##  1 1.50e11        3     20 new       0.99    4        51.6 standa~        1580
+##  2 2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
+##  3 3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
+##  4 2.80e11        3     18 new       0.99    0        44   standa~           7
+##  5 1.70e11        1     20 new       0.01    0        71   media           820
+##  6 3.60e11        3     19 new       0.99    4        45   standa~      270144
+##  7 1.20e11        1     13 used      0.01    0        37.0 standa~        7284
+##  8 3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
+##  9 2.00e11        3     29 used      0.99    4        47   priori~          27
+## 10 3.30e11        7      8 used     20.0     4        50   firstC~         201
+## # ... with 3 more variables: stock_photo &lt;chr&gt;, wheels &lt;dbl&gt;, title &lt;chr&gt;</code></pre>
+<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1019-1"><a href="LOGREG.html#cb1019-1"></a><span class="kw">inspect</span>(mariokart)</span></code></pre></div>
+<pre><code>## Warning: `data_frame()` is deprecated as of tibble 1.1.0.
+## Please use `tibble()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## 
+## categorical variables:  
+##          name     class levels   n missing
+## 1        cond character      2 143       0
+## 2     ship_sp character      8 143       0
+## 3 stock_photo character      2 143       0
+## 4       title character     80 142       1
+##                                    distribution
+## 1 used (58.7%), new (41.3%)                    
+## 2 standard (23.1%), upsGround (21.7%) ...      
+## 3 yes (73.4%), no (26.6%)                      
+## 4  (%) ...                                     
+## 
+## quantitative variables:  
+##             name   class          min           Q1       median           Q3
+## ...1          id numeric 1.104392e+11 1.403506e+11 2.204911e+11 2.953551e+11
+## ...2    duration numeric 1.000000e+00 1.000000e+00 3.000000e+00 7.000000e+00
+## ...3      n_bids numeric 1.000000e+00 1.000000e+01 1.400000e+01 1.700000e+01
+## ...4    start_pr numeric 1.000000e-02 9.900000e-01 1.000000e+00 1.000000e+01
+## ...5     ship_pr numeric 0.000000e+00 0.000000e+00 3.000000e+00 4.000000e+00
+## ...6    total_pr numeric 2.898000e+01 4.117500e+01 4.650000e+01 5.399000e+01
+## ...7 seller_rate numeric 0.000000e+00 1.090000e+02 8.200000e+02 4.858000e+03
+## ...8      wheels numeric 0.000000e+00 0.000000e+00 1.000000e+00 2.000000e+00
+##               max         mean           sd   n missing
+## ...1 4.000775e+11 2.235290e+11 8.809543e+10 143       0
+## ...2 1.000000e+01 3.769231e+00 2.585693e+00 143       0
+## ...3 2.900000e+01 1.353846e+01 5.878786e+00 143       0
+## ...4 6.995000e+01 8.777203e+00 1.506745e+01 143       0
+## ...5 2.551000e+01 3.143706e+00 3.213179e+00 143       0
+## ...6 3.265100e+02 4.988049e+01 2.568856e+01 143       0
+## ...7 2.701440e+05 1.589842e+04 5.184032e+04 143       0
+## ...8 4.000000e+00 1.146853e+00 8.471829e-01 143       0</code></pre>
+<p>We are again only interested in <code>total_pr</code>, <code>cond</code>, <code>stock_photo</code>, <code>duration</code>, and <code>wheels</code>. These variables are described in the following list:</p>
+<ol style="list-style-type: decimal">
+<li><code>total_pr</code>: final auction price plus shipping costs, in US dollars<br />
+</li>
+<li><code>cond</code>: a two-level categorical factor variable<br />
+</li>
+<li><code>stock_photo</code>: a two-level categorical factor variable<br />
+</li>
+<li><code>duration</code>: the length of the auction, in days, taking values from 1 to 10<br />
+</li>
+<li><code>wheels</code>: the number of Wii wheels included with the auction (a <strong>Wii wheel</strong> is a plastic racing wheel that holds the Wii controller and is an optional but helpful accessory for playing Mario Kart)</li>
+</ol>
+<p>Remember that we removed a couple of outlier sales that included multiple items. Before we start let’s clean up the data again to include removing those outliers.</p>
+<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1022-1"><a href="LOGREG.html#cb1022-1"></a>mariokart &lt;-<span class="st"> </span>mariokart <span class="op">%&gt;%</span></span>
+<span id="cb1022-2"><a href="LOGREG.html#cb1022-2"></a><span class="st">  </span><span class="kw">filter</span>(total_pr <span class="op">&lt;=</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1022-3"><a href="LOGREG.html#cb1022-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cond=</span><span class="kw">factor</span>(cond),</span>
+<span id="cb1022-4"><a href="LOGREG.html#cb1022-4"></a>         <span class="dt">stock_photo=</span><span class="kw">factor</span>(stock_photo)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1022-5"><a href="LOGREG.html#cb1022-5"></a><span class="st">  </span><span class="kw">select</span>(cond,stock_photo,total_pr,duration,wheels)</span></code></pre></div>
+<p>Next let’s summarize the data.</p>
+<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1023-1"><a href="LOGREG.html#cb1023-1"></a><span class="kw">inspect</span>(mariokart)</span></code></pre></div>
+<pre><code>## 
+## categorical variables:  
+##          name  class levels   n missing
+## 1        cond factor      2 141       0
+## 2 stock_photo factor      2 141       0
+##                                    distribution
+## 1 used (58.2%), new (41.8%)                    
+## 2 yes (74.5%), no (25.5%)                      
+## 
+## quantitative variables:  
+##          name   class   min Q1 median    Q3 max      mean        sd   n missing
+## ...1 total_pr numeric 28.98 41  46.03 53.99  75 47.431915 9.1136514 141       0
+## ...2 duration numeric  1.00  1   3.00  7.00  10  3.751773 2.5888663 141       0
+## ...3   wheels numeric  0.00  0   1.00  2.00   4  1.148936 0.8446146 141       0</code></pre>
 </div>
+<div id="analyzing-contingency-table" class="section level3">
+<h3><span class="header-section-number">31.2.2</span> Analyzing contingency table</h3>
+<p>As a review and introduction to logistic regression, let’s analyze the relationship between game condition and stock photo.</p>
+<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1025-1"><a href="LOGREG.html#cb1025-1"></a><span class="kw">tally</span>(cond<span class="op">~</span>stock_photo,<span class="dt">data=</span>mariokart</span>
+<span id="cb1025-2"><a href="LOGREG.html#cb1025-2"></a>      ,<span class="dt">margins =</span> <span class="ot">TRUE</span>,<span class="dt">format =</span> <span class="st">&quot;proportion&quot;</span>)</span></code></pre></div>
+<pre><code>##        stock_photo
+## cond           no       yes
+##   new   0.1111111 0.5238095
+##   used  0.8888889 0.4761905
+##   Total 1.0000000 1.0000000</code></pre>
+<p>We could analyze this by comparing the proportion of new condition games for each stock photo value using both randomization, empirical p-values, and the central limit theorem. We will just use an exact permutation test, **Fisher Exact Test."</p>
+<div class="sourceCode" id="cb1027"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1027-1"><a href="LOGREG.html#cb1027-1"></a><span class="kw">fisher.test</span>(<span class="kw">tally</span>(<span class="op">~</span>cond<span class="op">+</span>stock_photo,<span class="dt">data=</span>mariokart))</span></code></pre></div>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  tally(~cond + stock_photo, data = mariokart)
+## p-value = 9.875e-06
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.02766882 0.35763723
+## sample estimates:
+## odds ratio 
+##  0.1152058</code></pre>
+<p>Clearly, these variables are not independent of each other. This model does not gives us much more information so let’s move to logistic regression.</p>
 </div>
-<div id="exercises-to-apply-what-we-learned" class="section level2">
-<h2><span class="header-section-number">15.3</span> Exercises to apply what we learned</h2>
+<div id="modeling-the-probability-of-an-event" class="section level3">
+<h3><span class="header-section-number">31.2.3</span> Modeling the probability of an event</h3>
+<p>The outcome variable for a GLM is denoted by <span class="math inline">\(Y_i\)</span>, where the index <span class="math inline">\(i\)</span> is used to represent observation <span class="math inline">\(i\)</span>. In the Mario Kart application, <span class="math inline">\(Y_i\)</span> will be used to represent whether the game condition <span class="math inline">\(i\)</span> is new (<span class="math inline">\(Y_i=1\)</span>) or used (<span class="math inline">\(Y_i=0\)</span>).</p>
+<p>The predictor variables are represented as follows: <span class="math inline">\(x_{1,i}\)</span> is the value of variable 1 for observation <span class="math inline">\(i\)</span>, <span class="math inline">\(x_{2,i}\)</span> is the value of variable 2 for observation <span class="math inline">\(i\)</span>, and so on.</p>
+<p>Logistic regression is a generalized linear model where the outcome is a two-level categorical variable. The outcome, <span class="math inline">\(Y_i\)</span>, takes the value 1 (in our application, this represents a game in new condition but we could easily switch and make the outcome of interest a used game) with probability <span class="math inline">\(p_i\)</span> and the value 0 with probability <span class="math inline">\(1-p_i\)</span>. It is the probability <span class="math inline">\(p_i\)</span> that we model in relation to the predictor variables.</p>
+<p>The logistic regression model relates the probability a game is new (<span class="math inline">\(p_i\)</span>) to values of the predictors <span class="math inline">\(x_{1,i}\)</span>, <span class="math inline">\(x_{2,i}\)</span>, …, <span class="math inline">\(x_{k,i}\)</span> through a framework much like that of multiple regression:</p>
+<p><span class="math display">\[
+\text{transformation}(p_{i}) = \beta_0 + \beta_1x_{1,i} + \beta_2 x_{2,i} + \cdots \beta_k x_{k,i}
+\]</span></p>
+<p>We want to choose a transformation that makes practical and mathematical sense. For example, we want a transformation that makes the range of possibilities on the left hand side of the above equation equal to the range of possibilities for the right hand side. If there was no transformation for this equation, the left hand side could only take values between 0 and 1, but the right hand side could take values outside of this range. A common transformation for <span class="math inline">\(p_i\)</span> is the <strong>logit transformation</strong>, which may be written as</p>
+<p><span class="math display">\[
+\text{logit}(p_i) = \log_{e}\left( \frac{p_i}{1-p_i} \right)
+\]</span></p>
+<p>Below, we expand the equation using the logit transformation of <span class="math inline">\(p_i\)</span>:</p>
+<p><span class="math display">\[
+\log_{e}\left( \frac{p_i}{1-p_i} \right)
+    = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
+\]</span></p>
+<p>The logit transformation is shown in Figure <a href="LOGREG.html#fig:logit-fig">31.1</a>.</p>
+<div class="figure"><span id="fig:logit-fig"></span>
+<img src="31-Logistic-Regression_files/figure-html/logit-fig-1.png" alt="Logitstic function with some example points plotted." width="672" />
+<p class="caption">
+Figure 31.1: Logitstic function with some example points plotted.
+</p>
+</div>
+<p>Notice the output of the <code>logit</code> function restricts the values between 0 and 1. The curve is fairly flat on the edges with a sharp rise in the center. There are other functions that achieve this same result. However, for reasons beyond the scope of this class, the logit function has desirable mathematical properties that relate making sure all the common GLMs fall within the exponential family of distributions. This topic is at the graduate school level and not needed for our studies.</p>
+<p>In our Mario Kart example, there are 4 predictor variables, so <span class="math inline">\(k = 4\)</span>. This nonlinear model isn’t very intuitive, but it still has some resemblance to multiple regression, and we can fit this model using software. In fact, once we look at results from software, it will start to feel like we’re back in multiple regression, even if the interpretation of the coefficients is more complex.</p>
+</div>
+<div id="first-model---intercept-only" class="section level3">
+<h3><span class="header-section-number">31.2.4</span> First model - intercept only</h3>
+<p>Here we create a model with just an intercept.</p>
+<p>In <code>R</code> we use the <code>glm()</code> function to fit a logistic regression model. It has the same formula format as <code>lm</code> but also requires a <code>family</code> argument. Since our response is binary, we use <code>binomial</code>. If we wanted to use <code>glm()</code> for linear regression assuming normally distributed residual, the family argument would be <code>gaussian</code>. This implies that multiple linear regression with the assumption of normally distributed errors is a special case of a generalized linear model. In <code>R</code>, the response is a 0/1 variable, we can control the outcome of interest, the 1, by using a logical argument in the formula.</p>
+<p>First to understand the output of logistic regression, let’s just run a model with an intercept term. Notice in the code chunk that the left hand side of the formula has a logical argument, this gives a 0/1 output with 1 being the value we want to predict.</p>
+<div class="sourceCode" id="cb1029"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1029-1"><a href="LOGREG.html#cb1029-1"></a>mario_mod1 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span><span class="dv">1</span>,<span class="dt">data=</span>mariokart,</span>
+<span id="cb1029-2"><a href="LOGREG.html#cb1029-2"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<p>Let’s get regression output using the <code>summary()</code> function.</p>
+<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1030-1"><a href="LOGREG.html#cb1030-1"></a><span class="kw">summary</span>(mario_mod1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = cond == &quot;new&quot; ~ 1, family = &quot;binomial&quot;, data = mariokart)
+## 
+## Deviance Residuals: 
+##    Min      1Q  Median      3Q     Max  
+## -1.041  -1.041  -1.041   1.320   1.320  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)  -0.3292     0.1707  -1.928   0.0538 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.7  on 140  degrees of freedom
+## Residual deviance: 191.7  on 140  degrees of freedom
+## AIC: 193.7
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>This looks similar to the regression output we saw in previous chapters. However, the model has a different, nonlinear, form. Remember, Equation <a href="LOGREG.html#eq:logistic">(31.1)</a> is the general form of the model.</p>
+<p><span class="math display" id="eq:logistic">\[\begin{equation} 
+  \log_{e}\left( \frac{p_i}{1-p_i} \right)
+    = \beta_0 + \beta_1 x_{1,i} + \beta_2 x_{2,i} + \cdots + \beta_k x_{k,i}
+  \tag{31.1}
+\end{equation}\]</span></p>
+<p>Thus using the output of <code>R</code>, Equation <a href="LOGREG.html#eq:logistic2">(31.2)</a> is the estimated model.</p>
+<p><span class="math display" id="eq:logistic2">\[\begin{equation}
+\log\left( \frac{p_i}{1-p_i} \right) = -0.329 
+  \tag{31.2}
+\end{equation}\]</span></p>
+<p>Solving Equation <a href="LOGREG.html#eq:logistic2">(31.2)</a> for <span class="math inline">\(p_i\)</span>: <span class="math inline">\(\frac{e^{-0.329}}{1 + e^{-0.329}} = 0.418\)</span>. This is the estimated probability of the game condition being new. This point is plotted in Figure <a href="LOGREG.html#fig:logit-fig">31.1</a>. We can also check this result using a summary table.</p>
+<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1032-1"><a href="LOGREG.html#cb1032-1"></a><span class="kw">tally</span>(<span class="op">~</span>cond,<span class="dt">data=</span>mariokart,<span class="dt">format=</span><span class="st">&quot;proportion&quot;</span>)</span></code></pre></div>
+<pre><code>## cond
+##       new      used 
+## 0.4184397 0.5815603</code></pre>
+</div>
+<div id="second-model---stock_photo" class="section level3">
+<h3><span class="header-section-number">31.2.5</span> Second model - stock_photo</h3>
+<p>Now that we are starting to understand the logistic regression model. Let’s add a predictor variable, <code>stock_photo</code>. Again, we have many methods to determine if a relationship between two categorical variables exists, logistic regression is another method.</p>
+<div class="sourceCode" id="cb1034"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1034-1"><a href="LOGREG.html#cb1034-1"></a>mario_mod2 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo,<span class="dt">data=</span>mariokart,</span>
+<span id="cb1034-2"><a href="LOGREG.html#cb1034-2"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1035"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1035-1"><a href="LOGREG.html#cb1035-1"></a><span class="kw">summary</span>(mario_mod2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = cond == &quot;new&quot; ~ stock_photo, family = &quot;binomial&quot;, 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.2181  -1.2181  -0.4854   1.1372   2.0963  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)     -2.0794     0.5303  -3.921 8.81e-05 ***
+## stock_photoyes   2.1748     0.5652   3.848 0.000119 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 170.44  on 139  degrees of freedom
+## AIC: 174.44
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>Examining the <strong>p-value</strong> associated with the coefficient for <code>stock_photo</code>, we can see that it is significant. Thus we reject the null hypothesis that the coefficient is zero. There is a relationship between <code>cond</code> and <code>stock_photo</code>, as we found with the Fisher’s test.</p>
+<p>We can use the <code>broom</code> package to summarize the output and generate model fits.</p>
+<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1037-1"><a href="LOGREG.html#cb1037-1"></a><span class="kw">tidy</span>(mario_mod2)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)       -2.08     0.530     -3.92 0.0000881
+## 2 stock_photoyes     2.17     0.565      3.85 0.000119</code></pre>
+<p>Let’s convert these coefficients to estimated probabilities using the <code>augment()</code> function. We need to specify the output as the <em>response</em>, this returns a probability, or else we will get the logit of the probability, the link value.</p>
+<div class="sourceCode" id="cb1039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1039-1"><a href="LOGREG.html#cb1039-1"></a><span class="kw">augment</span>(mario_mod2,</span>
+<span id="cb1039-2"><a href="LOGREG.html#cb1039-2"></a>        <span class="dt">newdata=</span><span class="kw">tibble</span>(<span class="dt">stock_photo=</span><span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)),</span>
+<span id="cb1039-3"><a href="LOGREG.html#cb1039-3"></a>        <span class="dt">type.predict=</span><span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   stock_photo .fitted
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 yes           0.524
+## 2 no            0.111</code></pre>
+<p>These are the conditional probability of a new condition based on status of <code>stock_photo</code>. We can see this using the <code>tally()</code> function.</p>
+<div class="sourceCode" id="cb1041"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1041-1"><a href="LOGREG.html#cb1041-1"></a><span class="kw">tally</span>(cond<span class="op">~</span>stock_photo,<span class="dt">data=</span>mariokart,<span class="dt">margins =</span> <span class="ot">TRUE</span>,<span class="dt">format=</span><span class="st">&quot;proportion&quot;</span>)</span></code></pre></div>
+<pre><code>##        stock_photo
+## cond           no       yes
+##   new   0.1111111 0.5238095
+##   used  0.8888889 0.4761905
+##   Total 1.0000000 1.0000000</code></pre>
+<p>Or from the model coefficients.</p>
+<div class="sourceCode" id="cb1043"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1043-1"><a href="LOGREG.html#cb1043-1"></a><span class="kw">exp</span>(<span class="op">-</span><span class="fl">2.079442</span>)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">2.079442</span>))</span></code></pre></div>
+<pre><code>## [1] 0.1111111</code></pre>
+<div class="sourceCode" id="cb1045"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1045-1"><a href="LOGREG.html#cb1045-1"></a><span class="kw">exp</span>(<span class="op">-</span><span class="fl">2.079442+2.174752</span>)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">2.079442+2.174752</span>))</span></code></pre></div>
+<pre><code>## [1] 0.5238095</code></pre>
 <blockquote>
 <p><strong>Exercise</strong>:
-Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be defined above. Find <span class="math inline">\(\mbox{E}(Y)\)</span>, <span class="math inline">\(\mbox{E}(X+Y)\)</span>, <span class="math inline">\(\mbox{E}(XY)\)</span>, and <span class="math inline">\(\mbox{E}\left(\frac{1}{2X+Y+1}\right)\)</span>.</p>
+Fit a logistic regression model with <code>cond</code> as used and <code>stock_photo</code> as a predictor.</p>
 </blockquote>
-<div id="ey" class="section level3">
-<h3><span class="header-section-number">15.3.1</span> E(Y)</h3>
-<p>As with <span class="math inline">\(\mbox{E}(X)\)</span>, <span class="math inline">\(\mbox{E}(Y)\)</span> can be found in two ways. We will use the marginal pmf of <span class="math inline">\(Y\)</span>, which we will not derive:</p>
-<p><span class="math display">\[
-\mbox{E}(Y)=\sum_{y=0}^2 y \cdot f_Y(y)=0*0.35+1*0.33+2*0.32 = 0.97
-\]</span></p>
+<p>We repeat the code from above.</p>
+<div class="sourceCode" id="cb1047"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1047-1"><a href="LOGREG.html#cb1047-1"></a>mario_mod3 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;used&quot;</span><span class="op">~</span>stock_photo,<span class="dt">data=</span>mariokart,</span>
+<span id="cb1047-2"><a href="LOGREG.html#cb1047-2"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1048-1"><a href="LOGREG.html#cb1048-1"></a><span class="kw">tidy</span>(mario_mod3)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)        2.08     0.530      3.92 0.0000881
+## 2 stock_photoyes    -2.17     0.565     -3.85 0.000119</code></pre>
+<p>Again, let’s convert these coefficients to estimated probabilities using the <code>augment()</code> function.</p>
+<div class="sourceCode" id="cb1050"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1050-1"><a href="LOGREG.html#cb1050-1"></a><span class="kw">augment</span>(mario_mod3,</span>
+<span id="cb1050-2"><a href="LOGREG.html#cb1050-2"></a>        <span class="dt">newdata=</span><span class="kw">tibble</span>(<span class="dt">stock_photo=</span><span class="kw">c</span>(<span class="st">&quot;yes&quot;</span>,<span class="st">&quot;no&quot;</span>)),</span>
+<span id="cb1050-3"><a href="LOGREG.html#cb1050-3"></a>        <span class="dt">type.predict=</span><span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   stock_photo .fitted
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 yes           0.476
+## 2 no            0.889</code></pre>
+<p>This matches the output from the <code>tally()</code> function we observed above.</p>
+<p>Notice that is was not important whether we select new condition as the desired outcome or used status. In either case, the logistic regression model returns the conditional probability given the value of the predictor.</p>
 </div>
-<div id="exy" class="section level3">
-<h3><span class="header-section-number">15.3.2</span> E(X+Y)</h3>
-<p>To find <span class="math inline">\(\mbox{E}(X+Y)\)</span> we will use the joint pmf. In the discrete case, it helps to first identify all of the possible values of <span class="math inline">\(X+Y\)</span> and then figure out what probabilities are associated with each value. This problem is really a transformation problem where we are finding the distribution of <span class="math inline">\(X+Y\)</span>. In this example, <span class="math inline">\(X+Y\)</span> can take on values 0, 1, 2, 3, and 4. The value 0 only happens when <span class="math inline">\(X=Y=0\)</span> and the probability of this outcome is 0.10. The value 1 occurs when <span class="math inline">\(X=0\)</span> and <span class="math inline">\(Y=1\)</span> or when <span class="math inline">\(X=1\)</span> and <span class="math inline">\(Y=0\)</span>. This occurs with probability 0.08 + 0.18. We continue in this manner:
+<div id="interpreting-the-coefficients" class="section level3">
+<h3><span class="header-section-number">31.2.6</span> Interpreting the coefficients</h3>
+<p>At this point it seems that we created a great deal of work just to get the same results that we had from other methods. However, the logistic regression model allows us to add other predictors and it also gives us standard errors for the parameter estimates.</p>
+<p>Let’s first discuss the interpretation of coefficients. As a reminder, the fitted coefficients are reported from the model summary.</p>
+<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1052-1"><a href="LOGREG.html#cb1052-1"></a><span class="kw">tidy</span>(mario_mod2)</span></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term           estimate std.error statistic   p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)       -2.08     0.530     -3.92 0.0000881
+## 2 stock_photoyes     2.17     0.565      3.85 0.000119</code></pre>
+<p>The variable <code>stock_photo</code> takes on the values 0 and 1, the value 1 of indicates the sale had a stock photo. The logistic regression model we are fitting is Equation <a href="LOGREG.html#eq:logistic4">(31.3)</a>.</p>
+<p><span class="math display" id="eq:logistic4">\[\begin{equation} 
+  \log_{e}\left( \frac{p_{new}}{1-p_{new}} \right)
+    = \beta_0 + \beta_1 \mbox{stock_photo}  
+  \tag{31.3}
+\end{equation}\]</span></p>
+<p>If the photo is not a stock photo then the model is Equation <a href="LOGREG.html#eq:logistic5">(31.4)</a>. The left-hand side is the natural logarithm of the odds, where odds are the ratio of the probability of success divided by the probability of failure.<br />
 <span class="math display">\[
-\mbox{E}(X+Y)=\sum_{x=0}^2\sum_{y=0}^2 (x+y)f_{X,Y}(x,y) = 0*0.1+1*(0.18+0.08)+2*(0.11+0.07+0.20)
+\log_{e}\left( \frac{p_{\mbox{new|stock photo}}}{1-p_{\mbox{new|stock photo}}} \right)
+    = \beta_0 + \beta_1   
+\]</span></p>
+<p><span class="math display" id="eq:logistic5">\[\begin{equation} 
+  \log_{e}\left( \frac{p_{\mbox{new|no stock photo}}}{1-p_{\mbox{new|no stock photo}}} \right)
+    = \beta_0   
+  \tag{31.4}
+\end{equation}\]</span></p>
+<p>If we have a stock photo, the variable <code>stock_photo</code> is 1. Then Equation <a href="LOGREG.html#eq:logistic6">(31.5)</a> is the resulting model.</p>
+<p><span class="math display" id="eq:logistic6">\[\begin{equation} 
+ \log_{e}\left( \frac{p_{\mbox{new|stock photo}}}{1-p_{\mbox{new|stock photo}}} \right)
+    = \beta_0 + \beta_1   
+  \tag{31.5}
+\end{equation}\]</span></p>
+<p>Thus the difference of these gives an interpretation of the <span class="math inline">\(\beta_1\)</span> coefficient, it is the log odds ratio as is shown in the derivation that follows.</p>
+<p><span class="math display">\[
+\log_{e}\left( \frac{p_{\mbox{new|stock photo}}}{1-p_{\mbox{new|stock photo}}} \right) 
+- 
+\log_{e}\left( \frac{p_{\mbox{new|no stock photo}}}{1-p_{\mbox{new|no stock photo}}} \right) = \beta_1 
 \]</span>
 <span class="math display">\[
-+3*(0.12+0.05)+4*0.09 = 1.89
+\log_{e}\left(\frac{\frac{p_{\mbox{new|stock photo}}}{1-p_{\mbox{new|stock photo}}}}{\frac{p_{\mbox{new|no stock photo}}}{1-p_{\mbox{new|no stock photo}}}} \right) 
+ = \beta_1 
 \]</span></p>
-<p>Note that <span class="math inline">\(\mbox{E}(X+Y)=\mbox{E}(X)+\mbox{E}(Y)\)</span>. (The proof of this is left to the reader.)</p>
-</div>
-<div id="exy-1" class="section level3">
-<h3><span class="header-section-number">15.3.3</span> E(XY)</h3>
+<p>For our problem, the log odds more than double if the photo is a stock photo. It is easier to interpret odds ratios, so often analysts use <span class="math inline">\(e^{\beta_1}\)</span> as the odds ratio. Again, for our problem, the odds of a new condition game increase by a factor of 8.8 if a stock photo is used. Note that an odds ratio is not a relative risk. Relative risk is the ratio of the probability of a new game with stock photo to the probability of a new game without a stock photo. Be careful in your interpretation.</p>
 <p><span class="math display">\[
-\mbox{E}(XY)=\sum_{x=0}^2\sum_{y=0}^2 xyf_{X,Y}(x,y) = 0*(0.1+0.08+0.11+0.18+0.07)+1*0.20
-\]</span>
-<span class="math display">\[
-+2*(0.12+0.05)+4*0.09= 0.9
-\]</span></p>
-<p>Note that <span class="math inline">\(\mbox{E}(XY)\)</span> is not necessarily equal to <span class="math inline">\(\mbox{E}(X)\mbox{E}(Y)\)</span>.</p>
-</div>
-<div id="e12xy1" class="section level3">
-<h3><span class="header-section-number">15.3.4</span> E(1/2X+Y+1)</h3>
-<p><span class="math display">\[
-\mbox{E}\left(\frac{1}{2X+Y+1}\right) = \sum_{x=0}^2\sum_{y=0}^2 \frac{1}{2x+y+1}f_{X,Y}(x,y) = 1*0.1+\frac{1}{2}*0.08+\frac{1}{3}*(0.11+0.18)
-\]</span>
-<span class="math display">\[
-+\frac{1}{4}*0.20+\frac{1}{5}*(0.12+0.07)+\frac{1}{6}*0.05+\frac{1}{7}*0.09 = 0.3125
+\left(\frac{p_{\mbox{new|stock photo}}}{p_{\mbox{new|no stock photo}}} \right) 
 \]</span></p>
 </div>
-<div id="expectation-of-continuous-random-variables" class="section level3">
-<h3><span class="header-section-number">15.3.5</span> Expectation of continuous random variables</h3>
-<p>Let’s consider an example with continuous random variables where summation is replaced with integration:</p>
+<div id="comparing-models" class="section level3">
+<h3><span class="header-section-number">31.2.7</span> Comparing models</h3>
+<p>Just as is the case for linear regression, we can compare nested models. When we examine the output of model there is a line with the <strong>residual deviance</strong>. This model is not fit using least squares but using maximum likelihood. Deviance is 2 times the negative of the log likelihood. We negate the log likelihood so that maximizing the log likelihood is equivalent to minimizing the negation. This allows the same thought process of minimizing deviance as we had for minimizing residual sum of squares. The multiplication by 2 is because an asymptotic argument shows that 2 times the negative log likelihood is approximately distributed as a Chi-square random variable.</p>
+<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1054-1"><a href="LOGREG.html#cb1054-1"></a><span class="kw">summary</span>(mario_mod2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = cond == &quot;new&quot; ~ stock_photo, family = &quot;binomial&quot;, 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.2181  -1.2181  -0.4854   1.1372   2.0963  
+## 
+## Coefficients:
+##                Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)     -2.0794     0.5303  -3.921 8.81e-05 ***
+## stock_photoyes   2.1748     0.5652   3.848 0.000119 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 170.44  on 139  degrees of freedom
+## AIC: 174.44
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>Similar to linear regression, we can use the <code>anova()</code> function to compare nested models.</p>
+<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1056-1"><a href="LOGREG.html#cb1056-1"></a><span class="kw">anova</span>(mario_mod1,mario_mod2,<span class="dt">test=</span><span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: cond == &quot;new&quot; ~ 1
+## Model 2: cond == &quot;new&quot; ~ stock_photo
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)    
+## 1       140     191.70                         
+## 2       139     170.44  1    21.26 4.01e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Adding, <code>stock_photo</code> is a statistically significant result. The p-value is different from the <code>summary()</code> function, because it assumes the coefficient follows a normal distribution. Different assumptions, but the same conclusion.</p>
+<p>The use of p-value to pick a best model uses statistical assumptions to select the features. Another approach is to use a predictive measure. In machine learning contexts, which we will learn about in Math 378, use many different predictive performance measures for model selection but many are based on a <strong>confusion matrix</strong>.</p>
+<p>A confusion matrix generates a 2 by 2 matrix of predicted outcomes versus actual outcomes. For logistic regression, the output is a probability of success. To convert this to 0/1 outcome we pick a threshold. It is common to use 0.5 as the threshold. Probabilities above 0.5 are considered a success, in the context of our problem a new game. Let’s generate the confusion matrix.</p>
+<div class="sourceCode" id="cb1058"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1058-1"><a href="LOGREG.html#cb1058-1"></a><span class="kw">augment</span>(mario_mod2,<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1058-2"><a href="LOGREG.html#cb1058-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">actual=</span><span class="kw">starts_with</span>(<span class="st">&#39;cond&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1058-3"><a href="LOGREG.html#cb1058-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">result=</span><span class="kw">as.integer</span>(.fitted<span class="op">&gt;</span><span class="fl">0.5</span>),</span>
+<span id="cb1058-4"><a href="LOGREG.html#cb1058-4"></a>            <span class="dt">actual=</span><span class="kw">as.integer</span>(actual)) <span class="op">%&gt;%</span></span>
+<span id="cb1058-5"><a href="LOGREG.html#cb1058-5"></a><span class="st">  </span><span class="kw">table</span>()</span></code></pre></div>
+<pre><code>##       actual
+## result  0  1
+##      0 32  4
+##      1 50 55</code></pre>
+<p>One single number summary metric is accuracy. In this case the model was correct on <span class="math inline">\(32 + 55\)</span> out of the 141 cases, or 61.7% are correct.</p>
+<p>This looks like the same table we get comparing <code>cond</code> to <code>stock_photo</code>. This is the case because of the binary nature of the predictor. We only have two probability values in our prediction.</p>
+<div class="sourceCode" id="cb1060"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1060-1"><a href="LOGREG.html#cb1060-1"></a><span class="kw">tally</span>(<span class="op">~</span>cond<span class="op">+</span>stock_photo,<span class="dt">data=</span>mariokart)</span></code></pre></div>
+<pre><code>##       stock_photo
+## cond   no yes
+##   new   4  55
+##   used 32  50</code></pre>
+<p>If we change the threshold we get a different accuracy. In Math 378, we will learn about other metrics such as area under the ROC curve. But let’s add another variable to see if we can improve the model.</p>
+</div>
+</div>
+<div id="multiple-logistic-regression" class="section level2">
+<h2><span class="header-section-number">31.3</span> Multiple logistic regression</h2>
+<p>Let’s add <code>total_pr</code> to the model. This model is something that we could not have done in the previous models we learned.</p>
+<div class="sourceCode" id="cb1062"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1062-1"><a href="LOGREG.html#cb1062-1"></a>mario_mod4 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span>total_pr,</span>
+<span id="cb1062-2"><a href="LOGREG.html#cb1062-2"></a>                  <span class="dt">data=</span>mariokart,</span>
+<span id="cb1062-3"><a href="LOGREG.html#cb1062-3"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<p>Notice that we use the same formula syntax as we had done with linear regression.</p>
+<div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1063-1"><a href="LOGREG.html#cb1063-1"></a><span class="kw">summary</span>(mario_mod4)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = cond == &quot;new&quot; ~ stock_photo + total_pr, family = &quot;binomial&quot;, 
+##     data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3699  -0.6479  -0.2358   0.6532   2.5794  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)    -11.31951    1.88333  -6.010 1.85e-09 ***
+## stock_photoyes   2.11633    0.68551   3.087  0.00202 ** 
+## total_pr         0.19348    0.03562   5.431 5.60e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 119.21  on 138  degrees of freedom
+## AIC: 125.21
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>From the summary, both <code>stock_photo</code> and <code>total_pr</code> are statistically significant.</p>
 <blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be continuous random variables with joint pdf:
-<span class="math display">\[
-f_{X,Y}(x,y)=xy
-\]</span>
-for <span class="math inline">\(0\leq x \leq 2\)</span> and <span class="math inline">\(0 \leq y \leq 1\)</span>.</p>
+<p><strong>Exercise</strong>:<br />
+Interpret the coefficient associated with the predictor <code>total_pr</code>.</p>
 </blockquote>
-</div>
-</div>
-<div id="exercises-to-apply-what-we-learned-1" class="section level2">
-<h2><span class="header-section-number">15.4</span> Exercises to apply what we learned</h2>
+<p>For one dollar increase in total price of the auction, the odds ratio increases by <span class="math inline">\(exp(\beta_2)\)</span>, 1.21, for a given condition of the stock photo variable.</p>
+<p>This is similar to an interpretation we had for multiple linear regression. We had to specify that the other predictors are held constant and then we increased the variable of interest by one unit.</p>
+<p>Besides using individual predictor p-values to assess the model, can also use a confusion matrix.</p>
+<div class="sourceCode" id="cb1065"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1065-1"><a href="LOGREG.html#cb1065-1"></a><span class="kw">augment</span>(mario_mod4,<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1065-2"><a href="LOGREG.html#cb1065-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">actual=</span><span class="kw">starts_with</span>(<span class="st">&#39;cond&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1065-3"><a href="LOGREG.html#cb1065-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">result=</span><span class="kw">as.integer</span>(.fitted<span class="op">&gt;</span><span class="fl">0.5</span>),</span>
+<span id="cb1065-4"><a href="LOGREG.html#cb1065-4"></a>            <span class="dt">actual=</span><span class="kw">as.integer</span>(actual)) <span class="op">%&gt;%</span></span>
+<span id="cb1065-5"><a href="LOGREG.html#cb1065-5"></a><span class="st">  </span><span class="kw">table</span>()</span></code></pre></div>
+<pre><code>##       actual
+## result  0  1
+##      0 71 16
+##      1 11 43</code></pre>
+<p>For our new model, the accuracy improved to <span class="math inline">\(71 + 43\)</span> out of the 141 cases, or 80.9.7%. Without a measure of variability, we don’t know if this significant improvement or just the variability in the modeling procedure. On the surface, it appears to be an improvement.</p>
+<p>As another preview of what we will be doing in Math 378, let’s use a quadratic term in our model.</p>
+<div class="sourceCode" id="cb1067"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1067-1"><a href="LOGREG.html#cb1067-1"></a>mario_mod5 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span><span class="kw">poly</span>(total_pr,<span class="dv">2</span>),</span>
+<span id="cb1067-2"><a href="LOGREG.html#cb1067-2"></a>                  <span class="dt">data=</span>mariokart,</span>
+<span id="cb1067-3"><a href="LOGREG.html#cb1067-3"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<p>Using the individual p-values, it appears that a quadratic term is significant but it is marginal.</p>
+<div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1068-1"><a href="LOGREG.html#cb1068-1"></a><span class="kw">summary</span>(mario_mod5)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = cond == &quot;new&quot; ~ stock_photo + poly(total_pr, 2), 
+##     family = &quot;binomial&quot;, data = mariokart)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.1555  -0.6511  -0.1200   0.5987   2.6760  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)         -2.4407     0.6347  -3.845  0.00012 ***
+## stock_photoyes       2.0411     0.6494   3.143  0.00167 ** 
+## poly(total_pr, 2)1  23.7534     4.5697   5.198 2.01e-07 ***
+## poly(total_pr, 2)2  -9.9724     4.1999  -2.374  0.01758 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 191.70  on 140  degrees of freedom
+## Residual deviance: 114.05  on 137  degrees of freedom
+## AIC: 122.05
+## 
+## Number of Fisher Scoring iterations: 6</code></pre>
+<p>We get a similar result if we use the <code>anova()</code> function.</p>
+<div class="sourceCode" id="cb1070"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1070-1"><a href="LOGREG.html#cb1070-1"></a><span class="kw">anova</span>(mario_mod4,mario_mod5,<span class="dt">test=</span><span class="st">&quot;Chi&quot;</span>)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: cond == &quot;new&quot; ~ stock_photo + total_pr
+## Model 2: cond == &quot;new&quot; ~ stock_photo + poly(total_pr, 2)
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)  
+## 1       138     119.21                       
+## 2       137     114.05  1   5.1687    0.023 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Finally, the confusion matrix results in a slight improvement in accuracy to 82.3%.</p>
+<div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1072-1"><a href="LOGREG.html#cb1072-1"></a><span class="kw">augment</span>(mario_mod5,<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1072-2"><a href="LOGREG.html#cb1072-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">actual=</span><span class="kw">starts_with</span>(<span class="st">&#39;cond&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1072-3"><a href="LOGREG.html#cb1072-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">result=</span><span class="kw">as.integer</span>(.fitted<span class="op">&gt;</span><span class="fl">0.5</span>),</span>
+<span id="cb1072-4"><a href="LOGREG.html#cb1072-4"></a>            <span class="dt">actual=</span><span class="kw">as.integer</span>(actual)) <span class="op">%&gt;%</span></span>
+<span id="cb1072-5"><a href="LOGREG.html#cb1072-5"></a><span class="st">  </span><span class="kw">table</span>()</span></code></pre></div>
+<pre><code>##       actual
+## result  0  1
+##      0 69 12
+##      1 13 47</code></pre>
+<p>Almost any classifier will have some error. In the model above, we have decided that it is okay to allow up to 9%, 13 out of 141, of the games for sale to be classified as new when they are really used. If we wanted to make it a little harder to classify as new, we could use a cutoff of 0.75. This would have two effects. Because it raises the standard for what can be classified as new, it reduces the number of used games that are classified as new. However, it will also fail to correctly classify an increased fraction of new games as new, see the code below. No matter the complexity and the confidence we might have in our model, these practical considerations are absolutely crucial to making a helpful classification model. Without them, we could actually do more harm than good by using our statistical model. This tradeoff is similar to the one we found between Type 1 and Type 2 errors. Notice that the accuracy has also dropped slightly.</p>
+<div class="sourceCode" id="cb1074"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1074-1"><a href="LOGREG.html#cb1074-1"></a><span class="kw">augment</span>(mario_mod5,<span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1074-2"><a href="LOGREG.html#cb1074-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">actual=</span><span class="kw">starts_with</span>(<span class="st">&#39;cond&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1074-3"><a href="LOGREG.html#cb1074-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">result=</span><span class="kw">as.integer</span>(.fitted<span class="op">&gt;</span><span class="fl">0.75</span>),</span>
+<span id="cb1074-4"><a href="LOGREG.html#cb1074-4"></a>            <span class="dt">actual=</span><span class="kw">as.integer</span>(actual)) <span class="op">%&gt;%</span></span>
+<span id="cb1074-5"><a href="LOGREG.html#cb1074-5"></a><span class="st">  </span><span class="kw">table</span>()</span></code></pre></div>
+<pre><code>##       actual
+## result  0  1
+##      0 78 22
+##      1  4 37</code></pre>
+<p>In Math 378, we will learn about better methods to assess predictive accuracy as well as more sophisticated methods to transform and adapt our predictor variables.</p>
 <blockquote>
-<p><strong>Exercise</strong>:
-Find <span class="math inline">\(\mbox{E}(X)\)</span>, <span class="math inline">\(\mbox{E}(X+Y)\)</span>, <span class="math inline">\(\mbox{E}(XY)\)</span>, and <span class="math inline">\(\mbox{Var}(XY)\)</span>.</p>
+<p><strong>Exercise</strong> Find the probability that an auctioned game is new if the total price is 50 and it uses a stock photo.</p>
 </blockquote>
-<div id="ex" class="section level3">
-<h3><span class="header-section-number">15.4.1</span> E(X)</h3>
-<p>We found the marginal pdf of <span class="math inline">\(X\)</span> in a previous lesson, so we should use that now:
-<span class="math display">\[
-\mbox{E}(X)=\int_0^2 x\frac{x}{2}\,\mathrm{d}x = \frac{x^3}{6}\bigg|_0^2= \frac{4}{3} 
-\]</span></p>
-</div>
-<div id="exy-2" class="section level3">
-<h3><span class="header-section-number">15.4.2</span> E(X+Y)</h3>
-<p>To find <span class="math inline">\(\mbox{E}(X+Y)\)</span>, we could use the joint pdf directly, or use the marginal pdf of <span class="math inline">\(Y\)</span> to find <span class="math inline">\(\mbox{E}(Y)\)</span> and then add the result to <span class="math inline">\(\mbox{E}(X)\)</span>. The reason this is valid is because when we integrate <span class="math inline">\(x\)</span> with the joint pdf, integrating with respect to <span class="math inline">\(y\)</span> first, we can treat <span class="math inline">\(x\)</span> as a constant and bring it out side the integral. Then we are integrating the joint pdf with respect <span class="math inline">\(y\)</span> which results in the marginal pdf of <span class="math inline">\(X\)</span>.</p>
-<p>We’ll use the joint pdf:
-<span class="math display">\[
-\mbox{E}(X+Y)=\int_0^2\int_0^1 (x+y)xy\,\mathrm{d}y \,\mathrm{d}x=\int_0^2\int_0^1 (x^2y+xy^2)\,\mathrm{d}y \,\mathrm{d}x = \int_0^2 \frac{x^2y^2}{2}+\frac{xy^3}{3} \bigg|_{y=0}^{y=1}\,\mathrm{d}x
-\]</span></p>
+<p>It is not clear how to use the coefficients in the regression output since <code>R</code> is performing a transformation on <code>total_pr</code> variable. Let’s approach this in two ways. First we will use the <code>augment()</code> function to do the hard work.</p>
+<div class="sourceCode" id="cb1076"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1076-1"><a href="LOGREG.html#cb1076-1"></a><span class="kw">augment</span>(mario_mod5,</span>
+<span id="cb1076-2"><a href="LOGREG.html#cb1076-2"></a>        <span class="dt">newdata =</span> <span class="kw">tibble</span>(<span class="dt">stock_photo=</span><span class="st">&quot;yes&quot;</span>,<span class="dt">total_pr=</span><span class="dv">50</span>),</span>
+<span id="cb1076-3"><a href="LOGREG.html#cb1076-3"></a>        <span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##   stock_photo total_pr .fitted
+##   &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+## 1 yes               50   0.693</code></pre>
+<p>We predict that the probability of the game being new if it uses a stock photo and the total price is 50 is 0.693%.</p>
+<p>If we want to recreate the calculation, we need to use a <strong>raw</strong> polynomial.</p>
+<div class="sourceCode" id="cb1078"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1078-1"><a href="LOGREG.html#cb1078-1"></a>mario_mod6 &lt;-<span class="st"> </span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span>total_pr<span class="op">+</span><span class="kw">I</span>(total_pr<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb1078-2"><a href="LOGREG.html#cb1078-2"></a>                  <span class="dt">data=</span>mariokart,</span>
+<span id="cb1078-3"><a href="LOGREG.html#cb1078-3"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb1078-4"><a href="LOGREG.html#cb1078-4"></a><span class="kw">tidy</span>(mario_mod6)</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+##   term            estimate std.error statistic  p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    -30.7       9.08        -3.38 0.000732
+## 2 stock_photoyes   2.04      0.649        3.14 0.00167 
+## 3 total_pr         0.969     0.343        2.83 0.00470 
+## 4 I(total_pr^2)   -0.00760   0.00320     -2.37 0.0176</code></pre>
+<p>We can calculate the link as a linear combination, an inner product of coefficients and values.</p>
 <p><span class="math display">\[
-= \int_0^2 \frac{x^2}{2}+\frac{x}{3} \,\mathrm{d}x= \frac{x^3}{6}+\frac{x^2}{6}\bigg|_0^2=\frac{8}{6}+\frac{4}{6}=2
+-30.67 + 2.04 + 0.969 * 50 -0.007*50^2 = 0.814
 \]</span></p>
-<p>If we wanted to use simulation to find this expectation, we could simulate variables from the marginal of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> and then add them together to create a new variable.</p>
-<p>The cdf for <span class="math inline">\(X\)</span> is <span class="math inline">\(\frac{x^2}{4}\)</span> so we simulate a random variable from <span class="math inline">\(X\)</span> by sampling from a random uniform and then taking the inverse of the cdf. For <span class="math inline">\(Y\)</span> the cdf is <span class="math inline">\(y^2\)</span> and do a similar simulation.</p>
-<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="MULTIEXP.html#cb380-1"></a><span class="kw">set.seed</span>(<span class="dv">1820</span>)</span>
-<span id="cb380-2"><a href="MULTIEXP.html#cb380-2"></a>new_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">2</span><span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)),<span class="dt">y=</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)))</span>
-<span id="cb380-3"><a href="MULTIEXP.html#cb380-3"></a>new_data <span class="op">%&gt;%</span></span>
-<span id="cb380-4"><a href="MULTIEXP.html#cb380-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">z=</span>x<span class="op">+</span>y) <span class="op">%&gt;%</span></span>
-<span id="cb380-5"><a href="MULTIEXP.html#cb380-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Ex=</span><span class="kw">mean</span>(x),<span class="dt">Ey=</span><span class="kw">mean</span>(y),<span class="dt">Explusy =</span> <span class="kw">mean</span>(z))</span></code></pre></div>
-<pre><code>##         Ex        Ey  Explusy
-## 1 1.338196 0.6695514 2.007748</code></pre>
-<p>We can see that <span class="math inline">\(E(X + Y) = E(X) + E(Y)\)</span>.</p>
-</div>
-<div id="exy-3" class="section level3">
-<h3><span class="header-section-number">15.4.3</span> E(XY)</h3>
-<p>Next, we have</p>
+<div class="sourceCode" id="cb1080"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1080-1"><a href="LOGREG.html#cb1080-1"></a><span class="kw">tidy</span>(mario_mod6) <span class="op">%&gt;%</span></span>
+<span id="cb1080-2"><a href="LOGREG.html#cb1080-2"></a><span class="st">  </span><span class="kw">select</span>(estimate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1080-3"><a href="LOGREG.html#cb1080-3"></a><span class="st">  </span><span class="kw">pull</span>() <span class="op">%*%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">50</span>,<span class="dv">50</span><span class="op">^</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##           [,1]
+## [1,] 0.8140013</code></pre>
+<p>Using the inverse transform of the logit function, we find the probability of the game being new given the predictor values.</p>
 <p><span class="math display">\[
-\mbox{E}(XY)=\int_0^2\int_0^1 xy*xy\,\mathrm{d}y \,\mathrm{d}x = \int_0^2 \frac{x^2y^3}{3}\bigg|_0^1 \,\mathrm{d}x = \int_0^2 \frac{x^2}{3}\,\mathrm{d}x
-\]</span>
-<span class="math display">\[
-=\frac{x^3}{9}\bigg|_0^2 = \frac{8}{9}
+\frac{\ e^{.814}\ }{\ 1\ +\ e^{.814}\ } = 0.693
 \]</span></p>
-<p>Or by simulating, we have:</p>
-<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="MULTIEXP.html#cb382-1"></a><span class="kw">set.seed</span>(<span class="dv">191</span>)</span>
-<span id="cb382-2"><a href="MULTIEXP.html#cb382-2"></a>new_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">2</span><span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)),<span class="dt">y=</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)))</span>
-<span id="cb382-3"><a href="MULTIEXP.html#cb382-3"></a>new_data <span class="op">%&gt;%</span></span>
-<span id="cb382-4"><a href="MULTIEXP.html#cb382-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">z=</span>x<span class="op">*</span>y) <span class="op">%&gt;%</span></span>
-<span id="cb382-5"><a href="MULTIEXP.html#cb382-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Ex=</span><span class="kw">mean</span>(x),<span class="dt">Ey=</span><span class="kw">mean</span>(y),<span class="dt">Extimesy =</span> <span class="kw">mean</span>(z))</span></code></pre></div>
-<pre><code>##        Ex        Ey  Extimesy
-## 1 1.33096 0.6640436 0.8837552</code></pre>
-</div>
-<div id="vxy" class="section level3">
-<h3><span class="header-section-number">15.4.4</span> V(XY)</h3>
-<p>Recall that the variance of a random variable is the expected value of the squared difference from its mean. So,
-<span class="math display">\[
-\mbox{Var}(XY)=\mbox{E}\left[\left(XY-\mbox{E}(XY)\right)^2\right]=\mbox{E}\left[\left(XY-\frac{8}{9}\right)^2\right]
-\]</span>
-<span class="math display">\[
-=\int_0^2\int_0^1 \left(xy-\frac{8}{9}\right)^2 xy\,\mathrm{d}y \,\mathrm{d}x =\int_0^2\int_0^1 \left(x^2y^2-\frac{16xy}{9}+\frac{64}{81}\right)xy\,\mathrm{d}y \,\mathrm{d}x 
-\]</span></p>
-<p>Yuck!! But we will continue because we are determined to integrate after so much Calculus in our core curriculum.</p>
-<p><span class="math display">\[
-=\int_0^2\int_0^1 \left(x^3y^3-\frac{16x^2y^2}{9}+\frac{64xy}{81}\right)\,\mathrm{d}y \,\mathrm{d}x 
-=\int_0^2 \frac{x^3y^4}{4}-\frac{16x^2y^3}{27}+\frac{32xy^2}{81}\bigg|_0^1 \,\mathrm{d}x = \int_0^2 \frac{x^3}{4}-\frac{16x^2}{27}+\frac{32x}{81}\,\mathrm{d}x 
-\]</span></p>
-<p><span class="math display">\[
-= \frac{x^4}{16}-\frac{16x^3}{81}+\frac{16x^2}{81}\bigg|_0^2 
-\]</span>
-<span class="math display">\[
-=\frac{16}{16}-\frac{128}{81}+\frac{64}{81}=0.2098765
-\]</span></p>
-<p>Next we will estimate the variance using a simulation:</p>
-<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="MULTIEXP.html#cb384-1"></a><span class="kw">set.seed</span>(<span class="dv">816</span>)</span>
-<span id="cb384-2"><a href="MULTIEXP.html#cb384-2"></a>new_data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x=</span><span class="dv">2</span><span class="op">*</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)),<span class="dt">y=</span><span class="kw">sqrt</span>(<span class="kw">runif</span>(<span class="dv">10000</span>)))</span>
-<span id="cb384-3"><a href="MULTIEXP.html#cb384-3"></a>new_data <span class="op">%&gt;%</span></span>
-<span id="cb384-4"><a href="MULTIEXP.html#cb384-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">z=</span>(x<span class="op">*</span>y<span class="dv">-8</span><span class="op">/</span><span class="dv">9</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></span>
-<span id="cb384-5"><a href="MULTIEXP.html#cb384-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Var =</span> <span class="kw">mean</span>(z))</span></code></pre></div>
-<pre><code>##         Var
-## 1 0.2098769</code></pre>
-<p>That was much easier. Notice that we are really just estimating these expectations with the simulations. The mathematical answers are the true population values while our simulations are sample estimates. In a few lessons we will discuss estimators in more detail.</p>
+<div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1082-1"><a href="LOGREG.html#cb1082-1"></a><span class="kw">exp</span>(.<span class="dv">814</span>)<span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(.<span class="dv">814</span>))</span></code></pre></div>
+<pre><code>## [1] 0.6929612</code></pre>
+<div id="diagnostics-for-logistic-regression" class="section level3">
+<h3><span class="header-section-number">31.3.1</span> Diagnostics for logistic regression</h3>
+<p>The assumptions for logistic regression and the diagnostic tools are similar to what we found for linear regression. However, with the binary nature of the outcome, we often need large data sets to check. We will not devote much time to performing diagnostics for logistic regression because we are interested in using it as a predictive model. The assumptions are:</p>
+<ol style="list-style-type: decimal">
+<li>Each predictor <span class="math inline">\(x_i\)</span> is linearly related to logit<span class="math inline">\((p_i)\)</span> if all other predictors are held constant. This is similar to our linear fit diagnostic in linear multiple regression.<br />
+</li>
+<li>Each outcome <span class="math inline">\(Y_i\)</span> is independent of the other outcomes.<br />
+</li>
+<li>There are no influential data points.<br />
+</li>
+<li>Multicollinearity is minimal.</li>
+</ol>
 </div>
 </div>
-<div id="covariancecorrelation" class="section level2">
-<h2><span class="header-section-number">15.5</span> Covariance/Correlation</h2>
-<p>We have discussed expected values of random variables and functions of random variables in a joint context. It would be helpful to have some kind of consistent measure to describe <em>how</em> two random variables are related to one another. <em>Covariance</em> and <em>correlation</em> do just that. It is important to understand that these are measures of a linear relationship between variables.</p>
-<p>Consider two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. (We could certainly consider more than two, but for demonstration, let’s consider only two for now). The covariance between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is denoted as <span class="math inline">\(\mbox{Cov}(X,Y)\)</span> and is found by:
-<span class="math display">\[
-\mbox{Cov}(X,Y)=\mbox{E}\left[(X-\mbox{E}(X))(Y-\mbox{E}(Y))\right]
-\]</span></p>
-<p>We can simplify this expression to make it a little more usable:
-<span class="math display">\[
-\mbox{Cov}(X,Y)=\mbox{E}\left[(X-\mbox{E}(X))(Y-\mbox{E}(Y))\right] = \mbox{E}\left[XY - Y\mbox{E}(X) - X\mbox{E}(Y) + \mbox{E}(X)\mbox{E}(Y)\right]
-\]</span>
-<span class="math display">\[
-\mbox{E}(XY) - \mbox{E}(Y\mbox{E}(X)) - \mbox{E}(X\mbox{E}(Y)) + \mbox{E}(X)\mbox{E}(Y) = \mbox{E}(XY)-\mbox{E}(X)\mbox{E}(Y)-\mbox{E}(X)\mbox{E}(Y)+\mbox{E}(X)\mbox{E}(Y)
-\]</span></p>
-<p>Thus,
-<span class="math display">\[
-\mbox{Cov}(X,Y)=\mbox{E}(XY)-\mbox{E}(X)\mbox{E}(Y)
-\]</span></p>
-<p>This expression is a little easier to use, since it’s typically straightforward to find each of these quantities.</p>
-<p>It is important to note that while variance is a positive quantity, covariance can be positive or negative. A positive covariance implies that as the value of one variable increases, the other tends to increase. This is a statement about a linear relationship. Likewise, a negative covariance implies that as the value of one variable increases, the other tends to decrease.</p>
-<blockquote>
-<p><em>Example</em>:<br />
-An example of positive covariance is human height and weight. As height increase, weight tends to increase. An example of negative covariance is gas mileage and car weight. As car weight increases, gas mileage decreases.</p>
-</blockquote>
-<p>Remember that if <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants, <span class="math inline">\(\mbox{E}(aX+b) =a\mbox{E}(X)+b\)</span> and <span class="math inline">\(\mbox{Var}(aX+b)=a^2\mbox{Var}(X)\)</span>. Similarly, if <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(d\)</span> are all constants,
-<span class="math display">\[
-\mbox{Cov}(aX+b,cY+d)=ac\mbox{Cov}(X,Y)
-\]</span></p>
-<p>One disadvantage of covariance is its dependence on the scales of the random variables involved. This makes it difficult to compare covariances of multiple sets of variables. <em>Correlation</em> avoids this problem. Correlation is a scaled version of covariance. It is denoted by <span class="math inline">\(\rho\)</span> and found by:
-<span class="math display">\[
-\rho = \frac{\mbox{Cov}(X,Y)}{\sqrt{\mbox{Var}(X)\mbox{Var}(Y)}}
-\]</span></p>
-<p>While covariance could take on any real number, correlation is bounded by -1 and 1. Two random variables with a correlation of 1 are said to be perfectly positively correlated, while a correlation of -1 implies perfect negative correlation. Two random variables with a correlation (and thus covariance) of 0 are said to be uncorrelated, that is they do not have a linear relationship but could have a non-linear relationship. This last point is important; random variables with no relationship will have a 0 covariance. However, a 0 covariance only implies that the random variables do not have a linear relationship.</p>
-<p>Let’s look at some plots, Figures <a href="MULTIEXP.html#fig:cor1-fig">15.1</a>, <a href="MULTIEXP.html#fig:cor2-fig">15.2</a>, <a href="MULTIEXP.html#fig:cor3-fig">15.3</a>, and <a href="MULTIEXP.html#fig:cor4-fig">15.4</a> of different correlations. Remember that the correlation we are calculating in this section is for the population, while the plots are showing sample points from a population.</p>
-<div class="figure" style="text-align: center"><span id="fig:cor1-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/cor1-fig-1.png" alt="Correlation of 1" width="672" />
-<p class="caption">
-Figure 15.1: Correlation of 1
-</p>
+<div id="confidence-intervals-2" class="section level2">
+<h2><span class="header-section-number">31.4</span> Confidence intervals</h2>
+<p>In this section we will generate confidence intervals. This section is experimental since we are not sure how <code>do()</code> from the <code>mosaic</code> package will work with the <code>glm()</code> function, but let’s experiment.</p>
+<div id="confidence-intervals-for-a-parameter" class="section level3">
+<h3><span class="header-section-number">31.4.1</span> Confidence intervals for a parameter</h3>
+<p>First, let’s use the <code>R</code> built-in function <code>confint()</code> to find the confidence interval for the simple logistic regression model coefficients.</p>
+<div class="sourceCode" id="cb1084"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1084-1"><a href="LOGREG.html#cb1084-1"></a><span class="kw">confint</span>(mario_mod4)</span></code></pre></div>
+<pre><code>## Waiting for profiling to be done...</code></pre>
+<pre><code>##                      2.5 %     97.5 %
+## (Intercept)    -15.4048022 -7.9648042
+## stock_photoyes   0.8888216  3.6268545
+## total_pr         0.1297024  0.2705395</code></pre>
+<p>These are not symmetric around the estimate because the method is using a profile-likelihood method. We can get symmetric intervals based on the central limit theorem using the function <code>confint.default()</code>.</p>
+<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1087-1"><a href="LOGREG.html#cb1087-1"></a><span class="kw">confint.default</span>(mario_mod4)</span></code></pre></div>
+<pre><code>##                      2.5 %     97.5 %
+## (Intercept)    -15.0107641 -7.6282654
+## stock_photoyes   0.7727450  3.4599054
+## total_pr         0.1236583  0.2632982</code></pre>
+<p>These results are close. We recommend using the profile-likelihood method.</p>
+<p>Now, let’s work with the <code>do()</code> function to determine if we can get similar results.</p>
+<div class="sourceCode" id="cb1089"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1089-1"><a href="LOGREG.html#cb1089-1"></a><span class="kw">do</span>(<span class="dv">1</span>)<span class="op">*</span>mario_mod4</span></code></pre></div>
+<pre><code>##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.31951       2.116325 0.1934783    1      1</code></pre>
+<div class="sourceCode" id="cb1091"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1091-1"><a href="LOGREG.html#cb1091-1"></a><span class="kw">tidy</span>(mario_mod4)</span></code></pre></div>
+<pre><code>## # A tibble: 3 x 5
+##   term           estimate std.error statistic       p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;
+## 1 (Intercept)     -11.3      1.88       -6.01 0.00000000185
+## 2 stock_photoyes    2.12     0.686       3.09 0.00202      
+## 3 total_pr          0.193    0.0356      5.43 0.0000000560</code></pre>
+<p>It looks like <code>do()</code> is performing as expected. Let’s now perform one resample to see what happens.</p>
+<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1093-1"><a href="LOGREG.html#cb1093-1"></a><span class="kw">do</span>(<span class="dv">1</span>)<span class="op">*</span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span>total_pr,</span>
+<span id="cb1093-2"><a href="LOGREG.html#cb1093-2"></a>                  <span class="dt">data=</span><span class="kw">resample</span>(mariokart),</span>
+<span id="cb1093-3"><a href="LOGREG.html#cb1093-3"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<pre><code>##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.51907       1.644894 0.2146462    1      1</code></pre>
+<p>Again, it looks like what we expect. Now let’s bootstrap the coefficients and summarize the results.</p>
+<div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1095-1"><a href="LOGREG.html#cb1095-1"></a><span class="kw">set.seed</span>(<span class="dv">5011</span>)</span>
+<span id="cb1095-2"><a href="LOGREG.html#cb1095-2"></a>results &lt;-<span class="st"> </span><span class="kw">do</span>(<span class="dv">1000</span>)<span class="op">*</span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span>total_pr,</span>
+<span id="cb1095-3"><a href="LOGREG.html#cb1095-3"></a>                  <span class="dt">data=</span><span class="kw">resample</span>(mariokart),</span>
+<span id="cb1095-4"><a href="LOGREG.html#cb1095-4"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1097-1"><a href="LOGREG.html#cb1097-1"></a><span class="kw">head</span>(results)</span></code></pre></div>
+<pre><code>##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.22155       1.665492 0.1986654    1      1
+## 2 -13.25708       1.889510 0.2371109    1      2
+## 3 -11.54544       2.871460 0.1867757    1      3
+## 4 -19.25785       5.816050 0.2829247    1      4
+## 5 -10.86631       3.255767 0.1672335    1      5
+## 6 -13.62425       1.842765 0.2533934    1      6</code></pre>
+<p>Now we will plot the bootstrap sampling distribution on the parameter associated with <code>total_pr</code>.</p>
+<div class="sourceCode" id="cb1099"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1099-1"><a href="LOGREG.html#cb1099-1"></a>results <span class="op">%&gt;%</span></span>
+<span id="cb1099-2"><a href="LOGREG.html#cb1099-2"></a><span class="st">  </span><span class="kw">gf_histogram</span>(<span class="op">~</span>total_pr,<span class="dt">fill=</span><span class="st">&quot;cyan&quot;</span>,<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1099-3"><a href="LOGREG.html#cb1099-3"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_bw</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb1099-4"><a href="LOGREG.html#cb1099-4"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">title=</span><span class="st">&quot;Bootstrap sampling distribtuion&quot;</span>,</span>
+<span id="cb1099-5"><a href="LOGREG.html#cb1099-5"></a>          <span class="dt">x=</span><span class="st">&quot;total price paramater estimate&quot;</span>)</span></code></pre></div>
+<p><img src="31-Logistic-Regression_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p>The printout from the logistic regression model assumes normality for the sampling distribution of the <code>total_pr</code> coefficient, but it appears to be positively skewed, skewed to the right. The 95% confidence interval found using <code>cdata()</code>.</p>
+<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1100-1"><a href="LOGREG.html#cb1100-1"></a><span class="kw">cdata</span>(<span class="op">~</span>total_pr,<span class="dt">data=</span>results)</span></code></pre></div>
+<pre><code>##          lower     upper central.p
+## 2.5% 0.1388783 0.3082659      0.95</code></pre>
+<p>This result is closer to the result from profile-likelihood. Since the interval does not include the value of zero, we can be 95% confident that it is not zero. This is close to what we found using the <code>R</code> function <code>confint()</code>.</p>
 </div>
-<div class="figure" style="text-align: center"><span id="fig:cor2-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/cor2-fig-1.png" alt="Correlation of .8" width="672" />
-<p class="caption">
-Figure 15.2: Correlation of .8
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:cor3-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/cor3-fig-1.png" alt="Correlation of .5" width="672" />
-<p class="caption">
-Figure 15.3: Correlation of .5
-</p>
-</div>
-<div class="figure" style="text-align: center"><span id="fig:cor4-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/cor4-fig-1.png" alt="Correlation of 0" width="672" />
-<p class="caption">
-Figure 15.4: Correlation of 0
-</p>
-</div>
-<div style="page-break-after: always;"></div>
-<div id="variance-of-sums" class="section level3">
-<h3><span class="header-section-number">15.5.1</span> Variance of sums</h3>
-<p>Suppose <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are two random variables. Then,
-<span class="math display">\[
-\mbox{Var}(X+Y)=\mbox{E}\left[(X+Y-\mbox{E}(X+Y))^2\right]=\mbox{E}[(X+Y)^2]-\left[\mbox{E}(X+Y)\right]^2
-\]</span></p>
-<p>In the last step, we are using the alternative expression for variance (<span class="math inline">\(\mbox{Var}(X)=\mbox{E}(X^2)-\mbox{E}(X)^2\)</span>). Evaluating:
-<span class="math display">\[
-\mbox{Var}(X+Y)=\mbox{E}(X^2)+\mbox{E}(Y^2)+2\mbox{E}(XY)-\mbox{E}(X)^2-\mbox{E}(Y)^2-2\mbox{E}(X)\mbox{E}(Y)
-\]</span></p>
-<p>Regrouping the terms:
-<span class="math display">\[
-=\mbox{E}(X^2)-\mbox{E}(X)^2+\mbox{E}(Y^2)-\mbox{E}(Y)^2+2\left(\mbox{E}(XY)-\mbox{E}(X)\mbox{E}(Y)\right)=\mbox{Var}(X)+\mbox{Var}(Y)+2\mbox{Cov}(X,Y)
-\]</span></p>
-<blockquote>
-<p><em>Example</em>:<br />
-Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be defined as above. Find <span class="math inline">\(\mbox{Cov}(X,Y)\)</span>, <span class="math inline">\(\rho\)</span>, and <span class="math inline">\(\mbox{Var}(X+Y)\)</span>.</p>
-</blockquote>
-<p><span class="math display">\[
-\mbox{Cov}(X,Y)=\mbox{E}(XY)-\mbox{E}(X)\mbox{E}(Y)=0.9-0.92*0.97=0.0076
-\]</span></p>
-<p><span class="math display">\[
-\rho=\frac{\mbox{Cov}(X,Y)}{\sqrt{\mbox{Var}(X)\mbox{Var}(Y)}}
-\]</span></p>
-<p>Quickly, <span class="math inline">\(\mbox{Var}(X)=\mbox{E}(X^2)-\mbox{E}(X)^2= 1.34-0.92^2 =0.4936\)</span> and <span class="math inline">\(\mbox{Var}(Y)=0.6691\)</span>. So,
-<span class="math display">\[
-\rho=\frac{0.0076}{\sqrt{0.4936*0.6691}}=0.013
-\]</span></p>
-<p>With such a low <span class="math inline">\(\rho\)</span>, we would say that <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are only slightly positively correlated.</p>
-<p><span class="math display">\[
-\mbox{Var}(X+Y)=\mbox{Var}(X)+\mbox{Var}(Y)+2\mbox{Cov}(X,Y)=0.4936+0.6691+2*0.0076=1.178
-\]</span></p>
+<div id="confidence-intervals-for-probability-of-success" class="section level3">
+<h3><span class="header-section-number">31.4.2</span> Confidence intervals for probability of success</h3>
+<p>We can use the results from the bootstrap to get a confidence interval on probability of success. We will calculate a confidence for a game with a stock photo and total price of $50. As a reminder, the probability of the game being new is 0.69.</p>
+<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1102-1"><a href="LOGREG.html#cb1102-1"></a><span class="kw">augment</span>(mario_mod5,</span>
+<span id="cb1102-2"><a href="LOGREG.html#cb1102-2"></a>        <span class="dt">newdata =</span> <span class="kw">tibble</span>(<span class="dt">stock_photo=</span><span class="st">&quot;yes&quot;</span>,<span class="dt">total_pr=</span><span class="dv">50</span>),</span>
+<span id="cb1102-3"><a href="LOGREG.html#cb1102-3"></a>        <span class="dt">type.predict =</span> <span class="st">&quot;response&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##   stock_photo total_pr .fitted
+##   &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
+## 1 yes               50   0.693</code></pre>
+<p>The key is to use the coefficient from each resampled data set to calculate a probability of success.</p>
+<div class="sourceCode" id="cb1104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1104-1"><a href="LOGREG.html#cb1104-1"></a><span class="kw">head</span>(results)</span></code></pre></div>
+<pre><code>##   Intercept stock_photoyes  total_pr .row .index
+## 1 -11.22155       1.665492 0.1986654    1      1
+## 2 -13.25708       1.889510 0.2371109    1      2
+## 3 -11.54544       2.871460 0.1867757    1      3
+## 4 -19.25785       5.816050 0.2829247    1      4
+## 5 -10.86631       3.255767 0.1672335    1      5
+## 6 -13.62425       1.842765 0.2533934    1      6</code></pre>
+<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1106-1"><a href="LOGREG.html#cb1106-1"></a>results_pred &lt;-<span class="st"> </span>results <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1106-2"><a href="LOGREG.html#cb1106-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pred=</span><span class="dv">1</span><span class="op">/</span>(<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>(Intercept<span class="op">+</span>stock_photoyes<span class="op">+</span><span class="dv">50</span><span class="op">*</span>total_pr))))</span></code></pre></div>
+<div class="sourceCode" id="cb1107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1107-1"><a href="LOGREG.html#cb1107-1"></a><span class="kw">cdata</span>(<span class="op">~</span>pred,<span class="dt">data=</span>results_pred)</span></code></pre></div>
+<pre><code>##        lower     upper central.p
+## 2.5% 0.50388 0.7445598      0.95</code></pre>
+<p>We are 95% confident that expected probability a game with a stock photo and a total price of $50 is between 50.4% and 74.4%.</p>
 </div>
 </div>
-<div id="independence-1" class="section level2">
-<h2><span class="header-section-number">15.6</span> Independence</h2>
-<p>Two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are said to be <em>independent</em> if their joint pmf/pdf is the product of their marginal pmfs/pdfs:
-<span class="math display">\[
-f_{X,Y}(x,y)=f_X(x)f_Y(y)
-\]</span></p>
-<p>If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent, then <span class="math inline">\(\mbox{Cov}(X,Y) = 0\)</span>. The converse is not necessarily true, however because they could have a non-linear relationship.</p>
-<p>For a discrete distribution, you must check that each cell, joint probabilities, are equal to the product of the marginal probability. Back to our joint pmf from above:</p>
-<p><span class="math display">\[
-\begin{array}{cc|ccc} &amp; &amp; &amp; \textbf{Y} &amp;
-\\ &amp; &amp; 0 &amp; 1 &amp; 2  
-\\&amp;\hline0 &amp; 0.10 &amp; 0.08 &amp; 0.11  
-\\\textbf{X} &amp;1 &amp; 0.18 &amp; 0.20 &amp; 0.12  
-\\&amp;2 &amp; 0.07 &amp; 0.05 &amp; 0.09 
-\end{array} 
-\]</span></p>
-<p>The marginal pmf of <span class="math inline">\(X\)</span> is</p>
-<p><span class="math display">\[
-f_X(x) = \left\{\begin{array}{ll} 0.29, &amp; x=0 \\
-0.50, &amp; x=1 \\
-0.21, &amp; x=2 \\
-0, &amp; \mbox{otherwise} 
-\end{array}\right.
-\]</span>
-The marginal pmf of <span class="math inline">\(Y\)</span> is</p>
-<p><span class="math display">\[
-f_Y(y) = \left\{\begin{array}{ll} 0.35, &amp; y=0 \\
-0.33, &amp; y=1 \\
-0.32, &amp; y=2 \\
-0, &amp; \mbox{otherwise} 
-\end{array}\right.
-\]</span>
-Checking the first cell, we immediately see that <span class="math inline">\(f_{X,Y}(x=0,y=0) \neq f_{X}(x=0)\cdot f_{Y}(y=0)\)</span> so <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent.</p>
-<p>An easy way to determine if continuous variables are independent is to first check that the domain only contains constants, it is rectangular, and second that the joint pdf can be written as a product of a function of <span class="math inline">\(X\)</span> only and a function of <span class="math inline">\(Y\)</span> only.</p>
-<p>Thus for our examples above even though the domains were rectangular, in <span class="math inline">\(f(x,y)=xy\)</span>, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> were independent while <span class="math inline">\(f(x,y)=x+y\)</span> they were not.</p>
+<div id="summary-4" class="section level2">
+<h2><span class="header-section-number">31.5</span> Summary</h2>
+<p>In this chapter, we learned how to extend linear models to outcomes that are binary. We built and interpreted models. We also used resampling to find confidence intervals.</p>
 </div>
-<div id="conditional-expectation" class="section level2">
-<h2><span class="header-section-number">15.7</span> Conditional expectation</h2>
-<p>An important idea in graph theory, network analysis, Bayesian networks, and queuing theory is conditional expectation. We will only briefly introduce the ideas here so that you have a basic understanding. This does not imply it is not an important topic.</p>
-<p>Let’s start with a simple example to illustrate the ideas.</p>
-<blockquote>
-<p><em>Example</em>:<br />
-Sam will read either one chapter of his history book or one chapter of his philosophy book. If the number of misprints in a chapter of his history book is Poisson with mean 2 and if the number of misprints in a chapter of his philosophy book is Poisson with mean 5, then assuming Sam is equally likely to choose either book, what is the expected number of misprints that Sam will find?</p>
-</blockquote>
-<p>Note: in the next lesson we are working with transformations and could attack the problem using that method.</p>
-<p>First let’s use simulation to get an idea what value the answer should be and then use algebraic techniques and definitions we have learned in this course.</p>
-<p>Simulate 5000 reads from the history book and 5000 from philosophy and combine:</p>
-<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="MULTIEXP.html#cb386-1"></a><span class="kw">set.seed</span>(<span class="dv">2011</span>)</span>
-<span id="cb386-2"><a href="MULTIEXP.html#cb386-2"></a>my_data&lt;-<span class="kw">data.frame</span>(<span class="dt">misprints=</span><span class="kw">c</span>(<span class="kw">rpois</span>(<span class="dv">5000</span>,<span class="dv">2</span>),<span class="kw">rpois</span>(<span class="dv">5000</span>,<span class="dv">5</span>)))</span></code></pre></div>
-<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="MULTIEXP.html#cb387-1"></a><span class="kw">head</span>(my_data)</span></code></pre></div>
-<pre><code>##   misprints
-## 1         1
-## 2         1
-## 3         2
-## 4         1
-## 5         2
-## 6         4</code></pre>
-<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="MULTIEXP.html#cb389-1"></a><span class="kw">dim</span>(my_data)</span></code></pre></div>
-<pre><code>## [1] 10000     1</code></pre>
-<p>Figure <a href="MULTIEXP.html#fig:hist151-fig">15.5</a> is a histogram of the data.</p>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="MULTIEXP.html#cb391-1"></a><span class="kw">gf_histogram</span>(<span class="op">~</span>misprints,<span class="dt">data=</span>my_data,<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="op">-</span><span class="fl">0.5</span>, <span class="fl">15.5</span>, <span class="dt">by=</span><span class="dv">1</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb391-2"><a href="MULTIEXP.html#cb391-2"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb391-3"><a href="MULTIEXP.html#cb391-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x=</span><span class="st">&quot;Number of Misprints&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:hist151-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/hist151-fig-1.png" alt="Misprints from combined history and philosphy books." width="672" />
-<p class="caption">
-Figure 15.5: Misprints from combined history and philosphy books.
-</p>
-</div>
-<p>Or as a bar chart in Figure <a href="MULTIEXP.html#fig:bar151-fig">15.6</a></p>
-<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="MULTIEXP.html#cb392-1"></a><span class="kw">gf_bar</span>(<span class="op">~</span>misprints,<span class="dt">data=</span>my_data)<span class="op">%&gt;%</span></span>
-<span id="cb392-2"><a href="MULTIEXP.html#cb392-2"></a><span class="st">  </span><span class="kw">gf_theme</span>(<span class="kw">theme_classic</span>()) <span class="op">%&gt;%</span></span>
-<span id="cb392-3"><a href="MULTIEXP.html#cb392-3"></a><span class="st">  </span><span class="kw">gf_labs</span>(<span class="dt">x=</span><span class="st">&quot;Number of Misprints&quot;</span>)</span></code></pre></div>
-<div class="figure"><span id="fig:bar151-fig"></span>
-<img src="15-Multivariate-Expectation_files/figure-html/bar151-fig-1.png" alt="Misprints from combined history and philosphy books as a bar chart." width="672" />
-<p class="caption">
-Figure 15.6: Misprints from combined history and philosphy books as a bar chart.
-</p>
-</div>
-<p>And now find the average.</p>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="MULTIEXP.html#cb393-1"></a><span class="kw">mean</span>(<span class="op">~</span>misprints,<span class="dt">data=</span>my_data)</span></code></pre></div>
-<pre><code>## [1] 3.4968</code></pre>
-<p>Now for a mathematical solution. Let <span class="math inline">\(X\)</span> stand for the number of misprints and <span class="math inline">\(Y\)</span> for the book, to make <span class="math inline">\(Y\)</span> a random variable let’s call 0 history and 1 philosophy. Then <span class="math inline">\(E[X|Y]\)</span> is the expected number of misprints given the book. This is a conditional expectation. For example <span class="math inline">\(E[X|Y=0]\)</span> is the expected number of misprints in the history book.</p>
-<p>Now here is the tricky part, without specifying a value of <span class="math inline">\(Y\)</span>, called a realization, this expectation function is a random variable that depends on <span class="math inline">\(Y\)</span>. In other words, if we don’t know the book, the expected number of misprints depends on <span class="math inline">\(Y\)</span> and thus is a random variable. If we take the expected value of this random variable we get</p>
-<p><span class="math display">\[E[X]=E[E[X|Y]]\]</span></p>
-<p>The inner expectation in the right hand side is for the conditional distribution and the outer is for the marginal with respect to <span class="math inline">\(Y\)</span>. This seems confusing, so let’s go back to our example.</p>
-<p><span class="math display">\[E[X]=E[E[X|Y]]\]</span>
-<span class="math display">\[=E[X|Y=0] \cdot \mbox{P}(Y=0)+E[X|Y=1] \cdot \mbox{P}(Y=1)\]</span>
-<span class="math display">\[=2*\frac{1}{2}+5*\frac{1}{2}=\frac{7}{2}=3.5\]</span>
-These ideas are going to be similar for continuous random variables. Note that we can also use conditional expectations to find probabilities but that is beyond the scope of this course.</p>
-</div>
-<div id="homework-problems-14" class="section level2">
-<h2><span class="header-section-number">15.8</span> Homework Problems</h2>
-<p>1. Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be continuous random variables with joint pdf:
-<span class="math display">\[
-f_{X,Y}(x,y)=x + y
-\]</span></p>
-<p>where <span class="math inline">\(0 \leq x \leq 1\)</span> and <span class="math inline">\(0 \leq y \leq 1\)</span>.</p>
+<div id="homework-problems-30" class="section level2">
+<h2><span class="header-section-number">31.6</span> Homework Problems</h2>
+<p>1. Possum classification</p>
+<p>Let’s investigate the <code>possum</code> data set again. This time we want to model a binary outcome variable. As a reminder, the common brushtail possum of the Australia region is a bit cuter than its distant cousin, the American opossum. We consider 104 brushtail possums from two regions in Australia, where the possums may be considered a random sample from the population. The first region is Victoria, which is in the eastern half of Australia and traverses the southern coast. The second region consists of New South Wales and Queensland, which make up eastern and northeastern Australia.</p>
+<p>We use logistic regression to differentiate between possums in these two regions. The outcome variable, called <code>pop</code>, takes value <code>Vic</code> when a possum is from Victoria and <code>other</code> when it is from New South Wales or Queensland. We consider five predictors: <code>sex</code>, <code>head_l</code>, <code>skull_w</code>, <code>total_l</code>, and <code>tail_l</code>.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Find <span class="math inline">\(\mbox{E}(X)\)</span> and <span class="math inline">\(\mbox{E}(Y)\)</span>.<br />
+<li>Explore the data by making histograms or boxplots of the quantitative variables, and bar charts of the discrete variables.<br />
+Are there any outliers that are likely to have a very large influence on the logistic regression model?<br />
 </li>
-<li>Find <span class="math inline">\(\mbox{Var}(X)\)</span> and <span class="math inline">\(\mbox{Var}(Y)\)</span>.<br />
+<li>Build a logistic regression model with all the variables. Report a summary of the model.<br />
 </li>
-<li>Find <span class="math inline">\(\mbox{Cov}(X,Y)\)</span> and <span class="math inline">\(\rho\)</span>. Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent?<br />
+<li>Using the p-values decide if you want to remove a variable(s) and if so build that model.<br />
 </li>
-<li>Find <span class="math inline">\(\mbox{Var}(3X+2Y)\)</span>.</li>
+<li>For any variable you decide to remove, build a 95% confidence interval for the parameter.<br />
+</li>
+<li>Explain why the remaining parameter estimates change between the two models.<br />
+</li>
+<li>Write out the form of the model. Also identify which of the following variables are positively associated (when controlling for other variables) with a possum being from Victoria: <code>head_l</code>, <code>skull_w</code>, <code>total_l</code>, and <code>tail_l</code>.<br />
+</li>
+<li>Suppose we see a brushtail possum at a zoo in the US, and a sign says the possum had been captured in the wild in Australia, but it doesn’t say which part of Australia. However, the sign does indicate that the possum is male, its skull is about 63 mm wide, its tail is 37 cm long, and its total length is 83 cm. What is the reduced model’s computed probability that this possum is from Victoria? How confident are you in the model’s accuracy of this probability calculation?</li>
 </ol>
-<p> </p>
-<p>2. Optional - not difficult but does have small Calc III idea. Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> be continuous random variables with joint pmf:
-<span class="math display">\[
-f_{X,Y}(x,y)=1
-\]</span></p>
+<p>2. Medical school admission</p>
+<p>The file <code>MedGPA.csv</code> in the <code>data</code> folder has information on medical school admission status and GPA and standardized test scores gathered on 55 medical school applicants from a liberal arts college in the Midwest.</p>
+<p>The variables are:</p>
+<p><code>Accept Status</code>: A=accepted to medical school or D=denied admission<br />
+<code>Acceptance</code>: Indicator for Accept: 1=accepted or 0=denied<br />
+<code>Sex</code>: F=female or M=male<br />
+<code>BCPM</code>: Bio/Chem/Physics/Math grade point average<br />
+<code>GPA</code>: College grade point average<br />
+<code>VR</code>: Verbal reasoning (subscore)<br />
+<code>PS</code>: Physical sciences (subscore)<br />
+<code>WS</code>: Writing sample (subcore)<br />
+<code>BS</code>: Biological sciences (subscore)<br />
+<code>MCAT</code>: Score on the MCAT exam (sum of CR+PS+WS+BS)<br />
+<code>Apps</code>: Number of medical schools applied to</p>
+<ol style="list-style-type: lower-alpha">
+<li>Build a logistic regression model to predict if a student where denied admission from <code>GPA</code> and <code>Sex</code>.<br />
+</li>
+<li>Generate a 95% confidence interval for the coefficient associated with <code>Sex</code>.<br />
+</li>
+<li>Fit a model with a polynomial of degree 2 in the <code>GPA</code>.<br />
+</li>
+<li>Try to add different predictors to come up with your best model.<br />
+</li>
+<li>Generate a confusion matrix for the best model you have developed.<br />
+</li>
+<li>Find a 95% confidence interval for the probability a female student with a 3.5 GPS, a <code>BCPM</code> of 3.8, a verbal reasoning score of 10, a physical sciences score of 9, a writing sample score of 8, a biological score of 10, a MCAT score of 40, and who applied to 5 medical schools.</li>
+</ol>
 
 </div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="103">
+<li id="fn103"><p>Diez DM, Barr CD, and etinkaya-Rundel M. 2012. <code>openintro</code>: OpenIntro data sets and supplemental functions. <a href="http://cran.r-project.org/web/packages/openintro" class="uri">http://cran.r-project.org/web/packages/openintro</a><a href="LOGREG.html#fnref103" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="MULTIDISTS.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="TRANS.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="LRMULTI.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

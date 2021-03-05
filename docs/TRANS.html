@@ -26,7 +26,7 @@
 <meta name="author" content="Bradley Warner" />
 
 
-<meta name="date" content="2021-02-22" />
+<meta name="date" content="2021-03-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -144,6 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#prerequisites"><i class="fa fa-check"></i><b>0.3</b> Prerequisites</a></li>
 <li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#packages"><i class="fa fa-check"></i><b>0.4</b> Packages</a></li>
 <li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#acknowledgements"><i class="fa fa-check"></i><b>0.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#file-creation-information"><i class="fa fa-check"></i><b>0.6</b> File Creation Information</a></li>
 </ul></li>
 <li class="part"><span><b>I Descriptive Statistical Modeling</b></span></li>
 <li class="chapter" data-level="1" data-path="CS1.html"><a href="CS1.html"><i class="fa fa-check"></i><b>1</b> Case Study</a><ul>
@@ -622,6 +623,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="30.5" data-path="LRMULTI.html"><a href="LRMULTI.html#homework-problems-29"><i class="fa fa-check"></i><b>30.5</b> Homework Problems</a></li>
 </ul></li>
+<li class="chapter" data-level="31" data-path="LOGREG.html"><a href="LOGREG.html"><i class="fa fa-check"></i><b>31</b> Logistic Regression</a><ul>
+<li class="chapter" data-level="31.1" data-path="LOGREG.html"><a href="LOGREG.html#objectives-29"><i class="fa fa-check"></i><b>31.1</b> Objectives</a></li>
+<li class="chapter" data-level="31.2" data-path="LOGREG.html"><a href="LOGREG.html#logistic-regression-introduction"><i class="fa fa-check"></i><b>31.2</b> Logistic regression introduction</a><ul>
+<li class="chapter" data-level="31.2.1" data-path="LOGREG.html"><a href="LOGREG.html#mario-kart-data"><i class="fa fa-check"></i><b>31.2.1</b> Mario Kart data</a></li>
+<li class="chapter" data-level="31.2.2" data-path="LOGREG.html"><a href="LOGREG.html#analyzing-contingency-table"><i class="fa fa-check"></i><b>31.2.2</b> Analyzing contingency table</a></li>
+<li class="chapter" data-level="31.2.3" data-path="LOGREG.html"><a href="LOGREG.html#modeling-the-probability-of-an-event"><i class="fa fa-check"></i><b>31.2.3</b> Modeling the probability of an event</a></li>
+<li class="chapter" data-level="31.2.4" data-path="LOGREG.html"><a href="LOGREG.html#first-model---intercept-only"><i class="fa fa-check"></i><b>31.2.4</b> First model - intercept only</a></li>
+<li class="chapter" data-level="31.2.5" data-path="LOGREG.html"><a href="LOGREG.html#second-model---stock_photo"><i class="fa fa-check"></i><b>31.2.5</b> Second model - stock_photo</a></li>
+<li class="chapter" data-level="31.2.6" data-path="LOGREG.html"><a href="LOGREG.html#interpreting-the-coefficients"><i class="fa fa-check"></i><b>31.2.6</b> Interpreting the coefficients</a></li>
+<li class="chapter" data-level="31.2.7" data-path="LOGREG.html"><a href="LOGREG.html#comparing-models"><i class="fa fa-check"></i><b>31.2.7</b> Comparing models</a></li>
+</ul></li>
+<li class="chapter" data-level="31.3" data-path="LOGREG.html"><a href="LOGREG.html#multiple-logistic-regression"><i class="fa fa-check"></i><b>31.3</b> Multiple logistic regression</a><ul>
+<li class="chapter" data-level="31.3.1" data-path="LOGREG.html"><a href="LOGREG.html#diagnostics-for-logistic-regression"><i class="fa fa-check"></i><b>31.3.1</b> Diagnostics for logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="31.4" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-2"><i class="fa fa-check"></i><b>31.4</b> Confidence intervals</a><ul>
+<li class="chapter" data-level="31.4.1" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-for-a-parameter"><i class="fa fa-check"></i><b>31.4.1</b> Confidence intervals for a parameter</a></li>
+<li class="chapter" data-level="31.4.2" data-path="LOGREG.html"><a href="LOGREG.html#confidence-intervals-for-probability-of-success"><i class="fa fa-check"></i><b>31.4.2</b> Confidence intervals for probability of success</a></li>
+</ul></li>
+<li class="chapter" data-level="31.5" data-path="LOGREG.html"><a href="LOGREG.html#summary-4"><i class="fa fa-check"></i><b>31.5</b> Summary</a></li>
+<li class="chapter" data-level="31.6" data-path="LOGREG.html"><a href="LOGREG.html#homework-problems-30"><i class="fa fa-check"></i><b>31.6</b> Homework Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -787,10 +810,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class        min        Q1    median        Q3      max      mean
-## ...1 sqrt numeric 0.01278157 0.4984085 0.7071093 0.8653159 0.999994 0.6670095
+##      name   class        min       Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.00474163 0.498331 0.7073637 0.8665219 0.9999828 0.6653603
 ##             sd     n missing
-## ...1 0.2359595 10000       0</code></pre>
+## ...1 0.2373444 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -820,9 +843,9 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -4.359751 -0.6963352 -0.3465701 -0.1446606 -5.977613e-06
+## ...1    y numeric -5.351374 -0.6964907 -0.3462103 -0.1432679 -1.716923e-05
 ##            mean        sd     n missing
-## ...1 -0.4988322 0.4954362 10000       0</code></pre>
+## ...1 -0.5037316 0.5039057 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
