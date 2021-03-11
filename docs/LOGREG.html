@@ -1265,7 +1265,7 @@ Interpret the coefficient associated with the predictor <code>total_pr</code>.</
 <span id="cb1093-2"><a href="LOGREG.html#cb1093-2"></a>                  <span class="dt">data=</span><span class="kw">resample</span>(mariokart),</span>
 <span id="cb1093-3"><a href="LOGREG.html#cb1093-3"></a>                 <span class="dt">family=</span><span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
 <pre><code>##   Intercept stock_photoyes  total_pr .row .index
-## 1 -8.243471         2.6684 0.1207973    1      1</code></pre>
+## 1 -15.16621       1.861249 0.2844039    1      1</code></pre>
 <p>Again, it looks like what we expect. Now let’s bootstrap the coefficients and summarize the results.</p>
 <div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1095-1"><a href="LOGREG.html#cb1095-1"></a><span class="kw">set.seed</span>(<span class="dv">5011</span>)</span>
 <span id="cb1095-2"><a href="LOGREG.html#cb1095-2"></a>results &lt;-<span class="st"> </span><span class="kw">do</span>(<span class="dv">1000</span>)<span class="op">*</span><span class="kw">glm</span>(cond<span class="op">==</span><span class="st">&quot;new&quot;</span><span class="op">~</span>stock_photo<span class="op">+</span>total_pr,</span>
@@ -1419,7 +1419,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["Computational Probability and Statistics.pdf", "Computational Probability and Statistics.epub"],
+"download": null,
 "toc": {
 "collapse": "section"
 },

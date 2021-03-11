@@ -810,10 +810,10 @@ f_Y(y)=f_X(\sqrt{y})\bigg|\frac{\,\mathrm{d}}{\,\mathrm{d}y} \sqrt{y}\bigg| = \f
 <div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="TRANS.html#cb401-1"></a><span class="kw">inspect</span>(results)</span></code></pre></div>
 <pre><code>## 
 ## quantitative variables:  
-##      name   class         min        Q1    median       Q3       max      mean
-## ...1 sqrt numeric 0.007021746 0.4943233 0.7123025 0.870485 0.9999298 0.6672463
+##      name   class         min        Q1    median        Q3       max      mean
+## ...1 sqrt numeric 0.006942917 0.4989937 0.7057995 0.8641133 0.9999211 0.6660991
 ##             sd     n missing
-## ...1 0.2392709 10000       0</code></pre>
+## ...1 0.2346966 10000       0</code></pre>
 <p>Figure <a href="TRANS.html#fig:dens161-fig">16.2</a> is a density plot of the simulated original random variable.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="TRANS.html#cb403-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb403-2"><a href="TRANS.html#cb403-2"></a><span class="st">  </span><span class="kw">gf_density</span>(<span class="op">~</span>sqrt,<span class="dt">xlab=</span><span class="st">&quot;X&quot;</span>) <span class="op">%&gt;%</span></span>
@@ -843,9 +843,9 @@ Figure 16.3: The density plot of the transformed random variable from the simula
 <pre><code>## 
 ## quantitative variables:  
 ##      name   class       min         Q1     median         Q3           max
-## ...1    y numeric -4.958743 -0.7045656 -0.3392527 -0.1387047 -7.023841e-05
-##            mean        sd     n missing
-## ...1 -0.5028694 0.5117926 10000       0</code></pre>
+## ...1    y numeric -4.970033 -0.6951618 -0.3484241 -0.1460514 -7.888878e-05
+##            mean       sd     n missing
+## ...1 -0.4996527 0.495772 10000       0</code></pre>
 </div>
 <div id="multivariate-transformations" class="section level3">
 <h3><span class="header-section-number">16.2.6</span> Multivariate Transformations</h3>
@@ -980,7 +980,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["Computational Probability and Statistics.pdf", "Computational Probability and Statistics.epub"],
+"download": null,
 "toc": {
 "collapse": "section"
 },

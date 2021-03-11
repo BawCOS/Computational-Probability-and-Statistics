@@ -10,7 +10,7 @@ bookdown::gitbook:
     edit : null
     sharing: null
     info: no
-    download: ["pdf", "epub"]
+    download: no
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex
