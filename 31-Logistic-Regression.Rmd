@@ -2,7 +2,7 @@
 
 ## Objectives
 
-1) Using `R`, conduct logistic regression and interpret the output, check assumptions, and perform model selection.  
+1) Using `R`, conduct logistic regression and interpret the output and perform model selection.  
 2) Write the logistic regression model and predict outputs for given inputs.  
 3) Use the bootstrap to find confidence intervals for parameter estimates and predictions.  
 
@@ -638,11 +638,12 @@ The variables are:
 `Apps`:	Number of medical schools applied to  
 
 a. Build a logistic regression model to predict if a student where denied admission from `GPA` and `Sex`.  
-b. Generate a 95% confidence interval for the coefficient associated with `Sex`.  
-c. Fit a model with a polynomial of degree 2 in the `GPA`.  
-d. Try to add different predictors to come up with your best model.  
-e. Generate a confusion matrix for the best model you have developed.  
-f. Find a 95% confidence interval for the probability a female student with a 3.5 GPS, a `BCPM` of 3.8, a verbal reasoning score of 10, a physical sciences score of 9, a writing sample score of 8, a biological score of 10, a MCAT score of 40, and who applied to 5 medical schools.  
+b. Generate a 95% confidence interval for the coefficient associated with `GPA`.  
+c. Fit a model with a polynomial of degree 2 in the `GPA`. Drop `Sex` from the model.  Does a quadratic fit improve the model?   
+d. Fit a model with just `GPA` and interpret the coefficient.  
+e. Try to add different predictors to come up with your best model.  
+f. Generate a confusion matrix for the best model you have developed.  
+g. Find a 95% confidence interval for the probability a female student with a 3.5 GPA, a `BCPM` of 3.8, a verbal reasoning score of 10, a physical sciences score of 9, a writing sample score of 8, a biological score of 10, a MCAT score of 40, and who applied to 5 medical schools.  
 
 
 
