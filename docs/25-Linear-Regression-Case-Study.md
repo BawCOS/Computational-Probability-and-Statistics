@@ -450,9 +450,9 @@ augment(m1) %>%
 
 ```
 ## # A tibble: 1 x 8
-##   pf_score pf_expression_control .fitted .resid .std.resid   .hat .sigma .cooksd
-##      <dbl>                 <dbl>   <dbl>  <dbl>      <dbl>  <dbl>  <dbl>   <dbl>
-## 1     8.63                  6.75    7.86  0.767       1.08 0.0421  0.727  0.0254
+##   pf_score pf_expression_control .fitted .resid   .hat .sigma .cooksd .std.resid
+##      <dbl>                 <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>      <dbl>
+## 1     8.63                  6.75    7.86  0.767 0.0421  0.727  0.0254       1.08
 ```
 
 ## Model diagnostics

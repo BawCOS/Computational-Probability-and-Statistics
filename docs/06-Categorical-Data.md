@@ -40,13 +40,11 @@ email %>%
 ## 
 ## categorical variables:  
 ##     name  class levels    n missing
-## 1 number factor      3 3921       0
+## 1   spam factor      2 3921       0
+## 2 number factor      3 3921       0
 ##                                    distribution
-## 1 small (72.1%), none (14%) ...                
-## 
-## quantitative variables:  
-##      name   class min Q1 median Q3 max       mean        sd    n missing
-## ...1 spam numeric   0  0      0  0   1 0.09359857 0.2913066 3921       0
+## 1 0 (90.6%), 1 (9.4%)                          
+## 2 small (72.1%), none (14%) ...
 ```
 
 Notice the use of the `pipe` operator and how it adds to the ease of reading the code. The `select()` function allows us to narrow the variables down to the two of interest. Then `inspect()` gives us information about those variables. We read from top line; we start with the data set `email`, input it into `select()` and select variables from it, and then use `inspect()` to summarize the variables.

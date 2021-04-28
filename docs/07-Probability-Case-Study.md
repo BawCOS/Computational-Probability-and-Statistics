@@ -415,13 +415,6 @@ inspect(Births)
 ```
 
 ```
-## Warning: `data_frame()` is deprecated as of tibble 1.1.0.
-## Please use `tibble()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
-```
-
-```
 ## 
 ## categorical variables:  
 ##   name   class levels    n missing
@@ -498,10 +491,6 @@ Births %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 20 x 2
 ##     year     n
 ##    <int> <int>
@@ -535,10 +524,6 @@ Births %>%
   filter(!(year %in% c(1972,1976,1980,1984,1988))) %>%
   group_by(year) %>%
   summarise(n=n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```

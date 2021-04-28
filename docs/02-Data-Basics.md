@@ -28,40 +28,40 @@ Each row in the table represents a single email or **case**.^[A case is also som
 <caption>(\#tab:db1-tab)First 5 rows of email data frame</caption>
  <thead>
   <tr>
-   <th style="text-align:right;"> spam </th>
+   <th style="text-align:left;"> spam </th>
    <th style="text-align:right;"> num_char </th>
    <th style="text-align:right;"> line_breaks </th>
-   <th style="text-align:right;"> format </th>
+   <th style="text-align:left;"> format </th>
    <th style="text-align:left;"> number </th>
   </tr>
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
    <td style="text-align:right;"> 21.705 </td>
    <td style="text-align:right;"> 551 </td>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
    <td style="text-align:left;"> small </td>
   </tr>
   <tr>
-   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
    <td style="text-align:right;"> 7.011 </td>
    <td style="text-align:right;"> 183 </td>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
    <td style="text-align:left;"> big </td>
   </tr>
   <tr>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
    <td style="text-align:right;"> 0.631 </td>
    <td style="text-align:right;"> 28 </td>
-   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
    <td style="text-align:left;"> none </td>
   </tr>
   <tr>
-   <td style="text-align:right;"> 0 </td>
+   <td style="text-align:left;"> 0 </td>
    <td style="text-align:right;"> 15.829 </td>
    <td style="text-align:right;"> 242 </td>
-   <td style="text-align:right;"> 1 </td>
+   <td style="text-align:left;"> 1 </td>
    <td style="text-align:left;"> small </td>
   </tr>
 </tbody>
@@ -82,21 +82,21 @@ head(email50,n=10)
 
 ```
 ## # A tibble: 10 x 21
-##     spam to_multiple  from    cc sent_email time                image attach
-##    <dbl>       <dbl> <dbl> <int>      <dbl> <dttm>              <dbl>  <dbl>
-##  1     0           0     1     0          1 2012-01-04 06:19:16     0      0
-##  2     0           0     1     0          0 2012-02-16 13:10:06     0      0
-##  3     1           0     1     4          0 2012-01-04 08:36:23     0      2
-##  4     0           0     1     0          0 2012-01-04 10:49:52     0      0
-##  5     0           0     1     0          0 2012-01-27 02:34:45     0      0
-##  6     0           0     1     0          0 2012-01-17 10:31:57     0      0
-##  7     0           0     1     0          0 2012-03-17 22:18:55     0      0
-##  8     0           0     1     0          1 2012-03-31 07:58:56     0      0
-##  9     0           0     1     1          1 2012-01-10 18:57:54     0      0
-## 10     0           0     1     0          0 2012-01-07 12:29:16     0      0
+##    spam  to_multiple from     cc sent_email time                image attach
+##    <fct> <fct>       <fct> <int> <fct>      <dttm>              <dbl>  <dbl>
+##  1 0     0           1         0 1          2012-01-04 06:19:16     0      0
+##  2 0     0           1         0 0          2012-02-16 13:10:06     0      0
+##  3 1     0           1         4 0          2012-01-04 08:36:23     0      2
+##  4 0     0           1         0 0          2012-01-04 10:49:52     0      0
+##  5 0     0           1         0 0          2012-01-27 02:34:45     0      0
+##  6 0     0           1         0 0          2012-01-17 10:31:57     0      0
+##  7 0     0           1         0 0          2012-03-17 22:18:55     0      0
+##  8 0     0           1         0 1          2012-03-31 07:58:56     0      0
+##  9 0     0           1         1 1          2012-01-10 18:57:54     0      0
+## 10 0     0           1         0 0          2012-01-07 12:29:16     0      0
 ## # ... with 13 more variables: dollar <dbl>, winner <fct>, inherit <dbl>,
 ## #   viagra <dbl>, password <dbl>, num_char <dbl>, line_breaks <int>,
-## #   format <dbl>, re_subj <dbl>, exclaim_subj <dbl>, urgent_subj <dbl>,
+## #   format <fct>, re_subj <fct>, exclaim_subj <dbl>, urgent_subj <fct>,
 ## #   exclaim_mess <dbl>, number <fct>
 ```
 
@@ -196,15 +196,15 @@ head(county_M377,n=7)
 
 ```
 ## # A tibble: 7 x 10
-##   name  state pop2000 pop2010 fed_spend poverty homeownership multi_unit income
-##   <chr> <chr>   <dbl>   <dbl>     <dbl>   <dbl>         <dbl>      <dbl>  <dbl>
-## 1 Auta~ Alab~   43671   54571      6.07    10.6          77.5        7.2  24568
-## 2 Bald~ Alab~  140415  182265      6.14    12.2          76.7       22.6  26469
-## 3 Barb~ Alab~   29038   27457      8.75    25            68         11.1  15875
-## 4 Bibb~ Alab~   20826   22915      7.12    12.6          82.9        6.6  19918
-## 5 Blou~ Alab~   51024   57322      5.13    13.4          82          3.7  21070
-## 6 Bull~ Alab~   11714   10914      9.97    25.3          76.9        9.9  20289
-## 7 Butl~ Alab~   21399   20947      9.31    25            69         13.7  16916
+##   name   state pop2000 pop2010 fed_spend poverty homeownership multi_unit income
+##   <chr>  <chr>   <dbl>   <dbl>     <dbl>   <dbl>         <dbl>      <dbl>  <dbl>
+## 1 Autau~ Alab~   43671   54571      6.07    10.6          77.5        7.2  24568
+## 2 Baldw~ Alab~  140415  182265      6.14    12.2          76.7       22.6  26469
+## 3 Barbo~ Alab~   29038   27457      8.75    25            68         11.1  15875
+## 4 Bibb ~ Alab~   20826   22915      7.12    12.6          82.9        6.6  19918
+## 5 Bloun~ Alab~   51024   57322      5.13    13.4          82          3.7  21070
+## 6 Bullo~ Alab~   11714   10914      9.97    25.3          76.9        9.9  20289
+## 7 Butle~ Alab~   21399   20947      9.31    25            69         13.7  16916
 ## # ... with 1 more variable: med_income <dbl>
 ```
 

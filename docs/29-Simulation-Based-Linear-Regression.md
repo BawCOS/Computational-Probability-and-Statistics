@@ -534,7 +534,7 @@ str(loans100)
 ```
 
 ```
-## tibble [98 x 2] (S3: tbl_df/tbl/data.frame)
+## tibble[,2] [98 x 2] (S3: tbl_df/tbl/data.frame)
 ##  $ interest_rate: num [1:98] 19.03 9.44 6.07 7.96 10.9 ...
 ##  $ homeownership: Factor w/ 3 levels "MORTGAGE","OWN",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
@@ -594,10 +594,6 @@ The other terms represent the expected difference in average interest rates for 
 loans100 %>%
   group_by(homeownership) %>%
   summarise(average=mean(interest_rate),std_dev=sd(interest_rate))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```

@@ -28,31 +28,24 @@ head(mariokart,n=10)
 
 ```
 ## # A tibble: 10 x 12
-##         id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
-##      <dbl>    <dbl>  <dbl> <chr>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
-##  1 1.50e11        3     20 new       0.99    4        51.6 standa~        1580
-##  2 2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
-##  3 3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
-##  4 2.80e11        3     18 new       0.99    0        44   standa~           7
-##  5 1.70e11        1     20 new       0.01    0        71   media           820
-##  6 3.60e11        3     19 new       0.99    4        45   standa~      270144
-##  7 1.20e11        1     13 used      0.01    0        37.0 standa~        7284
-##  8 3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
-##  9 2.00e11        3     29 used      0.99    4        47   priori~          27
-## 10 3.30e11        7      8 used     20.0     4        50   firstC~         201
+##           id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
+##        <dbl>    <dbl>  <dbl> <chr>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
+##  1   1.50e11        3     20 new       0.99    4        51.6 standa~        1580
+##  2   2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
+##  3   3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
+##  4   2.80e11        3     18 new       0.99    0        44   standa~           7
+##  5   1.70e11        1     20 new       0.01    0        71   media           820
+##  6   3.60e11        3     19 new       0.99    4        45   standa~      270144
+##  7   1.20e11        1     13 used      0.01    0        37.0 standa~        7284
+##  8   3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
+##  9   2.00e11        3     29 used      0.99    4        47   priori~          27
+## 10   3.30e11        7      8 used     20.0     4        50   firstC~         201
 ## # ... with 3 more variables: stock_photo <chr>, wheels <dbl>, title <chr>
 ```
 
 
 ```r
 inspect(mariokart)
-```
-
-```
-## Warning: `data_frame()` is deprecated as of tibble 1.1.0.
-## Please use `tibble()` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -932,7 +925,7 @@ do(1)*glm(cond=="new"~stock_photo+total_pr,
 
 ```
 ##   Intercept stock_photoyes  total_pr .row .index
-## 1 -15.16621       1.861249 0.2844039    1      1
+## 1 -11.52058       2.935714 0.1804688    1      1
 ```
 
 Again, it looks like what we expect. Now let's bootstrap the coefficients and summarize the results.

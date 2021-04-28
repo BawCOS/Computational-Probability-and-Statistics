@@ -28,18 +28,18 @@ head(mariokart,n=10)
 
 ```
 ## # A tibble: 10 x 12
-##         id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
-##      <dbl>    <dbl>  <dbl> <chr>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
-##  1 1.50e11        3     20 new       0.99    4        51.6 standa~        1580
-##  2 2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
-##  3 3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
-##  4 2.80e11        3     18 new       0.99    0        44   standa~           7
-##  5 1.70e11        1     20 new       0.01    0        71   media           820
-##  6 3.60e11        3     19 new       0.99    4        45   standa~      270144
-##  7 1.20e11        1     13 used      0.01    0        37.0 standa~        7284
-##  8 3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
-##  9 2.00e11        3     29 used      0.99    4        47   priori~          27
-## 10 3.30e11        7      8 used     20.0     4        50   firstC~         201
+##           id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
+##        <dbl>    <dbl>  <dbl> <chr>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
+##  1   1.50e11        3     20 new       0.99    4        51.6 standa~        1580
+##  2   2.60e11        7     13 used      0.99    3.99     37.0 firstC~         365
+##  3   3.20e11        3     16 new       0.99    3.5      45.5 firstC~         998
+##  4   2.80e11        3     18 new       0.99    0        44   standa~           7
+##  5   1.70e11        1     20 new       0.01    0        71   media           820
+##  6   3.60e11        3     19 new       0.99    4        45   standa~      270144
+##  7   1.20e11        1     13 used      0.01    0        37.0 standa~        7284
+##  8   3.00e11        1     15 new       1       2.99     54.0 upsGro~        4858
+##  9   2.00e11        3     29 used      0.99    4        47   priori~          27
+## 10   3.30e11        7      8 used     20.0     4        50   firstC~         201
 ## # ... with 3 more variables: stock_photo <chr>, wheels <dbl>, title <chr>
 ```
 
@@ -183,10 +183,6 @@ mariokart %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 4
 ##   cond   xbar stand_dev xmedian
 ##   <fct> <dbl>     <dbl>   <dbl>
@@ -206,10 +202,10 @@ mariokart %>%
 
 ```
 ## # A tibble: 2 x 12
-##        id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
-##     <dbl>    <dbl>  <dbl> <fct>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
-## 1 1.10e11        7     22 used      1       25.5     327. parcel          115
-## 2 1.30e11        3     27 used      6.95     4       118. parcel           41
+##           id duration n_bids cond  start_pr ship_pr total_pr ship_sp seller_rate
+##        <dbl>    <dbl>  <dbl> <fct>    <dbl>   <dbl>    <dbl> <chr>         <dbl>
+## 1    1.10e11        7     22 used      1       25.5     327. parcel          115
+## 2    1.30e11        3     27 used      6.95     4       118. parcel           41
 ## # ... with 3 more variables: stock_photo <fct>, wheels <dbl>, title <chr>
 ```
 
@@ -520,10 +516,10 @@ augment(mario_mod_multi) %>%
 
 ```
 ## # A tibble: 1 x 11
-##   total_pr cond  stock_photo duration wheels .fitted .resid .std.resid   .hat
-##      <dbl> <fct> <fct>          <dbl>  <dbl>   <dbl>  <dbl>      <dbl>  <dbl>
-## 1     51.6 new   yes                3      1    49.6   1.92      0.397 0.0215
-## # ... with 2 more variables: .sigma <dbl>, .cooksd <dbl>
+##   total_pr cond  stock_photo duration wheels .fitted .resid   .hat .sigma
+##      <dbl> <fct> <fct>          <dbl>  <dbl>   <dbl>  <dbl>  <dbl>  <dbl>
+## 1     51.6 new   yes                3      1    49.6   1.92 0.0215   4.92
+## # ... with 2 more variables: .cooksd <dbl>, .std.resid <dbl>
 ```
 
 
@@ -819,18 +815,18 @@ glimpse(Credit)
 ```
 ## Rows: 400
 ## Columns: 12
-## $ ID        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17...
-## $ Income    <dbl> 14.891, 106.025, 104.593, 148.924, 55.882, 80.180, 20.996...
-## $ Limit     <int> 3606, 6645, 7075, 9504, 4897, 8047, 3388, 7114, 3300, 681...
-## $ Rating    <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589, 13...
-## $ Cards     <int> 2, 3, 4, 3, 2, 4, 2, 2, 5, 3, 4, 3, 1, 1, 2, 3, 3, 3, 1, ...
-## $ Age       <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49, 7...
-## $ Education <int> 11, 15, 11, 11, 16, 10, 12, 9, 13, 19, 14, 16, 7, 9, 13, ...
-## $ Gender    <fct>  Male, Female,  Male, Female,  Male,  Male, Female,  Male...
-## $ Student   <fct> No, Yes, No, No, No, No, No, No, No, Yes, No, No, No, No,...
-## $ Married   <fct> Yes, Yes, No, No, Yes, No, No, No, No, Yes, Yes, No, Yes,...
-## $ Ethnicity <fct> Caucasian, Asian, Asian, Asian, Caucasian, Caucasian, Afr...
-## $ Balance   <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407,...
+## $ ID        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1~
+## $ Income    <dbl> 14.891, 106.025, 104.593, 148.924, 55.882, 80.180, 20.996, 7~
+## $ Limit     <int> 3606, 6645, 7075, 9504, 4897, 8047, 3388, 7114, 3300, 6819, ~
+## $ Rating    <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589, 138, ~
+## $ Cards     <int> 2, 3, 4, 3, 2, 4, 2, 2, 5, 3, 4, 3, 1, 1, 2, 3, 3, 3, 1, 2, ~
+## $ Age       <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49, 75, ~
+## $ Education <int> 11, 15, 11, 11, 16, 10, 12, 9, 13, 19, 14, 16, 7, 9, 13, 15,~
+## $ Gender    <fct>  Male, Female,  Male, Female,  Male,  Male, Female,  Male, F~
+## $ Student   <fct> No, Yes, No, No, No, No, No, No, No, Yes, No, No, No, No, No~
+## $ Married   <fct> Yes, Yes, No, No, Yes, No, No, No, No, Yes, Yes, No, Yes, Ye~
+## $ Ethnicity <fct> Caucasian, Asian, Asian, Asian, Caucasian, Caucasian, Africa~
+## $ Balance   <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407, 0,~
 ```
 
 Suppose we suspected that there is a relationship between `Balance`, the response, and the predictors `Income` and `Student`. Note: we actually are using this model for educational purposes and did not go through a model selection process. 
