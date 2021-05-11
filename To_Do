@@ -1,6 +1,8 @@
 - Check spacing on homework problems
-- Update logistic regression section
+X Update logistic regression section
 - Remove \Prob \mbox{P} stuff so no more warnings
-- Create reference section
+X Create reference section
 - Update preface section to give more description of code
-- Run pdf and decide if we want pdf download
+X Run pdf and decide if we want pdf download, NO
+- Add section on modeling to discuss loss function and optimization criteria as
+a lead in to ML in Math 378.
