@@ -7,14 +7,17 @@
 1) Using `R`, generate a linear regression model and use it to produce a prediction model.  
 2) Using plots, check the assumptions of a linear regression model.  
 
-## Introduction 
+## Introduction to linear regression  
+
+Linear regression is often one of the first methods taught in a machine learning course. It is an excellent tool with a wide range of applications. It can be used solely to predict an outcome of interest, a prediction model, and/or be used for inference. In this book, we will mainly focus on its use for inference. Even so, this treatment barely scratches the surface of what can be done. There are entire courses devoted to the interpretation of linear regression models.
+
+When used as a predictive model, linear regression fits into the category of a function approximation method. The parameters of the model, function, are fit using an objective, loss, function and optimization procedure. For linear regression in this book, the loss function will be sum of squared errors which leads to closed form solution using differentiation. In machine learning courses you will learn about different types of loss functions to include penalized or regularized versions as well as different optimization engines. For software such as `tidymodels` in `R` or `scitkit-learn` in `python`, you will specify the loss function and optimization engine directly.
+
+## Case study introduction  
 
 The Human Freedom Index is a report that attempts to summarize the idea of "freedom" through a bunch of different variables for many countries around the globe. It serves as a rough objective measure for the relationships between the different types of freedom - whether it's political, religious, economical or personal freedom - and other social and economic circumstances. The Human Freedom Index is an annually co-published report by the Cato Institute, the Fraser Institute, and the Liberales Institut at the Friedrich Naumann Foundation for Freedom.
 
-In this case study, you'll be analyzing data from Human Freedom Index reports from 2008-2016.
-Your aim will be to summarize a few of the relationships within the data both 
-graphically and numerically in order to find which variables can help tell a story
-about freedom. This will be done using the tool of regression.
+In this case study, you'll be analyzing data from Human Freedom Index reports from 2008-2016. Your aim will be to summarize a few of the relationships within the data both graphically and numerically in order to find which variables can help tell a story about freedom. This will be done using the tool of regression.
 
 Again, like our previous case studies, this lesson will introduce many of the ideas of the block. Don't worry if they seem difficult and you feel overwhelmed a bit, we will come back to the ideas in the following lessons.
 

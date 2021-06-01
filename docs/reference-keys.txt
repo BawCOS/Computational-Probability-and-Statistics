@@ -515,7 +515,8 @@ permutation-test-2
 homework-problems-23
 CS4
 objectives-23
-introduction-3
+introduction-to-linear-regression
+case-study-introduction
 load-packages
 the-data-and-exploratory-analysis
 sum-of-squared-residuals
@@ -538,7 +539,7 @@ summary-1
 homework-problems-25
 LRINF
 objectives-25
-introduction-4
+introduction-3
 regression
 review-of-assumptions
 distribution-of-our-estimators
@@ -552,7 +553,7 @@ summary-2
 homework-problems-26
 LRDIAG
 objectives-26
-introduction-5
+introduction-4
 assessing-our-model---understanding-the-output-from-lm
 residual-standard-error
 r-squared
@@ -568,7 +569,7 @@ what-if-our-assumptions-are-violated
 homework-problems-27
 LRSIM
 objectives-27
-introduction-6
+introduction-5
 confidence-intervals-for-parameters
 resampling
 resample-residuals

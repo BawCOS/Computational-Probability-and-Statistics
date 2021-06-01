@@ -9,7 +9,7 @@
 2) Use basic counting methods.
 
 
-## Introduction to Probability Models
+## Introduction to probability models
 
 In this second block of material we will focus on probability models. We will take two approaches, one is mathematical and the other is computational. In some cases we can use both methods on a problem and in others only the computational approach is feasible. The mathematical approach to probability modeling allows us insight into the problem and the ability to understand the process. Simulation has a much greater ability to generalize but can be time intensive to run and often requires the writing of custom functions.
 

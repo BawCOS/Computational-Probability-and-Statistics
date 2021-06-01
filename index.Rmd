@@ -29,13 +29,17 @@ This book is based on the notes we created for our students as part of a one sem
 
 ## Who is this book for?
 
-We designed this book for study of statistics that maximizes computational ideas while minimizing algebraic symbol manipulation. Although we do discuss traditional small sample normal based inference and some of the classical probability distributions, we rely heavily on ideas such as simulation, permutations, and bootstrap. This means that students with a background in differential and integral calculus will be successful with this book. The book makes extensive using of the `R` programming language. In particular we focus both on the **tidyverse** and **mosaic** packages. We include a significant amount of code in our notes and frequently demonstrate multiple ways of completing a task. We have used this book for juniors and sophomores.
+We designed this book for study of statistics that maximizes computational ideas while minimizing algebraic symbol manipulation. Although we do discuss traditional small sample normal based inference and some of the classical probability distributions, we rely heavily on ideas such as simulation, permutations, and bootstrap. This means that students with a background in differential and integral calculus will be successful with this book. 
+
+The book makes extensive using of the `R` programming language. In particular we focus both on the **tidyverse** and **mosaic** packages. We include a significant amount of code in our notes and frequently demonstrate multiple ways of completing a task. We have used this book for juniors and sophomores.
 
 ## Book Structure and How to Use It
 
-The book is divided into 4 parts. Each part starts with a case study that introduces many of the main ideas of each part. Each chapter is designed to be a standalone 50 minute lesson. Within each lesson, we give exercises that can be worked in class and we have learning objectives. This assumes students have access to `R`. Finally, we keep the number of homework problems to a reasonable level and assign all problems.
+The book is divided into 4 parts. Each part starts with a case study that introduces many of the main ideas of each part. Each chapter is designed to be a standalone 50 minute lesson. Within each lesson, we give exercises that can be worked in class and we have learning objectives. 
 
-The four parts are:
+This book assumes students have access to `R`. Finally, we keep the number of homework problems to a reasonable level and assign all problems.
+
+The four parts of the book are:
 
 1. Descriptive Statistical Modeling: This part introduces the student to data collection methods, summary statistics, visual summaries, and exploratory data analysis. 
 
@@ -49,13 +53,13 @@ The four parts are:
 The learning outcomes for this course are to use computational and mathematical statistical/probabilistic concepts for:
 
 a.	Developing probabilistic models 
-b.	Developing statistical models for inference and description
+b.	Developing statistical models for description, inference, and prediction  
 c.	Advancing practical and theoretical analytic experience and skills
 
 
 ## Prerequisites
 
-To take this course, students are expected to have completed calculus up through and including integral calculus. We do have multivariate ideas in the course but they are easily taught and don't require calculus III.  We don't assume the students have any programming experience and thus we include a great deal of code. We have supplemented the course with [Data Camp](http://datacamp.com/) courses. We have also used [Rstudio Cloud](http://rstudio.cloud) to help students get started without the burden of loading and maintaining software.
+To take this course, students are expected to have completed calculus up through and including integral calculus. We do have multivariate ideas in the course but they are easily taught and don't require calculus III.  We don't assume the students have any programming experience and thus we include a great deal of code. We have historically supplemented the course with [Data Camp](http://datacamp.com/) courses. We have also used [Rstudio Cloud](http://rstudio.cloud) to help students get started without the burden of loading and maintaining software.
 
 ## Packages
 
